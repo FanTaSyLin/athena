@@ -34,7 +34,7 @@ passport.use(new LocalStrategy(
                
 
     }
-))
+));
 
 /**
  * Angular启动页
@@ -45,5 +45,5 @@ app.get('/', function (req, res) {
 
 server.listen(app.get('port'), function () {
     console.log('Athena server listening on port :' + app.get('port'));
-})
+});
 
