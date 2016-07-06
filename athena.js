@@ -14,6 +14,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('.html', ejs.__express);
 
+
 /**
  * 加载第三方中间件
  */
@@ -28,6 +29,8 @@ app.use(serveStatic(path.join(__dirname, 'app')));
 if (app.get('env') === 'development') {
     app.use(require('errorhandler')());
 }
+
+
 
 passport.use(new LocalStrategy(
     function (uid, pwd, done) {
