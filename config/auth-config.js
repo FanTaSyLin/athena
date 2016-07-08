@@ -4,6 +4,7 @@
 module.exports = {
     mysqlDB : {
         host : "localhost",
+        port : "3306",
         user : "sa",
         pwd : "masterkey",
         database : "authentication"

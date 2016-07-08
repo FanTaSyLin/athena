@@ -5,7 +5,7 @@
 (function () {
     var assert = require('assert');
     var restify = require("restify");
-    var mysql = require("mysql");
+    var mysqlHelp = require("./../lib/mysqlhelp.js");
     var S = require("string");
     var config = require("./../config/auth-config.js");
 
@@ -27,7 +27,7 @@
      */
     server.get({path: PATH + "/verify"}, function (req, res, next) {
         var account = req.params.u;
-        var pwd = req.param.p;
+        var pwd = req.params.p;
         _verify(account, pwd, function (err, data) {
             if (err) {
                 console.log(err.stack);
@@ -59,33 +59,19 @@
         return next;
     })
 
-    server.listen(port, "172.20.10.9", function () {
+    server.listen(port, function () {
         console.log('%s listening at %s ', server.name, server.url);
     });
 
     function _verify(account, pwd, cb) {
         assert.ok(cb !== null);
-        var o = {};
-        var connection = mysql.createConnection({
-            host: config.mysqlDB.host,
-            user: config.mysqlDB.user,
-            password: config.mysqlDB.pwd,
-            database: config.mysqlDB.database
-        });
-        connection.connect(function (err) {
-            o = {
-                status: "-1",
-                errMsg: err.message,
-                uid: null
-            };
-            cb(err, o);
-            return;
-        });
+        var o = {};        
+        var client = mysqlHelp.createNew(config.mysqlDB.host, config.mysqlDB.port, config.mysqlDB.user, config.mysqlDB.pwd, config.mysqlDB.database);
         var sqlCmd = S("select uid from account where account = '{{account}}' and password = '{{pwd}}'").template({
             account: account,
             pwd: pwd
         }).s;
-        connection.query(sqlCmd, function (err, data) {
+        client.executeData(sqlCmd, function (err, data) {
             if (err) {
                 o = {
                     status: "-1",
@@ -115,41 +101,24 @@
                     return;
                 }
             }
-        });
-        connection.end();
+        })
     }
 
     function _getUsrInfo(uid, cb) {
         assert.ok(cb !== null);
         var o = {};
-        var connection = mysql.createConnection({
-            host: config.mysqlDB.host,
-            user: config.mysqlDB.user,
-            password: config.mysqlDB.pwd,
-            database: config.mysqlDB.database
-        });
-        connection.connect(function (err) {
-            o = {
-                status: "-1",
-                errMsg: err.message,
-                usrInfo: null
-            };
-            cb(err, o);
-            connection.end();
-            return;
-        });
+        var client = mysqlHelp.createNew(config.mysqlDB.host, config.mysqlDB.port, config.mysqlDB.user, config.mysqlDB.pwd, config.mysqlDB.database);
         var sqlCmd = S("select uid, nickname, icon, sex, birthday " +
             "from usrinfo where uid = '{{uid}}'").template({
             uid: uid
         }).s;
-        connection.query(sqlCmd, function (err, data) {
+        client.executeData(sqlCmd, function (err, data) {
             if (err) {
                 o = {
                     status: "-1",
                     usrInfo: null
                 };
                 cb(err, o);
-                connection.end();
                 return;
             } else {
                 if (data.length > 0) {
@@ -160,7 +129,6 @@
                         usrInfo: data[0]
                     };
                     cb(null, o);
-                    connection.end();
                     return;
                 } else {
                     //验证不通过
@@ -170,12 +138,10 @@
                         usrInfo: null
                     };
                     cb(null, o);
-                    connection.end();
                     return;
                 }
             }
-        });
-        //connection.end();
+        })
     }
 
 })();
