@@ -21,10 +21,12 @@
   "homepage": "https://github.com/FanTaSyLin/athena#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "connect-mongo": "^1.2.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
     "errorhandler": "^1.4.3",
     "express": "^4.14.0",
+    "express-session": "^1.14.0",
     "md5": "^2.1.0",
     "mysql": "^2.11.1",
     "passport": "^0.3.2",

@@ -6,7 +6,7 @@ var assert = require("assert");
 var S = require("string");
 var md = require("md5");
 var mysqlHelp = require("./../../lib/mysqlhelp.js");
-var config = require("./../../config/auth-config.js");
+var config = require("././auth-config.js");
 
 
 /**

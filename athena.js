@@ -32,12 +32,19 @@ if (app.get('env') === 'development') {
 
 
 
-passport.use(new LocalStrategy(
-    function (uid, pwd, done) {
+passport.use(new LocalStrategy ("local", function (uid, pwd, done) {
                
 
     }
 ));
+
+passport.serializeUser(function (user, done) {
+    
+});
+
+passport.deserializeUser(function (user, done) {
+
+});
 
 /**
  * Angular启动页

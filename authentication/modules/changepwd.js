@@ -7,7 +7,7 @@ var md5 = require("md5");
 var S = require("string");
 var salthelp = require("./salthelp.js");
 var mysqlHelp = require("./../../lib/mysqlhelp.js");
-var config = require("./../../config/auth-config.js");
+var config = require("././auth-config.js");
 
 
 exports.changePwd = function (account, pwd, cb) {

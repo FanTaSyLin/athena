@@ -4,7 +4,7 @@
 
 var assert = require("assert");
 var S = require("string");
-var config = require("./../../config/auth-config.js");
+var config = require("././auth-config.js");
 var mysqlHelp = require("./../../lib/mysqlhelp.js");
 var shallowCopy = require("./../../lib/utils.js").shallowCopy;
 
