@@ -17,4 +17,4 @@ function RedisNotExistsTokenError(code, error) {
 RedisNotExistsTokenError.prototype = Object.create(Error.prototype);
 RedisNotExistsTokenError.prototype.constructor = RedisNotExistsTokenError;
 
-module.exports = UnauthorizedAccessError;
+module.exports = RedisNotExistsTokenError;

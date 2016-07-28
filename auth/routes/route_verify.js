@@ -6,7 +6,7 @@ var debug = require('debug')('app: ' + process.pid);
 var Router = require('express').Router;
 var path = require('path');
 var User = require(path.join(__dirname, '..', 'modules', 'user.js'));
-var tokenHelp = require(path.join(__dirname, '..', 'modules', 'token.js'));
+var tokenHelp = require(path.join(__dirname, '..', 'lib', 'tokenhelp.js'));
 var UnauthorizedAccessError = require(path.join(__dirname, '..', 'errors', 'UnauthorizedAccessError.js'));
 var _ = require('lodash');
 
