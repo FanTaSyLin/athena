@@ -21,23 +21,32 @@
   "homepage": "https://github.com/FanTaSyLin/athena#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
     "connect-mongo": "^1.2.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
     "errorhandler": "^1.4.3",
     "express": "^4.14.0",
+    "express-jwt": "^3.4.0",
     "express-session": "^1.14.0",
+    "express-unless": "^0.3.0",
+    "jsonwebtoken": "^7.1.6",
+    "lodash": "^4.13.1",
     "md5": "^2.1.0",
+    "mongoose": "^4.5.5",
+    "morgan": "^1.7.0",
     "mysql": "^2.11.1",
+    "node-bcrypt": "^0.0.1",
+    "on-finished": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "redis": "^2.6.2",
+    "response-time": "^2.3.1",
     "restify": "^4.1.1",
     "serve-static": "^1.11.1",
     "string": "^3.3.1"
   },
   "devDependencies": {
-    "eslint": "^3.0.1",
-    "eslint-config-google": "^0.6.0",
-    "eslint-plugin-react": "^5.2.2"
+    "debug": "^2.2.0"
   }
 }
