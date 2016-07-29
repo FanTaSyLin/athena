@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/7/26.
  */
 "use strict";
-var debug = require('debug')('app: ' + process.pid);
+var debug = require('debug')('auth: ' + process.pid);
 var Router = require('express').Router;
 var path = require('path');
 var User = require(path.join(__dirname, '..', 'modules', 'user.js'));

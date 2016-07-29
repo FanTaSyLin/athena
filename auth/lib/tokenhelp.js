@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/7/26.
  */
 
-var debug = require('debug')('app: ' + process.pid);
+var debug = require('debug')('auth: ' + process.pid);
 var path = require('path');
 var _ = require('lodash');
 var jsonWebToken = require('jsonwebtoken');

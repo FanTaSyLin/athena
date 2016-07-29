@@ -7,7 +7,7 @@ const MONGOOSE_URI = process.env.MONGOOSE_URI || "123.56.135.196/authentication"
 const HTTPS_PORT = process.env.HTTPS_PORT || 4401;
 
 var https = require('https');
-var debug = require('debug')('app: ' + process.pid);
+var debug = require('debug')('auth: ' + process.pid);
 var path = require('path');
 var fs = require('fs');
 var jwt = require('express-jwt');

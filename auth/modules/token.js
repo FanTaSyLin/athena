@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/7/28.
  */
 
-var debug = require('debug')('app: ' + process.pid);
+var debug = require('debug')('auth: ' + process.pid);
 var mongoose = require('mongoose');
 var md5 = require("md5");
 var _ = require('lodash');
