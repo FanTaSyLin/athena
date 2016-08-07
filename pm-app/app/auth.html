@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Auth">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆 - PMSoft 账户</title>
+    <base href="/" />
+    <meta name="description" content="Copyright http://blog.fens.me">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/login-signin.css">
+    <link rel="shortcut icon" href="public/favicon.ico" >
+</head>
+<body class="home-template" ng-contLoginroller="LoginCtrl">
+    <div class="topbanner" style="background-image: url(public/topbackground.jpg)">
+        <div class="logoImg">
+            <a title="Shinetek PMSoft">
+                <img alt="Shinetek PMSoft" src="public/pmLOGO.png" width="78" />
+            </a>
+        </div>
+        <div class="poswrap">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="logotxt">
+                        <h1>
+                            <a>项目管理软件</a>
+                        </h1>
+                        <h2 class="logotxt_h2">
+                            P M S o f t
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-unit">
+        <ng-view></ng-view>
+    </div>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="scripts/angular/auth_ctrl.js"></script>
+    <script type="text/javascript" src="scripts/angular/auth_services.js"></script>
+    <script type="text/javascript" src="lib/ngStorage.js"></script>
+</body>
+</html>

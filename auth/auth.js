@@ -20,7 +20,14 @@ var config = require('./config.js');
 
 debug('Starting Auth application');
 
-mongoose.connect(MONGOOSE_URI);
+var opt_Mongoose = {
+    server: {
+        auto_reconnect: true,
+        poolSize: 10
+    }
+};
+
+mongoose.connect(MONGOOSE_URI, opt_Mongoose);
 
 mongoose.connection.on('error', function (err) {
     debug('Mongoose connection error: %s', err.stack);
@@ -42,6 +49,17 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    if(req.method=="OPTIONS")
+        res.send(200);/*让options请求快速返回*/
+    else
+        next();
+});
+
 app.use(function (req, res, next) {
     next();
 });
@@ -49,6 +67,7 @@ app.use(function (req, res, next) {
 app.use('/api/verify', require(path.join(__dirname, 'routes', 'route_verify.js'))());
 
 app.use('/api/user', require(path.join(__dirname, 'routes', 'route_useropt.js'))());
+
 
 app.all("*", function (req, res, next) {
     next(new NotFoundError('404'));
@@ -84,4 +103,10 @@ https.createServer({
     rejectUnauthorized: false
 }, app).listen(HTTPS_PORT, function () {
     debug("HTTPS Server listening on port: %s, in %s mode", HTTPS_PORT, app.get('env'));
+});
+
+
+debug("Creating HTTP server on port: %s", 4001);
+require('http').createServer(app).listen(4001, function () {
+    debug("HTTP Server listening on port: %s, in %s mode", 4001, app.get('env'));
 });

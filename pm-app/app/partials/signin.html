@@ -1,0 +1,22 @@
+<form class="auth-form form-horizontal tb-auth" action="" method="post">
+    <div class="horizontal-line"></div>
+    <input name="account" type="hidden" value="">
+    <div class="form-field">
+        <input name="account" class="form-control email" required="" type="text" placeholder="账号" value=""/>
+    </div>
+    <div class="form-field">
+        <input name="password" class="form-control password" required="" type="text" placeholder="密码" value=""/>
+    </div>
+    <div class="form-field">
+        <input name="password" class="form-control password" required="" type="text" placeholder="确认密码" value=""/>
+    </div>
+    <button class="btn btn-primary anim-blue-all" type="submit" data-gta="event" data-label="login-direct" ng-click="switchSignin()">
+        注册
+    </button>
+    <div class="horizontal-line"></div>
+    <div class="tb-auth">
+        <a class="btn btn-primary anim-blue1 signin" ng-href="/login">
+            已有账号？登陆
+        </a>
+    </div>
+</form>

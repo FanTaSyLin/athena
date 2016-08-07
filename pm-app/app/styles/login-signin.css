@@ -39,13 +39,23 @@ body {
     margin-left: -15px;
 }
 
+.site-main {
+    min-height: 50%;
+}
+
 .logotxt {
     margin-bottom: 30px;
     border: 0;
 }
+.logotxt_h2 {
+    margin-bottom: 30px;
+    border: 0;
+    color: #3dc0ff;
+    font-size: 36px;
+}
 .logotxt a {
     font-weight: 700;
-    color: #fff;
+    color: #03a9f4;
     font-size: 72px;
 }
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
@@ -101,7 +111,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {
 }
 
 a:focus, a:hover {
-    color: #03a9f4;
+    color: #006af4;
     text-decoration: none;
 }
 
@@ -228,6 +238,20 @@ button, input, optgroup, select, textarea {
     transition: padding-right 218ms ease;
 }
 
+
+.form-unit .btn {
+    margin-bottom: 20px;
+    padding: 12px;
+    line-height: 20px;
+    font-size: 16px;
+    width: 100%;
+    display: inline-block;
+    outline: 0;
+    border: none;
+    border-radius: 3px;
+}
+
+
 .form-unit .anim-blue, .form-unit .anim-blue-all {
     border: 1px solid #03a9f4;
     -webkit-transition: padding-right 218ms ease;
@@ -282,6 +306,17 @@ button, input, optgroup, select, textarea {
     transition: opacity 218ms ease;
 }
 
+
+.form-unit .anim-blue1 {
+    position: relative;
+    border: 1px solid #03a9f4;
+    background-color: #fff;
+    color: #03a9f4;
+    -webkit-transition: padding-right 218ms ease;
+    -o-transition: padding-right 218ms ease;
+    transition: padding-right 218ms ease;
+}
+
 .form-unit .anim-grey {
     position: relative;
     border: 1px solid #aaa;
@@ -328,3 +363,4 @@ button, input, optgroup, select, textarea {
 .icon, address, cite {
     font-style: normal;
 }
+

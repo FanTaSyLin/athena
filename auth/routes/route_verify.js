@@ -24,11 +24,12 @@ module.exports = function () {
 
 function authentication(req, res, next) {
     debug('Processing authenticate middleware');
-    var username = (req.body && req.body.username) || (req.params && req.params.username);
-    var password = (req.body && req.body.password) || (req.params && req.params.password);
+    var username = (req.body && req.body.username) || (req.query && req.query.username);
+    var password = (req.body && req.body.password) || (req.query && req.query.password);
     debug('user.username: %s', username);
     debug('user.password: %s', password);
     if (_.isEmpty(username) || _.isEmpty(password)) {
+        debug('username or password is Empty');
         return next(new UnauthorizedAccessError('401', {
             message: 'Username or password is empty'
         }));
@@ -39,10 +40,14 @@ function authentication(req, res, next) {
             username : username
         }, function (err, user) {
             if (err || !user) {
+                debug('Invalid username, not found username');
                 return next(new UnauthorizedAccessError("401", {
                     message: 'Invalid username or password'
                 }));
             }
+
+            debug('Compare password');
+
             user.comparePassword(password, function (err, isMatch) {
                 if (isMatch && !err) {
                     debug('User authenticated, generating token');
@@ -50,8 +55,11 @@ function authentication(req, res, next) {
                         if (err) {
                             debug('createNewToken error: \r\n %s', err.stack);
                             return next (err);
-                        }
-                        res.status(200).json(user);
+                        }''
+                        //res.status(200).json(user);
+                        res.writeHead(200, {'Content-type' : 'application/json; charset=utf-8'});
+                        res.write(JSON.stringify(user));
+                        res.end();
 
                         //TODO: 是否需要将data 存储入数据库
                     });
@@ -68,7 +76,7 @@ function authentication(req, res, next) {
 
 function authVerify(req, res, next) {
     debug('verify token');
-    var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+    var token = (req.body && req.body.token) || (req.query && req.query.token) || req.headers['x-access-token'];
     debug('token: %s', token);
     process.nextTick(function() {
         tokenHelp.verifyToken(token, function (err, user) {

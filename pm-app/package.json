@@ -1,0 +1,25 @@
+{
+  "name": "pm-app",
+  "version": "0.0.1",
+  "description": "project management",
+  "main": "pm.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "fantasylin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-jwt": "^3.4.0",
+    "express-unless": "^0.3.0",
+    "jsonwebtoken": "^7.1.7",
+    "lodash": "^4.14.1",
+    "mongoose": "^4.5.8",
+    "morgan": "^1.7.0",
+    "on-finished": "^2.3.0"
+  },
+  "devDependencies": {
+    "debug": "^2.2.0"
+  }
+}
