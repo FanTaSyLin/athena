@@ -19,6 +19,10 @@ var TokenSchema = new Schema({
     lifetime: {
         type: String,
         required: true
+    },
+    username: {
+        type: String,
+        required: true
     }
 }, {
     toObject: {

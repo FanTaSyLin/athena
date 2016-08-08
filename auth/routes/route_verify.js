@@ -6,7 +6,8 @@ var debug = require('debug')('auth: ' + process.pid);
 var Router = require('express').Router;
 var path = require('path');
 var User = require(path.join(__dirname, '..', 'modules', 'user.js'));
-var tokenHelp = require(path.join(__dirname, '..', 'lib', 'tokenhelp.js'));
+//var tokenHelp = require(path.join(__dirname, '..', 'lib', 'tokenhelp.js'));
+var tokenHelp =require('./../lib/tokenhelp_mongo.js');
 var UnauthorizedAccessError = require(path.join(__dirname, '..', 'errors', 'UnauthorizedAccessError.js'));
 var _ = require('lodash');
 
@@ -56,10 +57,10 @@ function authentication(req, res, next) {
                             debug('createNewToken error: \r\n %s', err.stack);
                             return next (err);
                         }''
-                        //res.status(200).json(user);
-                        res.writeHead(200, {'Content-type' : 'application/json; charset=utf-8'});
-                        res.write(JSON.stringify(user));
-                        res.end();
+                        res.status(200).json(user);
+                        //res.writeHead(200, {'Content-type' : 'application/json; charset=utf-8'});
+                        //res.write(JSON.stringify(user));
+                        //res.end();
 
                         //TODO: 是否需要将data 存储入数据库
                     });
@@ -76,7 +77,7 @@ function authentication(req, res, next) {
 
 function authVerify(req, res, next) {
     debug('verify token');
-    var token = (req.body && req.body.token) || (req.query && req.query.token) || req.headers['x-access-token'];
+    var token = (req.body && req.body.token) || (req.query && req.query.token) || req.headers['authorization'];
     debug('token: %s', token);
     process.nextTick(function() {
         tokenHelp.verifyToken(token, function (err, user) {
