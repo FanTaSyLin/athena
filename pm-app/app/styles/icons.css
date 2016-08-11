@@ -1,0 +1,30 @@
+.icn {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.25em;
+}
+
+.icn::before {
+    display: inline-block;
+    font-family: icons;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-weight: 400;
+    speak: none
+}
+
+.icn--notice::before {
+    content: ""
+}
+
+.tcs {
+    color: #aebdc1
+}
+
+.tsh2 {
+    font-size: 150%
+}

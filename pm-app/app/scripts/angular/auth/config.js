@@ -3,12 +3,13 @@
  */
 
 var app = angular.module('Auth', [
-    'ngRoute'
+    'ngRoute',
+    'ngCookies'
 ]);
 
 app.config(['$routeProvider', '$httpProvider', '$locationProvider', function ($routeProvider, $httpProvider, $locationProvider) {
 
-    $routeProvider.when('/', {
+    $routeProvider.when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'LoginCtrl'
     });
@@ -24,7 +25,7 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider', function ($r
     });
 
     $routeProvider.otherwise({
-        redirectTo: '/'
+        redirectTo: '/login'
     });
 
     $httpProvider.defaults.headers.common = {};
@@ -34,8 +35,30 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider', function ($r
 
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-    $httpProvider.
-
     $locationProvider.html5Mode(true);
+
+    $httpProvider.interceptors.push(['$q', '$location', '$cookies', function ($q, $location, $cookies) {
+        return {
+            'request': function (config) {
+                config.headers = config.headers || {};
+
+                var token = $cookies.get('token');
+
+                var username = $cookies.get('username');
+
+                if (token) {
+                    config.headers.Authorization = 'Bearer ' + token;
+                }
+
+                return config;
+            },
+            'responseError': function (response) {
+                if (response.status === 401 || response.status === 403) {
+                    $location.path('/login');
+                }
+                return $q.reject(response);
+            }
+        };
+    }]);
 
 }]);

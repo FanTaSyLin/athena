@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="PMSoft">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>PMSoft</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/pm_master_page.css">
+
+    <!--直接从网站扒下来的CSS 先凑合用着 慢慢学习
+    <link rel="stylesheet" href="styles/CodeSchoolCSS.css">
+    <link rel="stylesheet" href="styles/normalize.css">
+    -->
+
+    <link rel="shortcut icon" href="public/favicon.ico">
 </head>
-<body>
-    Hi!!
+<body ng-controller="PMCtrl">
+<header class="header" role="banner">
+    <div class="cell">
+        <div class="header-logo">
+            <a href="/">
+                <img alt="PM-Soft" src="public/logo-code-school-ps.png"/>
+            </a>
+        </div>
+        <nav class="header-menu">
+            <ol>
+
+            </ol>
+        </nav>
+        <div class="header-user-icon-container">
+            <div class="vertical-split-line "></div>
+            <a class="header-item-padding" href="/pm-soft/notifications">
+                <img class="user-icon icn-size-0" src="public/icn_notice.png"/>
+            </a>
+            <div class="dropdown">
+                <a class="header-item-padding dropdown-toggle" data-toggle="dropdown">
+                    <img class="user-icon" src="public/header0.png"/>
+                </a>
+                <a class="caret"></a>
+                <ul class="dropdown-menu" role="menu">
+                    <div class="dropdown-menu-header">
+                        <strong class="">FanTaSyLin</strong>
+                    </div>
+                    <div class="dropdown-split-line"></div>
+                    <a class="dropdown-item" href="/">状态一览</a>
+                    <a class="dropdown-item" href="/">工作记录</a>
+                    <a class="dropdown-item" href="/">资料管理</a>
+                    <a class="dropdown-item" href="/">账号设置</a>
+                    <div class="dropdown-split-line" href="/"></div>
+                    <a class="dropdown-item" href="/">注销</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/config.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/controllers.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/services.js"></script>
+<script type="text/javascript" src="lib/ngStorage.js"></script>
 </body>
 </html>

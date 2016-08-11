@@ -6,7 +6,8 @@
     "bootstrap": "^3.3.7",
     "angular-route": "^1.5.8",
     "angular-bootstrap": "^2.0.0",
-    "angular-cookies": "^1.5.8"
+    "angular-cookies": "^1.5.8",
+    "normalize-css": "normalize.css#^4.2.0"
   },
   "devDependencies": {},
   "homepage": "https://github.com/FanTaSyLin/athena",

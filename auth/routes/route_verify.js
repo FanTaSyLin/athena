@@ -77,7 +77,7 @@ function authentication(req, res, next) {
 
 function authVerify(req, res, next) {
     debug('verify token');
-    var token = (req.body && req.body.token) || (req.query && req.query.token) || req.headers['authorization'];
+    var token = fetch(req.headers);
     debug('token: %s', token);
     process.nextTick(function() {
         tokenHelp.verifyToken(token, function (err, user) {
@@ -107,3 +107,19 @@ function expireToken(req, res, next) {
         }
     });
 }
+
+var fetch = function (headers) {
+    debug('fetch token');
+    if (headers && headers.authorization) {
+        var authorization = headers.authorization;
+        var part = authorization.split(' ');
+        debug('token : ' + part[1]);
+        if (part.length === 2) {
+            return part[1];
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+};

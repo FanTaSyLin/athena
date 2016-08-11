@@ -21,9 +21,14 @@ app.factory('AuthService', ['$http', function ($http) {
 
     }
 
+    function goPMSoftFunc(successFn, errorFn) {
+        $http.get('http://localhost:4002/pm-soft').success(successFn).error(errorFn);
+    }
+
 
     return {
-        login: loginFunc
+        login: loginFunc,
+        goPMSoft: goPMSoftFunc
     }
 
 }]);

@@ -4,7 +4,7 @@
 
 var app = angular.module('Auth');
 
-app.controller('LoginCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+app.controller('LoginCtrl', ['$cookies', '$scope', 'AuthService', function ($cookies, $scope, AuthService) {
 
     $scope.credentials = {
         username: '',
@@ -15,7 +15,13 @@ app.controller('LoginCtrl', ['$scope', 'AuthService', function ($scope, AuthServ
 
         AuthService.login(credentials, function (data, status, headers, config) {
 
-            window.location.href = 'http://localhost:4002/pm-soft/'
+            $cookies.put('username', data.username);
+            $cookies.put('token', data.token);
+
+
+            window.location.href = 'http://localhost:4002/pm-soft';
+
+
 
         }, function (res) {
 

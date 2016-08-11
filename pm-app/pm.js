@@ -26,6 +26,7 @@ var bodyParser = require('body-parser');
 app.use(morgan("dev"));
 app.use(express.static("./app"));
 app.use(bodyParser.json());
+app.use(require('cookie-parser')());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'app')));
 
@@ -53,7 +54,7 @@ var jwtCheck = expressJWT({
 
 jwtCheck.unless = unless;
 
-app.use(jwtCheck.unless({ path : '/login' }));
+//app.use(jwtCheck.unless({ path : '/login' }));
 
 app.use(utils.middleware().unless({ path : '/login' }));
 

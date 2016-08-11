@@ -2,6 +2,8 @@
  * Created by FanTaSyLin on 2016/8/3.
  */
 
+var debug = require('debug')('pm-app:' + process.pid);
+
 module.exports.middleware = function () {
 
     var https = require('https');
@@ -9,22 +11,31 @@ module.exports.middleware = function () {
     var config = require('./../config.js');
     var UnauthorizedAccessError = require('./../errors/UnauthorizedAccessError.js');
 
-    var fetch = function (headers) {
+    var fetch = function (headers, cookie) {
+        debug('fetch token');
         if (headers && headers.authorization) {
             var authorization = headers.authorization;
             var part = authorization.split(' ');
+            debug('token : ' + part[1]);
             if (part.length === 2) {
                 return part[1];
             } else {
                 return null;
             }
+        } else if (cookie) {
+            var cookieObj = cookie;
+            return cookieObj.token;
         } else {
             return null;
         }
     };
 
     var func = function (req, res, next) {
-        var token = fetch(req.headers);
+        debug('into middleware');
+        var token = fetch(req.headers, req.cookies);
+
+
+
         var opts = {
             hostname: config.authAPI.host,
             port: config.authAPI.port,
@@ -34,21 +45,15 @@ module.exports.middleware = function () {
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Content-Length': 0,
-                'Authorization': 'Basic' + token
+                'Authorization': 'Bearer ' + token
             }
         }
-        var req = https.request(opts, function (res) {
-            if (res.statusCode === 200) {
-                res.on('data', function (data) {
-                    console.log(data);
-                });
-
-                res.on('end', function () {
-                    console.log('1');
-                })
+        var request = https.request(opts, function (response) {
+            if (response.statusCode === 200) {
+                return next();
             }
 
-            if (res.statusCode === 401) {
+            if (response.statusCode === 401) {
                 return next(new UnauthorizedAccessError("invalid_token", new Error("token_invalid"), {
                     "message": "Token doesn't exists, are you sure it hasn't expired or been revoked?"
                 }));
@@ -63,7 +68,7 @@ module.exports.middleware = function () {
              });
              */
         });
-        req.end();
+        request.end();
     };
 
     func.unless = require('express-unless');
