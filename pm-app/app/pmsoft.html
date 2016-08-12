@@ -2,19 +2,14 @@
 <html lang="en" ng-app="PMSoft">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PMSoft</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles/pm_master_page.css">
-
-    <!--直接从网站扒下来的CSS 先凑合用着 慢慢学习
-    <link rel="stylesheet" href="styles/CodeSchoolCSS.css">
-    <link rel="stylesheet" href="styles/normalize.css">
-    -->
-
     <link rel="shortcut icon" href="public/favicon.ico">
 </head>
 <body ng-controller="PMCtrl">
-<header class="header" role="banner">
+<header class="header" role="banner" >
     <div class="cell">
         <div class="header-logo">
             <a href="/">
@@ -26,23 +21,23 @@
                 <ul class="nav-list nav-list-object">
                     <li class="nav-list-item">
                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="/project">项目</a>
-                        <div class="nav-list-item-font-mark"/>
+                        <a class="nav-list-item-font" href="#/project">项目</a>
+                        <div class="nav-list-item-font-mark"></div>
                     </li>
                     <li class="nav-list-item">
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="/system-maintenance">维护</a>
-                        <div class="nav-list-item-font-mark"/>
+                        <a class="nav-list-item-font" href="#/system-maintenance">维护</a>
+                        <div class="nav-list-item-font-mark"></div>
                     </li>
                     <li class="nav-list-item">
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="/my-own">我的</a>
-                        <div class="nav-list-item-font-mark"/>
+                        <a class="nav-list-item-font" href="#/my-own">我的</a>
+                        <div class="nav-list-item-font-mark"></div>
                     </li>
                     <li class="nav-list-item">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="/calendar">日历</a>
-                        <div class="nav-list-item-font-mark"/>
+                        <a class="nav-list-item-font" href="#/calendar">日历</a>
+                        <div class="nav-list-item-font-mark"></div>
                     </li>
                 </ul>
             </div>
@@ -73,16 +68,25 @@
         </div>
     </div>
 </header>
-
+<div class="main-area">
+    <ng-view></ng-view>
+</div>
 
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
-<script type="text/javascript" src="scripts/angular/pmsoft/config.js"></script>
-<script type="text/javascript" src="scripts/angular/pmsoft/controllers.js"></script>
-<script type="text/javascript" src="scripts/angular/pmsoft/services.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.module.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.config.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.config.router.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.config.Interceptor.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.pmctrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.projectctrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.maintenancectrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.myownctrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.calendarctrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.buildingctrl.js"></script>
 <script type="text/javascript" src="lib/ngStorage.js"></script>
 </body>
 </html>

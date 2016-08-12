@@ -14,6 +14,10 @@ html {
     position: relative
 }
 
+body {
+    background: transparent;
+}
+
 a {
     text-decoration: none;
 }
@@ -132,7 +136,7 @@ a {
     width: 5.8em;
     position: relative;
     top: 1.6em;
-    left: -12px;
+    left: -11px;
 
 }
 
@@ -253,4 +257,31 @@ a {
     height: 1px;
     margin: 8px 1px;
     background-color: #e5e5e5;
+}
+
+
+.main-area {
+    width: 100%;
+    height: auto;
+    max-width: 100em;
+    min-height: 5em;
+    padding: 0 10px;
+    margin: 30px auto;
+    display: block;
+    align-items: center;
+    /*background: #4fff5b;*/
+}
+
+.main-area-building {
+    position: relative;
+    width: 400px;
+    height: auto;
+    margin: 0 auto;
+    top: 10em;
+    /*background: #1c00cf;*/
+    
+}
+
+.main-area-building > img {
+    margin: 0 auto;
 }
