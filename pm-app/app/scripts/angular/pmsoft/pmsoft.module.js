@@ -7,7 +7,8 @@
     angular.module('PMSoft', [
         'ngCookies',
         'ngStorage',
-        'ngRoute'
+        'ngRoute',
+        'ngAnimate'
     ]);
 
 })();

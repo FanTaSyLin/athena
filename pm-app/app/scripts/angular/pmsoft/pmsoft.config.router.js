@@ -14,6 +14,11 @@
 
     function PMSoftRouter($routeProvider) {
 
+        $routeProvider.when('/', {
+            templateUrl: 'partials/project.html',
+            controller: 'ProjectCtrl'
+        });
+
         $routeProvider.when('/project', {
             templateUrl: 'partials/project.html',
             controller: 'ProjectCtrl'
@@ -40,7 +45,7 @@
         });
 
         $routeProvider.otherwise({
-            redirectTo: '/project'
+            redirectTo: '/building'
         });
 
     }

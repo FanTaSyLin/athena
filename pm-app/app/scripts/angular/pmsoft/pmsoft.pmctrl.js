@@ -8,10 +8,13 @@
 
     angular
         .module('PMSoft')
-        .controller('PMCtrl', PMCtrl);
+        .controller('PMController', PMController);
 
-    function PMCtrl() {
+    PMController.$inject = ['$rootScope'];
 
+    function PMController($rootScope) {
+        var self = this;
+        self.username = $rootScope.username;
     }
 
 

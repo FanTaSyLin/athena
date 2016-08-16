@@ -22,6 +22,11 @@ a {
     text-decoration: none;
 }
 
+a:hover, a:focus, a:active {
+    text-decoration: none;
+    font-weight: 600;
+}
+
 .header {
     /*background: black*/;
     position: relative;
@@ -117,7 +122,6 @@ a {
     display: block;
 }
 
-
 .nav-list-item > a {
     text-decoration: none;
 }
@@ -125,6 +129,7 @@ a {
 .nav-list-item-font {
     border: 0;
     font-size: 120%;
+    height: 6em;
     color: #6e6e6e;
     font-family: "Microsoft YaHei";
     font-weight: 600;
@@ -152,16 +157,27 @@ a {
     color: #22425a;
 }
 
-
 .header-user-icon-container {
     /*background: lightblue;*/
     display: flex;
     display: -ms-flexbox;
     -ms-flex-align: center;
     align-items: center;
-    padding-left: 15px;
-    max-width: 140px;
+    padding-left: 10px;
+    max-width: 300px;
     width: 100%
+}
+
+.envelope {
+    margin-top: 5px;
+}
+
+.glyphicon-size-middle {
+    font-size: 1.2em;
+}
+
+.glyphicon-size-small {
+    font-size: 14px;
 }
 
 .user-icon {
@@ -197,7 +213,7 @@ a {
 .dropdown-menu {
     text-align: left;
     font-size: 100%;
-    top:58px;
+    top: 58px;
     border-radius: 4px;
     width: 200px;
     padding-top: 5px;
@@ -214,6 +230,7 @@ a {
     top: -7px;
     left: 9px;
 }
+
 .dropdown-menu::after {
     content: '';
     display: inline-block;
@@ -259,7 +276,6 @@ a {
     background-color: #e5e5e5;
 }
 
-
 .main-area {
     width: 100%;
     height: auto;
@@ -272,16 +288,156 @@ a {
     /*background: #4fff5b;*/
 }
 
-.main-area-building {
+.main-area-item {
     position: relative;
-    width: 400px;
-    height: auto;
     margin: 0 auto;
-    top: 10em;
     /*background: #1c00cf;*/
-    
+
 }
 
-.main-area-building > img {
+.btn-align-left {
+    text-align: left;
+}
+
+.area-building {
+    width: 400px;
+    height: auto;
+    top: 10em;
+}
+
+.area-project {
+    width: 100%;
+    height: auto;
+    min-height: 10em;
+    background: #4fff5b;
+}
+
+.area-maintenance {
+    width: 400px;
+    height: 400px;
+    background: #fff14b;
+}
+
+.main-area-item > img {
     margin: 0 auto;
+}
+
+.size-jobsheet {
+    width: 57.5em;
+    height: 60em;
+}
+
+.area-project-list {
+    display: flex;
+    width: 10em;
+    height: auto;
+    min-height: 40em;
+    /*background-color: #00b3ee;*/
+}
+
+.area-JobSheet-recode {
+    min-width: 25em;
+    min-height: 30em;
+    /*background-color: #2ab029;*/
+}
+
+.dialog-header {
+    background-color: #0d89d0;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 3px 1px 2px 0px #666;
+}
+
+.dialog-body {
+    background-color: #f5fafa;
+}
+
+.title-h4 {
+    font-family: "Microsoft YaHei";
+    font-size: 1.5em;
+    font-weight: 500;
+    color: white;
+}
+
+.title-h7 {
+    margin-top: 0.6em;
+    font-family: "Microsoft YaHei";
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #646464;
+}
+
+.title-h8 {
+    margin-top: 1em;
+    font-family: "Microsoft YaHei";
+    font-size: 1.1em;
+    font-weight: normal;
+    color: #646464;
+}
+
+.function-select-area {
+    background: white;
+    height: 6em;
+    width: 55em;
+    border-radius: 5px;
+}
+
+.function-recode-area {
+    background: white;
+    height: auto;
+    max-height: 500px;
+    width: 55em;
+    border-radius: 5px;
+}
+
+.function-select-item {
+    height: 6em;
+}
+
+.function-select-item-item > a {
+    font-size: 1.1em;
+    color: #575a5b;
+    font-family: "Microsoft YaHei";
+    font-weight: 500;
+    padding-left: 5px;
+    text-align: center;
+}
+
+.function-select-item-item:hover > a,
+.function-select-item-item:focus > a,
+.function-select-item-item:active > a {
+    color: #ffffff;
+}
+
+.item-border {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #e7ecec;
+}
+
+.function-select-item .title-h8 {
+    margin-left: 0.5em;
+}
+
+.function-select-area-projects > .dropdown-menu,
+.function-select-area-type > .dropdown-menu,
+.function-select-area-date > .dropdown-menu {
+    top: 88px;
+    max-height: 40em;
+    overflow: auto
+}
+
+.function-select-area-time .dropdown-menu {
+    top: 40px;
+    max-height: 30em;
+    overflow: auto
+}
+
+.function-recode-area > div {
+    margin: 10px;
+
+}
+
+.recode-area-markdown {
+    width: 60em;
+    height: 12em;
 }
