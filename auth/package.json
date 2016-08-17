@@ -17,6 +17,7 @@
   "author": "fantasylin",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "debug": "^2.2.0",
     "express": "^4.14.0",
     "express-jwt": "^3.4.0",
@@ -25,6 +26,7 @@
     "lodash": "^4.15.0",
     "md5": "^2.1.0",
     "mongoose": "^4.5.9",
+    "morgan": "^1.7.0",
     "redis": "^2.6.2"
   }
 }
