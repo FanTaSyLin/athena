@@ -4,9 +4,6 @@
 
 var debug = require('debug')('auth: ' + process.pid);
 var mongoose = require('mongoose');
-var md5 = require("md5");
-var _ = require('lodash');
-var saltHelp = require('../lib/salthelp.js');
 var Schema = mongoose.Schema;
 
 
