@@ -1,0 +1,20 @@
+{
+  "name": "pm-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "pm-api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fantasylin",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.15.0",
+    "mongoose": "^4.5.9",
+    "restify": "^4.1.1"
+  },
+  "devDependencies": {
+    "debug": "^2.2.0",
+    "morgan": "^1.7.0"
+  }
+}

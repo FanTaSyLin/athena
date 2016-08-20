@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SysConfig">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+    <link rel="stylesheet" href="styles/sysconfig.css">
+    <title>系统配置</title>
+    <link rel="shortcut icon" href="public/favicon.ico">
+</head>
+<body ng-controller="SysConfigController as SysConfigCtrl">
+<div class="header">
+    <div class="row" style="padding-top: 30px">
+        <b class="title">项 目 管 理 软 件</b>
+    </div>
+    <div class="row" style="padding-top: 15px">
+        <img src="public/pmLOGO.png" style="width: 78px;height: 78px"/>
+    </div>
+</div>
+<div class="container">
+    <ul class="nav nav-pills config-menu">
+        <li role="presentation" ng-class="{active: SysConfigCtrl.isSelectedTab(1)}">
+            <a href ng-click="SysConfigCtrl.selectTab(1)">部门分组配置</a>
+        </li>
+        <li role="presentation" ng-class="{active: SysConfigCtrl.isSelectedTab(2)}">
+            <a href ng-click="SysConfigCtrl.selectTab(2)">部门配置</a>
+        </li>
+        <li role="presentation" ng-class="{active: SysConfigCtrl.isSelectedTab(3)}">
+            <a href ng-click="SysConfigCtrl.selectTab(3)">权限模板配置</a>
+        </li>
+        <li role="presentation" ng-class="{active: SysConfigCtrl.isSelectedTab(4)}">
+            <a href ng-click="SysConfigCtrl.selectTab(4)">权限配置</a>
+        </li>
+    </ul>
+    <div class="horizontal-line"></div>
+    <div class="row">
+        <div class="well departmentGroupConfig" style="width: 720px; margin: 0 auto;">
+            <h2>部门分组设置</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="departmentGroup in SysConfigCtrl.departmentGroups">
+                    <td>
+                        <input type="text" ng-model="departmentGroup.id" readonly/>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="departmentGroup.name"/>
+                    </td>
+                    <td>
+                        <a href ng-click="SysConfigCtrl.updateDptGroup(departmentGroup.id, departmentGroup.name)">Update</a>
+                        <b >|</b>
+                        <a href>Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" ng-model="SysConfigCtrl.newDepartmentGroup.id"/>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="SysConfigCtrl.newDepartmentGroup.name"/>
+                    </td>
+                    <td>
+                        <a href>Add</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/module.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/run.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/ctrl.sysconfig.js"></script>
+</body>
+</html>

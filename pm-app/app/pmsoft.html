@@ -56,14 +56,15 @@
                    data-toggle="dropdown" href="#" title="Create New...">
                     <span class="glyphicon glyphicon-plus glyphicon-size-middle"></span>
                 </a>
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu dropdown-menu-custom" role="menu">
                     <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-target="#JobSheet">记录工作</a>
                     <a class="dropdown-item btn btn-align-left">新建维护</a>
                     <a class="dropdown-item btn btn-align-left">新建任务</a>
                     <a class="dropdown-item btn btn-align-left">新建提醒</a>
                     <a class="dropdown-item btn btn-align-left">新建活动</a>
                     <div class="dropdown-split-line" href="/"></div>
-                    <a class="dropdown-item btn btn-align-left">新建项目</a>
+                    <a class="dropdown-item btn btn-align-left" data-toggle="modal"
+                       data-target="#CreateProject">新建项目</a>
                 </ul>
             </div>
             <div class="dropdown">
@@ -71,7 +72,7 @@
                     <img class="user-icon" src="public/header0.png"/>
                 </a>
                 <a class="caret"></a>
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu dropdown-menu-custom" role="menu">
                     <div class="dropdown-menu-header">
                         <strong class="">
                             {{PMCtrl.username}}
@@ -330,6 +331,108 @@
 </div>
 <!--工作记录填写对话框 end-->
 
+<!--创建项目对话框 start-->
+<div class="modal fade" id="CreateProject" ng-controller="CreateProjectCtrl as CPCtrl">
+    <div class="modal-dialog size-CreateProject">
+        <div class="modal-content">
+            <!--标题-->
+            <div class="modal-header dialog-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title title-h4">创建新项目</h4>
+            </div>
+            <!--内容-->
+            <div class="modal-body dialog-body">
+                <section>
+                    <ul class="nav nav-pills">
+                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(1)}">
+                            <a href ng-click="CPCtrl.selectTab(1)">创建项目</a>
+                        </li>
+                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(2)}">
+                            <a href ng-click="CPCtrl.selectTab(2)">添加项目成员</a>
+                        </li>
+                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(3)}">
+                            <a href ng-click="CPCtrl.selectTab(3)">设置审批权限</a>
+                        </li>
+                    </ul>
+                    <div class="create-content-area">
+                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(1)">
+                            <div class="icon-project">
+                                <img src="public/illustration.png"/>
+                            </div>
+                            <div class="horizontal-line"></div>
+                            <div class="form-field">
+                                <input class="form-control" required="" type="text" placeholder="项目全称"/>
+                            </div>
+                            <div class="form-field">
+                                <input class="form-control" required="" type="text" placeholder="项目简称"/>
+                            </div>
+                            <div class="input-group form-field">
+                                <input class="form-control" required="" type="text" placeholder="项目类型">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                            <img src="public/project-type-gongcheng.png"
+                                                 style="width: 20px;height: 20px"/>
+                                            <a class="btn btn-align-left">工程类</a>
+                                        </div>
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                            <img src="public/project-type-ziyan.png"
+                                                 style="width: 20px;height: 20px"/>
+                                            <a class="btn btn-align-left">自研类</a>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <input class="form-control" role="textbox" placeholder="项目介绍"/>
+                            </div>
+                        </div>
+                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(2)">
+                            <div class="form-field" style="margin-top: 50px">
+                                <input class="form-control" required="" type="text" placeholder="请输入成员姓名，确认按回车"/>
+                            </div>
+                            <div ng-hide="CPCtrl.members.length">
+                                <div class="icon-project">
+                                    <img src="public/illustration-baton.png"/>
+                                </div>
+                                <p>现在项目中只有你一个,</p>
+                                <p>你可以在此邀请你的小伙伴一起协作。</p>
+                            </div>
+                            <div ng-show="CPCtrl.members.length" class="form-field">
+                                <div>
+                                    <div>
+                                        <img class="img-circle" style="width: 35px;height: 35px" src="public/12312312.jpg"/>
+                                        <b>FanTaSyLin</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(3)">
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!--页脚-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" ng-click="CPCtrl.back()">上一步</button>
+                <button type="button" class="btn btn-default" ng-click="CPCtrl.forward()"
+                        ng-hide="CPCtrl.isSelectedTab(3)">下一步
+                </button>
+                <button type="button" class="btn btn-primary"
+                        ng-show="CPCtrl.isSelectedTab(3)">创建
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--创建项目对话框 end-->
+
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="bower_components/summernote/dist/summernote.js"></script>
@@ -348,6 +451,7 @@
 <script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.myownctrl.js"></script>
 <script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.calendarctrl.js"></script>
 <script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.buildingctrl.js"></script>
+<script type="text/javascript" src="scripts/angular/pmsoft/pmsoft.ctrl.createproject.js"></script>
 <script type="text/javascript" src="lib/ngStorage.js"></script>
 <script type="text/javascript" src="scripts/jqueryFn.js"></script>
 </body>

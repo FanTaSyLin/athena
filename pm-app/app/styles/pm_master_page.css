@@ -210,7 +210,7 @@ a:hover, a:focus, a:active {
     text-decoration: none;
 }
 
-.dropdown-menu {
+.dropdown-menu-custom {
     text-align: left;
     font-size: 100%;
     top: 58px;
@@ -220,7 +220,7 @@ a:hover, a:focus, a:active {
     padding-bottom: 5px;
 }
 
-.dropdown-menu::before {
+.dropdown-menu-custom::before {
     content: '';
     display: inline-block;
     border-left: 6px solid transparent;
@@ -231,7 +231,7 @@ a:hover, a:focus, a:active {
     left: 9px;
 }
 
-.dropdown-menu::after {
+.dropdown-menu-custom::after {
     content: '';
     display: inline-block;
     border-left: 6px solid transparent;
@@ -325,6 +325,11 @@ a:hover, a:focus, a:active {
 .size-jobsheet {
     width: 57.5em;
     height: 60em;
+}
+
+.size-CreateProject {
+    width: 47.5em;
+    height: 50em;
 }
 
 .area-project-list {
@@ -440,4 +445,73 @@ a:hover, a:focus, a:active {
 .recode-area-markdown {
     width: 60em;
     height: 12em;
+}
+
+.item-display-none {
+    display: none;
+}
+
+.create-content-area {
+    width: 45em;
+}
+
+.project-edit-info-area {
+    height: 500px;
+    width: 45em;
+    margin-top: 10px;
+}
+
+.form-field {
+    width: 300px;
+    border: 0;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.horizontal-line {
+    width: 500px;
+    height: 1px;
+    background-color: #d9d9d9;
+    margin: 30px auto;
+}
+
+.icon-project {
+    width: 188px;
+    height: 150px;
+    margin: 40px auto 30px auto;
+
+}
+
+.icon-project > img {
+    width: 188px;
+    height: 150px;
+}
+
+.input-group .dropdown-menu {
+    clear: both;
+}
+
+#CreateProject p {
+    width: 400px;
+    font-family: "Microsoft YaHei";
+    color: #6e6e6e;
+    font-size: 1.1em;
+    margin: 5px auto;
+    font-weight: 500;
+    text-align: center;
+}
+
+#CreateProject .members-area {
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #e6f0f0;
+    margin-top: 10px;
+}
+
+.project-edit-info-area .horizontal-line {
+    width: 500px;
+    height: 1px;
+    background-color: #d9d9d9;
+    margin: 10px auto;
 }

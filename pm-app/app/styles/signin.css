@@ -1,0 +1,66 @@
+.header {
+    width: 100%;
+    height: 130px;
+    background-repeat: no-repeat;
+    background-position: center 0;
+    background-size: cover;
+    text-align: center;
+    position: relative;
+    background-image: url(../public/topbackground.jpg);
+    box-shadow: 3px 1px 2px 0px #666;
+}
+
+.title {
+    width: 100%;
+    font-size: 2.5em;
+    font-weight: 600;
+    font-family: "Microsoft YaHei";
+    color: #ffffff;
+    text-align: center;
+}
+
+.horizontal-line {
+    width: 100%;
+    height: 1px;
+    background-color: #d9d9d9;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.info-area {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.form-field {
+    width: 300px;
+    border: 0;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.item-display-none {
+    display: none;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 4px 10px 4px 15px;
+    overflow: hidden;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 2em;
+}
+
+.dropdown-item:hover, .dropdown-item.zeroclipboard-is-hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #4078c0
+}
+
+.dropdown-item:hover > a,
+.dropdown-item:focus > a,
+.dropdown-item:active > a {
+    color: #ffffff;
+}
