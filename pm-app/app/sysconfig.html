@@ -54,7 +54,7 @@
                     </td>
                     <td>
                         <a href ng-click="SysConfigCtrl.updateDptGroup(departmentGroup._id, departmentGroup.name)">Update</a>
-                        <b >|</b>
+                        <b>|</b>
                         <a href ng-click="SysConfigCtrl.deleteDptGroup(departmentGroup._id)">Delete</a>
                     </td>
                 </tr>
@@ -66,7 +66,8 @@
                         <input type="text" ng-model="SysConfigCtrl.newDepartmentGroup.name"/>
                     </td>
                     <td>
-                        <a ng-click="SysConfigCtrl.insertDptGroup(SysConfigCtrl.newDepartmentGroup.id, SysConfigCtrl.newDepartmentGroup.name)"  href>Add</a>
+                        <a ng-click="SysConfigCtrl.insertDptGroup(SysConfigCtrl.newDepartmentGroup.id, SysConfigCtrl.newDepartmentGroup.name)"
+                           href>Add</a>
                     </td>
                 </tr>
             </table>
@@ -81,6 +82,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Group</th>
                     <th></th>
                 </tr>
                 <tr ng-repeat="department in SysConfigCtrl.departments">
@@ -91,8 +93,23 @@
                         <input type="text" ng-model="department.name"/>
                     </td>
                     <td>
-                        <a href ng-click="SysConfigCtrl.updateDepartment(department.id, department.name)">Update</a>
-                        <b >|</b>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default  dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                {{SysConfigCtrl.getDepartmentGroupName(department.group)}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="Group in SysConfigCtrl.departmentGroups">
+                                    <a href ng-click="SysConfigCtrl.selectedDepartmentGroup(Group.name, department)">{{Group.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <a href
+                           ng-click="SysConfigCtrl.updateDepartment(department.id, department.name, department.group)">Update</a>
+                        <b>|</b>
                         <a href ng-click="SysConfigCtrl.deleteDepartment(department._id)">Delete</a>
                     </td>
                 </tr>
@@ -104,7 +121,22 @@
                         <input type="text" ng-model="SysConfigCtrl.newDepartment.name"/>
                     </td>
                     <td>
-                        <a ng-click="SysConfigCtrl.insertDepartment(SysConfigCtrl.newDepartment.id, SysConfigCtrl.newDepartment.name)"  href>Add</a>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    {{SysConfigCtrl.getDepartmentGroupName(SysConfigCtrl.newDepartment.group)}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="Group in SysConfigCtrl.departmentGroups">
+                                    <a href ng-click="SysConfigCtrl.selectedDepartmentGroup(Group.id, SysConfigCtrl.newDepartment)">{{Group.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <a ng-click="SysConfigCtrl.insertDepartment(SysConfigCtrl.newDepartment.id, SysConfigCtrl.newDepartment.name, SysConfigCtrl.newDepartment.group)"
+                           href>Add</a>
                     </td>
                 </tr>
             </table>

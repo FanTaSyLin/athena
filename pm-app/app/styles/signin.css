@@ -20,16 +20,28 @@
 }
 
 .horizontal-line {
-    width: 100%;
+    width: 500px;
     height: 1px;
     background-color: #d9d9d9;
-    margin-bottom: 30px;
-    margin-top: 10px;
+    margin: 10px auto 30px auto;
 }
 
 .info-area {
     width: 400px;
     margin: 0 auto;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #03a9f4;
+    border-color: #0398db;
+}
+
+.anim-blue-all {
+    position: relative;
+    background-color: #03a9f4;
+    color: #fff;
+    transition: padding-right 218ms ease;
 }
 
 .form-field {

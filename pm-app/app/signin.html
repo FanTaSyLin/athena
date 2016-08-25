@@ -21,13 +21,13 @@
     <form class="info-area" action="" method="post">
         <div class="horizontal-line"></div>
         <div class="form-field">
-            <input class="form-control" role="textbox" readonly="readonly" value="{{SignInCtrl.account}}"/>
+            <input class="form-control" role="textbox" readonly="readonly" value="{{SignInCtrl.userInfo.account}}"/>
         </div>
         <div class="form-field">
             <input class="form-control" role="textbox" placeholder="用户姓名"/>
         </div>
         <div class="input-group form-field">
-            <input class="form-control" required="" type="text" placeholder="性别">
+            <input class="form-control" required="" type="text" placeholder="性别" value="{{SignInCtrl.getSexName(SignInCtrl.userInfo.sex)}}" readonly>
             <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="true">
@@ -35,49 +35,37 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <div class="dropdown-item btn btn-align-left ">
-                        <a class="item-display-none">1</a>
-                        <a class="btn btn-align-left">男</a>
+                        <a class="btn btn-align-left" href ng-click="SignInCtrl.selectedSex('male')">男</a>
                     </div>
                     <div class="dropdown-item btn btn-align-left ">
-                        <a class="item-display-none">2</a>
-                        <a class="btn btn-align-left">女</a>
+                        <a class="btn btn-align-left" href ng-click="SignInCtrl.selectedSex('female')">女</a>
                     </div>
                 </ul>
             </div>
         </div>
         <div class="form-field">
-            <input class="form-control" role="textbox" placeholder="手机"/>
+            <input class="form-control" role="textbox" placeholder="手机" ng-model="SignInCtrl.useInfo.mobile"/>
         </div>
         <div class="form-field">
-            <input class="form-control" role="textbox" placeholder="座机"/>
+            <input class="form-control" role="textbox" placeholder="座机" ng-model="SignInCtrl.useInfo.officeTel"/>
         </div>
         <div class="input-group form-field">
-            <input class="form-control" required="" type="text" placeholder="所属部门">
+            <input class="form-control" required="" type="text" placeholder="所属部门" value="{{SignInCtrl.getDepartmentName(SignInCtrl.userInfo.departmentId)}}" readonly>
             <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="true">
+                        aria-haspopup="true" aria-expanded="true" ng-click="SignInCtrl.getDepartments()">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <div class="dropdown-item btn btn-align-left ">
-                        <a class="item-display-none">1</a>
-                        <a class="btn btn-align-left">软件一部</a>
-                    </div>
-                    <div class="dropdown-item btn btn-align-left ">
-                        <a class="btn btn-align-left">软件二部</a>
-                    </div>
-                    <div class="dropdown-item btn btn-align-left ">
-                        <a class="btn btn-align-left">软件三部</a>
-                    </div>
-                    <div class="dropdown-item btn btn-align-left ">
-                        <a class="btn btn-align-left">软件四部</a>
-                    </div>
-                    <div class="dropdown-item btn btn-align-left ">
-                        <a class="btn btn-align-left">软件五部</a>
+                    <div ng-repeat="department in SignInCtrl.departments" class="dropdown-item btn btn-align-left ">
+                        <a class="btn btn-align-left" ng-click="SignInCtrl.selectedDepartment(department.id)">{{department.name}}</a>
                     </div>
                 </ul>
             </div>
         </div>
+        <button class="btn btn-primary form-field anim-blue-all" type="button" ng-click="login(credentials)">
+            登录
+        </button>
     </form>
 </div>
 
@@ -88,6 +76,7 @@
 <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
 <script type="text/javascript" src="scripts/angular/signin/module.js"></script>
 <script type="text/javascript" src="scripts/angular/signin/run.js"></script>
-<script type="text/javascript" src="scripts/angular/signin/ctrl.signin.js"></script>
+<script type="text/javascript" src="scripts/angular/signin/controller.js"></script>
+<script type="text/javascript" src="scripts/angular/signin/services.js"></script>
 </body>
 </html>

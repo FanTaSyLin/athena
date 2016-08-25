@@ -112,6 +112,11 @@ server.put({
     version: '0.0.1'
 }, sysConfigHandler.deleteDepartment);
 
+server.put({
+    path: BASEPATH + '/sysconfig/department/update',
+    version: '0.0.1'
+}, sysConfigHandler.updateDepartment);
+
 
 server.listen(HTTP_PORT, function () {
     debug('%s listening at %s ', server.name, server.url);

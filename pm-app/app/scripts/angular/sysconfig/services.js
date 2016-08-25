@@ -57,12 +57,30 @@
         function deleteDepartmentGroup(data, successFn, errorFn) {
             $http.put(baseUrl + '/dptgroup/delete?id=' + data).success(successFn).error(errorFn);
         }
-        
+
+        function getDepartments(successFn, errorFn) {
+            $http({
+                url: baseUrl + '/department',
+                method: 'GET'
+            }).success(successFn).error(errorFn);
+        }
+
+        function insertDepartment(data, successFn, errorFn) {
+            var body = {
+                id: data.id,
+                name: data.name,
+                group: data.group
+            };
+            $http.post(baseUrl + '/department', body).success(successFn).error(errorFn);
+        }
+
         return {
             getDepartmentGroups: getDepartmentGroups,
             insertDepartmentGroup: insertDepartmentGroup,
             updateDepartmentGroup: updateDepartmentGroup,
-            deleteDepartmentGroup: deleteDepartmentGroup
+            deleteDepartmentGroup: deleteDepartmentGroup,
+            getDepartments: getDepartments,
+            insertDepartment: insertDepartment
         } 
     }
     

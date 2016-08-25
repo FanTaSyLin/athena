@@ -88,13 +88,20 @@ button {
 }
 
 .config {
-    width: 720px;
+    width: 780px;
     margin: 0 auto;
 }
 
 .config input {
     font-family: "Microsoft YaHei";
     font-size: 1.5em;
+    font-weight: 400;
+    color: #5a5a5a;
+}
+
+.config button {
+    font-family: "Microsoft YaHei";
+    font-size: 1.3em;
     font-weight: 400;
     color: #5a5a5a;
 }

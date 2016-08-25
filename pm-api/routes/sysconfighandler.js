@@ -18,7 +18,12 @@ module.exports = function () {
         updateDptGroup: departmentGroup_Update,
         insertDepartment: department_Insert,
         getDepartment: department_Get,
-        deleteDepartment: department_Delete
+        deleteDepartment: department_Delete,
+        updateDepartment: department_Update
+    }
+
+    function department_Update(req, res, next) {
+
     }
 
     function department_Delete(req, res, next) {
@@ -26,10 +31,61 @@ module.exports = function () {
     }
 
     function department_Get(req, res, next) {
+        try {
 
+            SysConfigSchema.findOne({
+                name: 'Shinetek'
+            }, 'departments', function (err, doc) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
+                var result = doc.toObject();
+                return res.end(JSON.stringify(result.departments));
+
+            });
+
+        } catch (err) {
+            return res.end(err);
+        }
     }
 
     function department_Insert(req, res, next) {
+        if (req.body == undefined) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = JSON.parse(req.body);
+        var id = body.id;
+        var name = body.name;
+        var group = body.group;
+
+        if (id == undefined || name == undefined || group == undefined) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var department = SysConfigSchema.getDptItem(id, name, group);
+
+        try {
+            SysConfigSchema.update({
+                name: 'Shinetek'
+            }, {
+                $push: {
+                    "departments": department
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    return res.end();
+                }
+            });
+        } catch (err) {
+            return next(err);
+        }
 
     }
 
