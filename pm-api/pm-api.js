@@ -80,7 +80,37 @@ server.get({
 server.post({
     path: BASEPATH + '/sysconfig/dptgroup',
     version: '0.0.1'
-}, sysConfigHandler.insertDtpGroup);
+}, sysConfigHandler.insertDptGroup);
+
+server.get({
+    path: BASEPATH + '/sysconfig/dptgroup',
+    version: '0.0.1'
+}, sysConfigHandler.getDptGroup);
+
+server.put({
+    path: BASEPATH + '/sysconfig/dptgroup/delete',
+    version: '0.0.1'
+}, sysConfigHandler.deleteDptGroup);
+
+server.put({
+    path: BASEPATH + '/sysconfig/dptgroup/update',
+    version: '0.0.1'
+}, sysConfigHandler.updateDptGroup);
+
+server.post({
+    path: BASEPATH + '/sysconfig/department',
+    version: '0.0.1'
+}, sysConfigHandler.insertDepartment);
+
+server.get({
+    path: BASEPATH + '/sysconfig/department',
+    version: '0.0.1'
+}, sysConfigHandler.getDepartment);
+
+server.put({
+    path: BASEPATH + '/sysconfig/department/delete',
+    version: '0.0.1'
+}, sysConfigHandler.deleteDepartment);
 
 
 server.listen(HTTP_PORT, function () {

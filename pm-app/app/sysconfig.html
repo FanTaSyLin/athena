@@ -34,8 +34,10 @@
         </li>
     </ul>
     <div class="horizontal-line"></div>
-    <div class="row">
-        <div class="well departmentGroupConfig" style="width: 720px; margin: 0 auto;">
+
+    <!--部门分组设置-->
+    <div ng-show="SysConfigCtrl.isSelectedTab(1)">
+        <div class="config">
             <h2>部门分组设置</h2>
             <table>
                 <tr>
@@ -51,9 +53,9 @@
                         <input type="text" ng-model="departmentGroup.name"/>
                     </td>
                     <td>
-                        <a href ng-click="SysConfigCtrl.updateDptGroup(departmentGroup.id, departmentGroup.name)">Update</a>
+                        <a href ng-click="SysConfigCtrl.updateDptGroup(departmentGroup._id, departmentGroup.name)">Update</a>
                         <b >|</b>
-                        <a href>Delete</a>
+                        <a href ng-click="SysConfigCtrl.deleteDptGroup(departmentGroup._id)">Delete</a>
                     </td>
                 </tr>
                 <tr>
@@ -64,12 +66,51 @@
                         <input type="text" ng-model="SysConfigCtrl.newDepartmentGroup.name"/>
                     </td>
                     <td>
-                        <a href>Add</a>
+                        <a ng-click="SysConfigCtrl.insertDptGroup(SysConfigCtrl.newDepartmentGroup.id, SysConfigCtrl.newDepartmentGroup.name)"  href>Add</a>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
+
+    <!--部门设置-->
+    <div ng-show="SysConfigCtrl.isSelectedTab(2)">
+        <div class="config">
+            <h2>部门设置</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="department in SysConfigCtrl.departments">
+                    <td>
+                        <input type="text" ng-model="department.id" readonly/>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="department.name"/>
+                    </td>
+                    <td>
+                        <a href ng-click="SysConfigCtrl.updateDepartment(department.id, department.name)">Update</a>
+                        <b >|</b>
+                        <a href ng-click="SysConfigCtrl.deleteDepartment(department._id)">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" ng-model="SysConfigCtrl.newDepartment.id"/>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="SysConfigCtrl.newDepartment.name"/>
+                    </td>
+                    <td>
+                        <a ng-click="SysConfigCtrl.insertDepartment(SysConfigCtrl.newDepartment.id, SysConfigCtrl.newDepartment.name)"  href>Add</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 
@@ -79,7 +120,10 @@
 <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
 <script type="text/javascript" src="scripts/angular/sysconfig/module.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/config.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/services.js"></script>
 <script type="text/javascript" src="scripts/angular/sysconfig/run.js"></script>
-<script type="text/javascript" src="scripts/angular/sysconfig/ctrl.sysconfig.js"></script>
+<script type="text/javascript" src="scripts/angular/sysconfig/controller.js"></script>
+<script type="text/javascript" src="lib/ngStorage.js"></script>
 </body>
 </html>

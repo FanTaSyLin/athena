@@ -87,21 +87,26 @@ button {
     margin: 5px auto;
 }
 
-.departmentGroupConfig input {
+.config {
+    width: 720px;
+    margin: 0 auto;
+}
+
+.config input {
     font-family: "Microsoft YaHei";
     font-size: 1.5em;
     font-weight: 400;
     color: #5a5a5a;
 }
 
-.departmentGroupConfig a,
-.departmentGroupConfig b {
+.config a,
+.config b {
     font-family: "Microsoft YaHei";
     font-size: 1.2em;
     font-weight: 400;
 }
 
-.departmentGroupConfig table {
+.config table {
     border-collapse: separate;
     border-spacing: 10px;
 }

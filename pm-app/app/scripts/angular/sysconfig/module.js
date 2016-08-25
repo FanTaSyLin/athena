@@ -6,6 +6,6 @@
 
     'use strict';
 
-    angular.module('SysConfig', []);
+    angular.module('SysConfig', ['ngStorage']);
 
 })();

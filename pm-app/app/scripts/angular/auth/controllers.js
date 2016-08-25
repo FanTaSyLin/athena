@@ -23,8 +23,8 @@ app.controller('LoginCtrl', ['$cookies', '$scope', 'AuthService', function ($coo
 
 
 
-        }, function (res) {
-
+        }, function (data, status, headers, config) {
+            alert('err');
         })
     }
 

@@ -10,16 +10,58 @@ module.exports = function () {
     var ParamProviderError = require('./../errors/ParamProviderError.js');
     var DBOptionError = require('./../errors/DBOptionError.js');
     var SysConfigSchema = require('./../modules/sysconfig-schema.js');
-    var DptGroupSchema = require('./../modules/departmentgroup-schema.js');
 
     var sysConfigHandler = {
-        insertDtpGroup: departmentGroup_Insert
+        insertDptGroup: departmentGroup_Insert,
+        getDptGroup: departmentGroup_Get,
+        deleteDptGroup: departmentGroup_Delete,
+        updateDptGroup: departmentGroup_Update,
+        insertDepartment: department_Insert,
+        getDepartment: department_Get,
+        deleteDepartment: department_Delete
     }
 
+    function department_Delete(req, res, next) {
+
+    }
+
+    function department_Get(req, res, next) {
+
+    }
+
+    function department_Insert(req, res, next) {
+
+    }
+
+    function departmentGroup_Get(req, res, next) {
+        try {
+
+            SysConfigSchema.findOne({
+                name: 'Shinetek'
+            }, 'departmentGroups', function (err, doc) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
+                var result = doc.toObject();
+                return res.end(JSON.stringify(result.departmentGroups));
+
+            });
+
+        } catch (err) {
+            return res.end(err);
+        }
+    }
 
     function departmentGroup_Insert(req, res, next) {
-        var id = req.params['id'];
-        var name = req.params['name']
+        if (req.body == undefined) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = JSON.parse(req.body);
+        var id = body.id;
+        var name = body.name;
 
         if (_.isNull(id) || _.isNull(name)) {
             return next(new ParamProviderError(415, {
@@ -27,23 +69,90 @@ module.exports = function () {
             }));
         }
 
-        var dptGroup = new DptGroupSchema();
+        var dptGroup = SysConfigSchema.getDptGroupItem(id, name);
 
         try {
-            dptGroup.init(id, name);
             SysConfigSchema.update({
-                name: 'Shinetek01'
+                name: 'Shinetek'
             }, {
                 $push: {
-                    'departmentGroups': dptGroup
+                    "departmentGroups": dptGroup
                 }
             }, function (err) {
-                return next(new DBOptionError(415, err));
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    return res.end();
+                }
             });
         } catch (err) {
-            return next(err)
+            return next(err);
         }
 
+    }
+
+    function departmentGroup_Delete(req, res, next) {
+        if (req.params == undefined) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+        var id = req.params['id'];
+
+        try {
+            SysConfigSchema.update({
+                name: 'Shinetek'
+            }, {
+                $pull: {
+                    "departmentGroups": {
+                        _id: id
+                    }
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    return res.end();
+                }
+            });
+        } catch (err) {
+            return next(err);
+        }
+
+
+    }
+
+    function departmentGroup_Update(req, res, next) {
+        if (req.body == undefined) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = JSON.parse(req.body);
+        var _id = body._id;
+        var name = body.name;
+
+        if (_.isNull(_id) || _.isNull(name)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        SysConfigSchema.update({
+            "name": "Shinetek",
+            "departmentGroups._id": _id
+        }, {
+            $set: {
+                'departmentGroups.$.name' : name
+            }
+        }, function (err) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            } else {
+                return res.end();
+            }
+        });
     }
 
     return sysConfigHandler;

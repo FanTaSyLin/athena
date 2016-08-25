@@ -7,6 +7,7 @@ var app = angular.module('Auth');
 app.factory('AuthService', ['$http', function ($http) {
 
     var baseUrl = 'http://123.56.135.196:4001/api/verify';
+    //var baseUrl = 'http://localhost:4001/api/verify';
 
     function loginFunc(data, success, error) {
 
