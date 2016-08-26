@@ -1,3 +1,4 @@
+
 .header {
     width: 100%;
     height: 130px;
@@ -38,10 +39,9 @@
 }
 
 .anim-blue-all {
-    position: relative;
     background-color: #03a9f4;
     color: #fff;
-    transition: padding-right 218ms ease;
+    width: 100%;
 }
 
 .form-field {
@@ -75,4 +75,8 @@
 .dropdown-item:focus > a,
 .dropdown-item:active > a {
     color: #ffffff;
+}
+
+.form-control {
+    font-size: 1.4em;
 }
