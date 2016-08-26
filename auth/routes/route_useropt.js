@@ -6,6 +6,7 @@ var debug = require('debug')('auth: ' + process.pid);
 var path = require('path');
 var Router = require('express').Router;
 var User = require(path.join(__dirname, "..", "modules", "user.js"));
+var tokenHelp =require('./../lib/tokenhelp_mongo.js');
 var UnauthorizedAccessError = require(path.join(__dirname, '..', 'errors', 'UnauthorizedAccessError.js'));
 
 module.exports = function () {

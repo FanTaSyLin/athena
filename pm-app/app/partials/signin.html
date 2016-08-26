@@ -1,21 +1,21 @@
-<form class="auth-form form-horizontal tb-auth" action="" method="post">
+<form class="auth-form form-horizontal tb-auth" ng-controller="SignInController as SignCtrl">
     <div class="horizontal-line"></div>
     <input name="account" type="hidden" value="">
     <div class="form-field">
-        <input name="account" class="form-control email" required="" type="text" placeholder="账号" ng-model="auth.account"/>
+        <input name="account" class="form-control email" required="" type="text" placeholder="账号" ng-model="SignCtrl.auth.username"/>
     </div>
     <div class="form-field">
-        <input name="password" class="form-control password" required="" type="text" placeholder="密码" ng-model="auth.password"/>
+        <input name="password" class="form-control password" required="" type="text" placeholder="密码" ng-model="SignCtrl.auth.password"/>
     </div>
     <div class="form-field">
-        <input name="password" class="form-control password" required="" type="text" placeholder="确认密码" ng-model="auth.password2"/>
+        <input name="password" class="form-control password" required="" type="text" placeholder="确认密码" ng-model="SignCtrl.auth.password2"/>
     </div>
-    <button class="btn btn-primary anim-blue-all" type="submit" data-gta="event" data-label="login-direct" ng-click="signIn(auth)">
+    <button class="btn btn-primary anim-blue-all" type="button" ng-click="SignCtrl.signIn(SignCtrl.auth)">
         注册
     </button>
     <div class="horizontal-line"></div>
     <div class="tb-auth">
-        <a class="btn btn-primary anim-blue1 signin" ng-href="/login">
+        <a class="btn btn-primary anim-blue1 signin" href="#/login">
             已有账号？登陆
         </a>
     </div>

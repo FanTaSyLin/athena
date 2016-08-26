@@ -8,7 +8,7 @@ var Router = require('express').Router;
 module.exports = function () {
     var router = new Router();
 
-    router.route('/login').get(login);
+    router.route('/auth').get(auth);
 
     router.route('/signin').get(signin)
 
@@ -24,7 +24,7 @@ function signin(req, res, next) {
     res.sendfile('app/signin.html');
 }
 
-function login (req, res, next) {
+function auth (req, res, next) {
     res.sendfile('app/auth.html');
 }
 

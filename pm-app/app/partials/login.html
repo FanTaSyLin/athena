@@ -1,22 +1,22 @@
-<form class="auth-form form-horizontal tb-auth" action="" method="post">
+<form class="auth-form form-horizontal tb-auth" action="" method="post" ng-controller="LoginController as LoginCtrl">
     <div class="horizontal-line"></div>
     <input name="account" type="hidden" value="">
     <div class="form-field">
-        <input id="username" ng-model="credentials.username" class="form-control" required="" type="text" placeholder="账号"/>
+        <input id="username" ng-model="LoginCtrl.credentials.username" class="form-control" required="" type="text" placeholder="账号"/>
     </div>
     <div class="form-field">
-        <input id="password" ng-model="credentials.password" class="form-control" required="" type="text" placeholder="密码"/>
+        <input id="password" ng-model="LoginCtrl.credentials.password" class="form-control" required="" type="text" placeholder="密码"/>
     </div>
-    <button class="btn btn-primary anim-blue-all" type="button" ng-click="login(credentials)">
+    <button class="btn btn-primary anim-blue-all" type="button" ng-click="LoginCtrl.login(credentials)">
         登录
     </button>
     <div class="horizontal-line"></div>
     <div class="tb-auth">
-        <a class="btn btn-primary others anim-grey forget" ng-href="/forgot">
+        <a class="btn btn-primary others anim-grey forget" href="#/forgot">
             忘记密码？重置
             <span class="icon icon-upload"></span>
         </a>
-        <a class="btn btn-primary anim-blue1 signin" ng-href="/signin">
+        <a class="btn btn-primary anim-blue1 signin" href="#/signin">
             注册
         </a>
         <a class="btn btn-primary anim-blue1 help" href="http://10.24.43.63/pmdoc" target="_blank">

@@ -4,25 +4,20 @@
 
 (function () {
     angular.module('Auth')
-        .controller('AuthController', AuthController);
+        .controller('LoginController', LoginController)
+        .controller('SignInController', SignInController);
 
-    AuthController.$inject = ['$cookies', 'AuthService'];
+    LoginController.$inject = ['$cookies', 'AuthService'];
+    SignInController.$inject = ['$cookies', 'AuthService'];
 
-    function AuthController($cookies, AuthService) {
+    function SignInController($cookies, AuthService) {
         var self = this;
-
-        self.credentials = {
-            username: '',
-            password: ''
-        };
-
         self.auth = {
             username: '',
             password: '',
             password2: ''
         };
 
-        self.login = login;
         self.signIn = signIn;
 
         function signIn(auth) {
@@ -31,13 +26,36 @@
                 //TODO: 提醒
             } else {
                 AuthService.signIn(auth, function (data, status, headers, config) {
+                    AuthService.login({
+                        username: self.auth.username,
+                        password: self.auth.password
+                    }, function (data, status, headers, config) {
+
+                        $cookies.put('username', data.username);
+                        $cookies.put('token', data.token);
+                        window.location.href = 'http://localhost:4002/signin';
+
+                    }, function (data, status, headers, config) {
+                        alert('err');
+                    });
 
                 }, function (data, status, headers, config) {
-
+                    alert(status);
                 });
             }
 
         }
+    }
+
+    function LoginController($cookies, AuthService) {
+        var self = this;
+
+        self.credentials = {
+            username: '',
+            password: ''
+        };
+
+        self.login = login;
 
         function login(credentials) {
             AuthService.login(credentials, function (data, status, headers, config) {
@@ -52,7 +70,7 @@
 
             }, function (data, status, headers, config) {
                 alert('err');
-            })
+            });
         }
     }
 

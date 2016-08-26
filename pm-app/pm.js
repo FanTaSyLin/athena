@@ -56,7 +56,7 @@ jwtCheck.unless = unless;
 
 //app.use(jwtCheck.unless({ path : '/login' }));
 
-app.use(utils.middleware().unless({ path : '/login' }));
+app.use(utils.middleware().unless({ path : '/auth' }));
 
 app.use("/", require('./routes/user.js')());
 
@@ -76,7 +76,7 @@ app.use(function (err, req, res, next) {
         case "UnauthorizedAccessError":
             code = err.status;
             msg = undefined;
-            return res.status(code).sendfile('app/auth.html');
+            return res.redirect('/auth');
             break;
         case "BadRequestError":
         case 'NotFoundError':
