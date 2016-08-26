@@ -7,23 +7,28 @@
     'use strict';
 
     angular.module('SignIn')
-        .factory('SysConfigService', SysConfigService);
+        .factory('SignInService', SignInService);
 
-    SysConfigService.$inject = ['$http'];
+    SignInService.$inject = ['$http'];
 
-    const baseUrl = 'http://localhost:4003/api/sysconfig'
+    const baseUrl = 'http://localhost:4003/api'
 
-    function SysConfigService($http) {
+    function SignInService($http) {
 
         function getDepartments(successFn, errorFn) {
             $http({
-                url: baseUrl + '/department',
+                url: baseUrl + '/sysconfig/department',
                 method: 'GET'
             }).success(successFn).error(errorFn);
         }
 
+        function userInfoSignIn(body, successFn, errorFn) {
+            $http.post(baseUrl + '/userinfo', body).success(successFn).error(errorFn);
+        }
+
         return {
-            getDepartments: getDepartments
+            getDepartments: getDepartments,
+            userInfoSignIn: userInfoSignIn
         }
     }
 

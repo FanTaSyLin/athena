@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+    <!--<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">-->
     <link rel="stylesheet" href="styles/signin.css">
     <title>用户注册</title>
 </head>
@@ -24,7 +24,7 @@
             <input class="form-control" role="textbox" readonly="readonly" value="{{SignInCtrl.userInfo.account}}"/>
         </div>
         <div class="form-field">
-            <input class="form-control" role="textbox" placeholder="用户姓名"/>
+            <input class="form-control" role="textbox" placeholder="用户姓名" ng-model="SignInCtrl.userInfo.name"/>
         </div>
         <div class="input-group form-field">
             <input class="form-control" required="" type="text" placeholder="性别" value="{{SignInCtrl.getSexName(SignInCtrl.userInfo.sex)}}" readonly>
@@ -44,10 +44,10 @@
             </div>
         </div>
         <div class="form-field">
-            <input class="form-control" role="textbox" placeholder="手机" ng-model="SignInCtrl.useInfo.mobile"/>
+            <input class="form-control" role="textbox" placeholder="手机" ng-model="SignInCtrl.userInfo.mobile"/>
         </div>
         <div class="form-field">
-            <input class="form-control" role="textbox" placeholder="座机" ng-model="SignInCtrl.useInfo.officeTel"/>
+            <input class="form-control" role="textbox" placeholder="座机" ng-model="SignInCtrl.userInfo.officeTel"/>
         </div>
         <div class="input-group form-field">
             <input class="form-control" required="" type="text" placeholder="所属部门" value="{{SignInCtrl.getDepartmentName(SignInCtrl.userInfo.departmentId)}}" readonly>
@@ -63,9 +63,12 @@
                 </ul>
             </div>
         </div>
-        <button class="btn btn-primary form-field anim-blue-all" type="button" ng-click="login(credentials)">
-            登录
-        </button>
+        <div class="form-field">
+            <button class="btn btn-default btn-primary anim-blue-all" type="button"
+                    style="font-size: 1.2em; font-weight: 400" ng-click="SignInCtrl.signIn(SignInCtrl.userInfo)">
+                设  置
+            </button>
+        </div>
     </form>
 </div>
 

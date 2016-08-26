@@ -7,19 +7,21 @@
     angular.module('SignIn')
         .controller('SignInController', SignInCtrl);
 
-    SignInCtrl.$inject = ['SysConfigService'];
+    SignInCtrl.$inject = ['SignInService'];
 
-    function SignInCtrl(SysConfigService) {
+    function SignInCtrl(SignInService) {
         var self = this;
         self.account = 'fanl';
         self.departments = [];
 
         self.userInfo = {
             account: 'fanl',
+            name: '',
             departmentId: '',
             mobile: '',
             officeTel: '',
-            sex: 'male'
+            sex: 'male',
+            authority: 0
         }
 
         self.getDepartments = getDepartments;
@@ -27,6 +29,15 @@
         self.selectedDepartment = selectedDepartment;
         self.selectedSex = selectedSex;
         self.getSexName = getSexName;
+        self.signIn = signIn;
+
+        function signIn(userInfo) {
+            SignInService.userInfoSignIn(userInfo, function (data, status, header, config) {
+                window.location.href = 'http://localhost:4002/pm-soft'
+            }, function (data, status, header, config) {
+                
+            });
+        }
 
         function getSexName(id) {
             if (id === 'male') {
@@ -55,7 +66,7 @@
         }
 
         function getDepartments() {
-            SysConfigService.getDepartments(function (data) {
+            SignInService.getDepartments(function (data) {
 
                 var list = [];
                 for (var i = 0; i < data.length; i++) {

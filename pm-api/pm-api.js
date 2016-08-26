@@ -50,6 +50,17 @@ server.use(restify.CORS());
 const BASEPATH = '/api';
 var jobRecodeHandler = require('./routes/jobrecodehandler.js')();
 var sysConfigHandler = require('./routes/sysconfighandler.js')();
+var userInfoHandler = require('./routes/userInfohandler.js')();
+
+
+/**
+ * 员工信息注册
+ */
+server.post({
+    path: BASEPATH + '/userinfo',
+    version: '0.0.1'
+}, userInfoHandler.create)
+
 
 /**
  * 工作记录相关API

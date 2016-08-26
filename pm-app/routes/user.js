@@ -8,7 +8,9 @@ var Router = require('express').Router;
 module.exports = function () {
     var router = new Router();
 
-    router.route('/login').get(login)
+    router.route('/login').get(login);
+
+    router.route('/signin').get(signin)
 
     router.route("/pm-soft").get(startApp);
 
@@ -17,6 +19,10 @@ module.exports = function () {
     return router;
 
 };
+
+function signin(req, res, next) {
+    res.sendfile('app/signin.html');
+}
 
 function login (req, res, next) {
     res.sendfile('app/auth.html');

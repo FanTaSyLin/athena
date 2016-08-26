@@ -49,11 +49,7 @@ JobLogSchema.methods.init = function (body) {
         self.content = body.content || '';
         self.duration = Math.abs(self.endTime - self.starTime) / (1000 * 60 * 60).toFixed(1);
     } catch (err) {
-        if (!verify(body)) {
-            throw new DataVerifyError("415", {
-                message: 'Invalid JobLog body'
-            });
-        }
+        throw new DataVerifyError("415", err);
     }
 }
 

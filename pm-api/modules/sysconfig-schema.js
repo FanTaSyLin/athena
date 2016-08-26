@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+var DataVerifyError = require('./../errors/DataVerifyError.js');
 var Schema = mongoose.Schema;
 
 var SysConfigSchema = new Schema({
@@ -23,7 +24,12 @@ var SysConfigSchema = new Schema({
         id: {type: Number, unique: true}, /*编号*/
         name: {type: String}, /*名称*/
         authority: [Boolean] /*权限*/
-    }]
+    }],
+    /*默认权限模板*/
+    defaultAuthority: {
+        id: {type: Number},
+        authority: {type: [Boolean]}
+    }
 });
 
 SysConfigSchema.statics.getDptGroupItem = function (id, name) {
@@ -48,5 +54,9 @@ SysConfigSchema.statics.getAuthorityModel = function (id, name, authority) {
         authority: authority
     };
 };
+
+SysConfigSchema.static.getDefaultAuthorityModel = function () {
+    return [];
+}
 
 module.exports = mongoose.model('SysConfig', SysConfigSchema);
