@@ -30,10 +30,11 @@
                         username: self.auth.username,
                         password: self.auth.password
                     }, function (data, status, headers, config) {
-
-                        $cookies.put('username', data.username);
-                        $cookies.put('token', data.token);
-                        window.location.href = 'http://localhost:4002/signin';
+                        var expireTime = new Date();
+                        expireTime.setDate(expireTime.getDate() + 7);
+                        $cookies.put('username', data.username, {'expires': expireTime});
+                        $cookies.put('token', data.token, {'expires': expireTime});
+                        window.location.href = 'http://localhost:4002/signin?username=' + data.username;
 
                     }, function (data, status, headers, config) {
                         alert('err');
@@ -59,13 +60,13 @@
 
         function login(credentials) {
             AuthService.login(credentials, function (data, status, headers, config) {
-
-                $cookies.put('username', data.username);
-                $cookies.put('token', data.token);
+                var expireTime = new Date();
+                expireTime.setDate(expireTime.getDate() + 7);
+                $cookies.put('username', data.username, {'expires': expireTime});
+                $cookies.put('token', data.token, {'expires': expireTime});
 
 
                 window.location.href = 'http://localhost:4002/pm-soft';
-
 
 
             }, function (data, status, headers, config) {
@@ -78,31 +79,31 @@
 
 
 /*
-var app = angular.module('Auth');
+ var app = angular.module('Auth');
 
-app.controller('LoginCtrl', ['$cookies', '$scope', 'AuthService', function ($cookies, $scope, AuthService) {
+ app.controller('LoginCtrl', ['$cookies', '$scope', 'AuthService', function ($cookies, $scope, AuthService) {
 
-    $scope.credentials = {
-        username: '',
-        password: ''
-    };
+ $scope.credentials = {
+ username: '',
+ password: ''
+ };
 
-    $scope.login = function (credentials) {
+ $scope.login = function (credentials) {
 
-        AuthService.login(credentials, function (data, status, headers, config) {
+ AuthService.login(credentials, function (data, status, headers, config) {
 
-            $cookies.put('username', data.username);
-            $cookies.put('token', data.token);
-
-
-            window.location.href = 'http://localhost:4002/pm-soft';
+ $cookies.put('username', data.username);
+ $cookies.put('token', data.token);
 
 
+ window.location.href = 'http://localhost:4002/pm-soft';
 
-        }, function (data, status, headers, config) {
-            alert('err');
-        })
-    }
 
-}]);
-*/
+
+ }, function (data, status, headers, config) {
+ alert('err');
+ })
+ }
+
+ }]);
+ */

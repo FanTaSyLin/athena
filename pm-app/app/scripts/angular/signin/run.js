@@ -9,9 +9,9 @@
     angular.module('SignIn')
         .run(main);
 
-    main.$inject = ['$rootScope'];
+    main.$inject = ['$location'];
 
-    function main($rootScope) {
+    function main($location) {
 
         //获取部门配置信息
 

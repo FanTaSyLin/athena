@@ -12,8 +12,8 @@
     AuthServiceFunc.$inject = ['$http'];
 
     function AuthServiceFunc($http) {
-        //var baseUrl = 'http://123.56.135.196:4001/api';
-        var baseUrl = 'http://localhost:4001/api';
+        var baseUrl = 'http://123.56.135.196:4001/api';
+        //var baseUrl = 'http://localhost:4001/api';
 
         function signInFunc(data, success, error) {
             var body = {

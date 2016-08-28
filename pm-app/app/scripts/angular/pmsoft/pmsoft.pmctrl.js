@@ -10,11 +10,11 @@
         .module('PMSoft')
         .controller('PMController', PMController);
 
-    PMController.$inject = ['$rootScope'];
+    PMController.$inject = ['$cookies'];
 
-    function PMController($rootScope) {
+    function PMController($cookies) {
         var self = this;
-        self.username = $rootScope.username;
+        self.username = $cookies.get('username');
     }
 
 
