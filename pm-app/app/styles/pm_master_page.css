@@ -38,6 +38,10 @@ a:hover, a:focus, a:active {
     background: #fff;
 }
 
+.ls5px {
+    letter-spacing: 5px;
+}
+
 .header::after {
     background-color: rgba(0, 0, 0, 0.1);
     bottom: -1px;
@@ -468,6 +472,13 @@ a:hover, a:focus, a:active {
     padding-bottom: 20px;
 }
 
+.form-field-400 {
+    width: 400px;
+    border: 0;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
 .horizontal-line {
     width: 500px;
     height: 1px;
@@ -514,4 +525,17 @@ a:hover, a:focus, a:active {
     height: 1px;
     background-color: #d9d9d9;
     margin: 10px auto;
+}
+
+.process a {
+    font-family: "Microsoft YaHei";
+    font-size: 1.2em;
+    font-weight: 400;
+}
+
+.fix-textarea {
+    min-height: 6em;
+    max-height: 6em;
+    max-width: 300px;
+    min-width: 300px;
 }

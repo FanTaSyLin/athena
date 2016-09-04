@@ -16,32 +16,32 @@
 
         $routeProvider.when('/', {
             templateUrl: 'partials/project.html',
-            controller: 'ProjectCtrl'
+            //controller: 'ProjectCtrl'
         });
 
         $routeProvider.when('/project', {
             templateUrl: 'partials/project.html',
-            controller: 'ProjectCtrl'
+            //controller: 'ProjectCtrl'
         });
 
         $routeProvider.when('/maintenance', {
             templateUrl: 'partials/maintenance.html',
-            controller: 'MaintenanceCtrl'
+            //controller: 'MaintenanceCtrl'
         });
 
         $routeProvider.when('/myown', {
             templateUrl: 'partials/myown.html',
-            controller: 'MyOwnCtrl'
+            //controller: 'MyOwnCtrl'
         });
 
         $routeProvider.when('/calendar', {
             templateUrl: 'partials/calendar.html',
-            controller: 'CalendarCtrl'
+            //controller: 'CalendarCtrl'
         });
 
         $routeProvider.when('/building', {
             templateUrl: 'partials/building.html',
-            controller: 'BuildingCtrl'
+            //controller: 'BuildingCtrl'
         });
 
         $routeProvider.otherwise({

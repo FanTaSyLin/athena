@@ -33,7 +33,7 @@ var EmployeeSchema = new Schema({
     }]
 });
 
-EmployeeSchema.methods.init = function (body) {
+EmployeeSchema.methods.initData = function (body) {
 
     if (!verify(body)) {
         throw new DataVerifyError("415", {

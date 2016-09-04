@@ -5,7 +5,6 @@
 (function () {
 
     var SysConfigSchema = require('./modules/sysconfig-schema.js');
-    var DptGroupSchema = require('./modules/departmentgroup-schema.js');
 
     const MONGOOSE_URI = process.env.MONGOOSE_URI || "123.56.135.196/pmsoft";
 

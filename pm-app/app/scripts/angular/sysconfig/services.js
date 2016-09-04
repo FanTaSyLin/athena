@@ -10,6 +10,7 @@
     
     SysConfigService.$inject = ['$http'];
 
+    //const baseUrl = 'http://123.56.135.196:4003/api/sysconfig'
     const baseUrl = 'http://localhost:4003/api/sysconfig'
     
     function SysConfigService($http) {

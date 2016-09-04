@@ -14,6 +14,8 @@ module.exports = function () {
 
     router.route("/pm-soft").get(startApp);
 
+    router.route('/pm-soft/sysconfig').get(sysconfig);
+
     router.unless = require('express-unless');
 
     return router;
@@ -31,4 +33,8 @@ function auth (req, res, next) {
 function startApp (req, res, next) {
 
     res.sendfile('app/pmsoft.html');
+}
+
+function sysconfig(req, res, next) {
+    res.sendfile('app/sysconfig.html');
 }

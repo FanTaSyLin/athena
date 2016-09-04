@@ -51,6 +51,7 @@ const BASEPATH = '/api';
 var jobRecodeHandler = require('./routes/jobrecodehandler.js')();
 var sysConfigHandler = require('./routes/sysconfighandler.js')();
 var userInfoHandler = require('./routes/userInfohandler.js')();
+var projectHandler = require('./routes/projecthandler.js')();
 
 
 /**
@@ -59,31 +60,13 @@ var userInfoHandler = require('./routes/userInfohandler.js')();
 server.post({
     path: BASEPATH + '/userinfo',
     version: '0.0.1'
-}, userInfoHandler.create)
-
-
-/**
- * 工作记录相关API
- */
-server.post({
-    path: BASEPATH + '/jobrecode/:projectid',
-    version: '0.0.1'
-}, jobRecodeHandler.insert);
-
-server.put({
-    path: BASEPATH + '/jobrecode/:projectid/:joblogid',
-    version: '0.0.1'
-}, jobRecodeHandler.update);
+}, userInfoHandler.create);
 
 server.get({
-    path: BASEPATH + '/jobrecode/:user/:projectid',
+    path: BASEPATH + '/employee',
     version: '0.0.1'
-}, jobRecodeHandler.find);
+}, userInfoHandler.getEmployee);
 
-server.get({
-    path: BASEPATH + '/jobrecode/:user',
-    version: '0.0.1'
-}, jobRecodeHandler.find);
 
 /**
  * 系统设置相关API
@@ -127,6 +110,38 @@ server.put({
     path: BASEPATH + '/sysconfig/department/update',
     version: '0.0.1'
 }, sysConfigHandler.updateDepartment);
+
+/**
+ * 项目相关API
+ */
+
+server.post({
+    path: BASEPATH + '/project'
+}, projectHandler.create);
+
+
+/**
+ * 工作记录相关API
+ */
+server.post({
+    path: BASEPATH + '/jobrecode/:projectid',
+    version: '0.0.1'
+}, jobRecodeHandler.insert);
+
+server.put({
+    path: BASEPATH + '/jobrecode/:projectid/:joblogid',
+    version: '0.0.1'
+}, jobRecodeHandler.update);
+
+server.get({
+    path: BASEPATH + '/jobrecode/:user/:projectid',
+    version: '0.0.1'
+}, jobRecodeHandler.find);
+
+server.get({
+    path: BASEPATH + '/jobrecode/:user',
+    version: '0.0.1'
+}, jobRecodeHandler.find);
 
 
 server.listen(HTTP_PORT, function () {
