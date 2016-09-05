@@ -38,6 +38,12 @@
         self.selectedDepartmentGroup = selectedDepartmentGroup;
         self.getDepartmentGroupName = getDepartmentGroupName;
 
+        init();
+
+        function init() {
+            onLoadDepartmentGroups();
+        }
+
         /* 部门 */
         function selectedDepartmentGroup(groupId, departmentObj) {
             departmentObj.group = groupId;
