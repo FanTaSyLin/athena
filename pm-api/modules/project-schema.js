@@ -22,7 +22,8 @@ var ProjectSchema = new Schema({
     reviewers: [{
         account: {type: String}, /*成员账号 查询*/
         name: {type: String} /*成员姓名 显示*/
-    }]
+    }],
+    isClosed: {type: Boolean} /*是否已关闭*/
 });
 
 ProjectSchema.methods.init = function (body) {
@@ -44,6 +45,7 @@ ProjectSchema.methods.init = function (body) {
         self.about = body.about;
         self.members = [];
         self.reviewers = [];
+        self.isClosed = body.isClosed || false;
         body.members.forEach(function (item) {
             self.members.push({
                 account: item.account,
