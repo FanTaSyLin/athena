@@ -1,6 +1,7 @@
 node_modules
 bower_components
 .idea
+tmp
 .eslintrc.js
 typings
 tsd.json
