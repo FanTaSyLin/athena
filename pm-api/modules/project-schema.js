@@ -26,7 +26,7 @@ var ProjectSchema = new Schema({
     isClosed: {type: Boolean} /*是否已关闭*/
 });
 
-ProjectSchema.methods.init = function (body) {
+ProjectSchema.methods.initData = function (body) {
     var self = this;
 
     if (!verify(body)) {

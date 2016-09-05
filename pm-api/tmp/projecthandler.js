@@ -32,7 +32,7 @@ module.exports = function () {
         var project = new ProjectSchema();
         var body = req.body;
         try {
-            project.init(body);
+            project.initData(body);
         } catch (err) {
             return next(err);
         }

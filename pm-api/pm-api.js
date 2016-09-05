@@ -48,100 +48,26 @@ server.use(restify.CORS());
  */
 
 const BASEPATH = '/api';
-var jobRecodeHandler = require('./routes/jobrecodehandler.js')();
-var sysConfigHandler = require('./routes/sysconfighandler.js')();
-var userInfoHandler = require('./routes/userInfohandler.js')();
-var projectHandler = require('./routes/projecthandler.js')();
-
 
 /**
- * 员工信息注册
+ * 员工信息相关api
  */
-server.post({
-    path: BASEPATH + '/userinfo',
-    version: '0.0.1'
-}, userInfoHandler.create);
-
-server.get({
-    path: BASEPATH + '/employee',
-    version: '0.0.1'
-}, userInfoHandler.getEmployee);
-
+require('./routes/userinfo-handler.js')(server, BASEPATH);
 
 /**
  * 系统设置相关API
  */
-server.post({
-    path: BASEPATH + '/sysconfig/dptgroup',
-    version: '0.0.1'
-}, sysConfigHandler.insertDptGroup);
-
-server.get({
-    path: BASEPATH + '/sysconfig/dptgroup',
-    version: '0.0.1'
-}, sysConfigHandler.getDptGroup);
-
-server.put({
-    path: BASEPATH + '/sysconfig/dptgroup/delete',
-    version: '0.0.1'
-}, sysConfigHandler.deleteDptGroup);
-
-server.put({
-    path: BASEPATH + '/sysconfig/dptgroup/update',
-    version: '0.0.1'
-}, sysConfigHandler.updateDptGroup);
-
-server.post({
-    path: BASEPATH + '/sysconfig/department',
-    version: '0.0.1'
-}, sysConfigHandler.insertDepartment);
-
-server.get({
-    path: BASEPATH + '/sysconfig/department',
-    version: '0.0.1'
-}, sysConfigHandler.getDepartment);
-
-server.put({
-    path: BASEPATH + '/sysconfig/department/delete',
-    version: '0.0.1'
-}, sysConfigHandler.deleteDepartment);
-
-server.put({
-    path: BASEPATH + '/sysconfig/department/update',
-    version: '0.0.1'
-}, sysConfigHandler.updateDepartment);
+require('./routes/sysconfig-handler.js')(server, BASEPATH);
 
 /**
  * 项目相关API
  */
-
-server.post({
-    path: BASEPATH + '/project'
-}, projectHandler.create);
-
+require('./routes/projects-handler.js')(server, BASEPATH);
 
 /**
  * 工作记录相关API
  */
-server.post({
-    path: BASEPATH + '/jobrecode/:projectid',
-    version: '0.0.1'
-}, jobRecodeHandler.insert);
-
-server.put({
-    path: BASEPATH + '/jobrecode/:projectid/:joblogid',
-    version: '0.0.1'
-}, jobRecodeHandler.update);
-
-server.get({
-    path: BASEPATH + '/jobrecode/:user/:projectid',
-    version: '0.0.1'
-}, jobRecodeHandler.find);
-
-server.get({
-    path: BASEPATH + '/jobrecode/:user',
-    version: '0.0.1'
-}, jobRecodeHandler.find);
+require('./routes/jobrecode-handler.js')(server, BASEPATH);
 
 
 server.listen(HTTP_PORT, function () {

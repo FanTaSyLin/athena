@@ -9,11 +9,14 @@ module.exports = function () {
     var JobLogSchema = require('./../modules/joblog-schema.js');
     var ParamProviderError = require('./../errors/ParamProviderError.js');
     var DBOptionError = require('./../errors/DBOptionError.js');
+    var shkUtil = require('./../lib/shkutil.js');
 
     var jobRecodeHandler = {
         insert: insert,
         update: update,
-        find: find
+        find: find,
+        
+        getDateList: getDateList
     }
 
     function insert(req, res, next) {
@@ -53,8 +56,22 @@ module.exports = function () {
         //TODO: 更新数据
     }
 
-    function find(req, res, cb) {
+    function find(req, res, next) {
 
+    }
+    
+    function getDateList(req, res, next) {
+        var now = new Date();
+        var dateList = [];
+        dateList.push(now.addDay(1));
+        dateList.push(now);
+        dateList.push(now.addDay(-1));
+        dateList.push(now.addDay(-2));
+        dateList.push(now.addDay(-3));
+        dateList.push(now.addDay(-4));
+        dateList.push(now.addDay(-5));
+        res.end(JSON.stringify(dateList));
+        return next();
     }
 
     return jobRecodeHandler;
