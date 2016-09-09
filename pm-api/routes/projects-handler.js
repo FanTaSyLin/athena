@@ -40,7 +40,7 @@ module.exports = function (server, BASEPATH) {
 };
 
 function getList(req, res, next) {
-    ProjectSchema.find({}, {'cnName': 1, 'enName': 1}, function (err, doc) {
+    ProjectSchema.find({}, {'cnName': 1, 'enName': 1, 'type': 1}, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -50,7 +50,8 @@ function getList(req, res, next) {
         doc.forEach(function (item) {
             projects.push({
                 _id: item._id,
-                cnName: item.cnName
+                cnName: item.cnName,
+                enName: item.enName
             });
         });
 
@@ -63,7 +64,7 @@ function getListByAccount(req, res, next) {
     var account = req.params['account'];
     ProjectSchema.find({
         'members.account': account
-    }, {'cnName': 1, 'enName': 1}, function (err, doc) {
+    }, {'cnName': 1, 'enName': 1, 'type': 1}, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -73,7 +74,8 @@ function getListByAccount(req, res, next) {
         doc.forEach(function (item) {
             projects.push({
                 _id: item._id,
-                cnName: item.cnName
+                cnName: item.cnName,
+                enName: item.enName
             });
         });
 
