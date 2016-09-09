@@ -21,6 +21,7 @@ var JobLogSchema = new Schema({
     authorName: {type: String}, /*记录人姓名，显示*/
     authorAvatar: {type: String}, /*记录人头像，显示*/
     reportTime: {type: Date}, /*记录时间，查询，显示*/
+    date: {type: Date}, /*工作记录的日期，查询，显示*/
     starTime: {type: Date}, /*工作开始时间，查询，显示*/
     endTime: {type: Date}, /*工作结束时间，查询，显示*/
     type: {type: String}, /*工作类型，查询，显示*/
@@ -53,14 +54,15 @@ JobLogSchema.methods.reportInit = function (body) {
         self.authorAvatar = body.authorAvatar || ''; //默认值
         self.authorDepartment = body.authorDepartment;
         self.reportTime = new Date();
-        self.starTime = body.startTime;
-        self.endTime = body.endTime;
+        self.date = new Date(body.date);
+        self.starTime = new Date(body.startTime);
+        self.endTime = new Date(body.endTime);
         self.type = body.type;
         self.content = body.content;
         self.projectID = body.projectID;
         self.projectCName = body.projectCName;
         self.projectEName = body.projectEName;
-        self.duration = (Math.abs(body.endTime - body.startTime) / (1000 * 60 * 60)).toFixed(1);
+        self.duration = (Math.abs(self.endTime - self.starTime) / (1000 * 60 * 60)).toFixed(1);
         self.factor = 0;
         self.isChecked = false;
         self.reviewerID = '';
