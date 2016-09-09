@@ -19,12 +19,16 @@ module.exports = function (server, BASEPATH) {
         version: '0.0.1'
     }, getDateList);
 
+    server.post({
+        path: BASEPATH + '/jobrecode',
+        version: '0.0.1'
+    }, submitRecode);
+
 };
 
 function getDateList(req, res, next) {
     var now = new Date();
     var dateList = [];
-    dateList.push(now.addDay(1));
     dateList.push(now);
     dateList.push(now.addDay(-1));
     dateList.push(now.addDay(-2));
@@ -33,4 +37,38 @@ function getDateList(req, res, next) {
     dateList.push(now.addDay(-5));
     res.end(JSON.stringify(dateList));
     return next();
+}
+
+function submitRecode(req, res, next) {
+
+    if (_.isUndefined(req.body)) {
+        return next(new ParamProviderError(415, {
+            message: 'Invalid params'
+        }));
+    }
+
+    var body = req.body;
+
+    try {
+
+        var recodeSchema = new JobLogSchema();
+
+        recodeSchema.reportInit(body);
+
+        recodeSchema.save(function (err) {
+
+            if (err) {
+                return next(new DBOptionError(415, err));
+            } else {
+                res.end();
+            }
+
+        });
+
+    } catch (err) {
+
+        return next(err);
+
+    }
+
 }
