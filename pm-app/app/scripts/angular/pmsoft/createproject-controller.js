@@ -8,9 +8,9 @@
     angular.module('PMSoft')
         .controller('CreateProjectCtrl', CreateProjectCtrl);
 
-    CreateProjectCtrl.$inject = ['PMSoftServices', '$cookies'];
+    CreateProjectCtrl.$inject = ['PMSoftServices', '$rootScope'];
 
-    function CreateProjectCtrl(PMSoftServices, $cookies) {
+    function CreateProjectCtrl(PMSoftServices, $rootScope) {
         var self = this;
         self.tab = 1;
         self.members = [];
@@ -41,9 +41,9 @@
         init();
 
         function init() {
-            self.projectModule.authorID = $cookies.get('username');
-            self.projectModule.authorName = $cookies.get('name');
-            self.projectModule.authorAvatar = $cookies.get('avatar');
+            self.projectModule.authorID = $rootScope.account;
+            self.projectModule.authorName = $rootScope.username;
+            self.projectModule.authorAvatar = $rootScope.avatar;
 
             //项目创建者自动成为项目组成员
             self.projectModule.members.push({
