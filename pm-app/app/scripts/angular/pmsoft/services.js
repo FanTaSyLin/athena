@@ -18,7 +18,10 @@
         return {
             getEmployeeByName: getEmployeeByName,
             getEmployeeByAccount: getEmployeeByAccount,
-            createProject: createProject
+            createProject: createProject,
+            getPastProjects: getPastProjects,
+            getDateList: getDateList,
+            recodeSubmit: recodeSubmit
         }
 
         function getEmployeeByAccount(memberAccount, successFn, errorFn) {
@@ -40,6 +43,18 @@
 
         function createProject(projectModule, successFn, errorFn) {
             $http.post(BASEPATH + '/project', projectModule).success(successFn).error(errorFn);
+        }
+
+        function getPastProjects(account, successFn, errorFn) {
+            $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
+        }
+
+        function getDateList(successFn, errorFn) {
+            $http.get(BASEPATH + '/jobrecode/datelist').success(successFn).error(errorFn);
+        }
+
+        function recodeSubmit(data, successFn, errorFn) {
+            $http.post(BASEPATH + '/jobrecode', data).success(successFn).error(errorFn);
         }
     }
 

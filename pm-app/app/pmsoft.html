@@ -94,7 +94,7 @@
 </div>
 
 <!--工作记录填写对话框 start-->
-<div class="modal fade" id="JobSheet">
+<div class="modal fade" id="JobSheet" ng-controller="RecodeController as RecodeCtrl">
     <div class="modal-dialog size-jobsheet">
         <div class="modal-content">
             <!-- 标题 -->
@@ -113,79 +113,16 @@
                                 <p class="title-h8">项目</p>
                                 <div class="function-select-area-projects">
                                     <span class="glyphicon glyphicon-list-alt"></span>
-                                    <a class="title-h7 dropdown-toggle" href="#" data-toggle="dropdown">
-                                        未选择
+                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown"
+                                       ng-click="RecodeCtrl.getProjects()">
+                                        {{RecodeCtrl.selectedProject.enName}}
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                             ng-repeat="project in RecodeCtrl.projects">
                                             <img src="/public/project-type-gongcheng.png"
                                                  style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">FY3C-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">Tan-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">MIPS-Web</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">FY3C-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">Tan-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">MIPS-Web</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">FY3C-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">Tan-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">MIPS-Web</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">FY3C-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">Tan-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">MIPS-Web</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">FY3C-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">Tan-Client</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left">MIPS-Web</a>
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.projectSelect(project)">{{project.enName}}</a>
                                         </div>
                                     </ul>
                                 </div>
@@ -196,24 +133,15 @@
                                 <p class="title-h8">日期</p>
                                 <div class="function-select-area-date">
                                     <span class="glyphicon glyphicon-calendar"></span>
-                                    <a class="title-h7 dropdown-toggle" href="#" data-toggle="dropdown">
-                                        8月5日
+                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                        {{RecodeCtrl.selectedDate.str}}
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">8月2日</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">8月3日</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">8月4日</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">8月5日</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">8月6日</a>
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                             ng-repeat="date in RecodeCtrl.dates">
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.dateSelect(date)">
+                                                {{date.str}}
+                                            </a>
                                         </div>
                                     </ul>
                                 </div>
@@ -224,53 +152,12 @@
                                 <div class="row function-select-area-time">
                                     <div class="col-xs-4 ">
                                         <a class="title-h7 dropdown-toggle" href="#" data-toggle="dropdown">
-                                            12:30
+                                            {{RecodeCtrl.selectedStart.str}}
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">0:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">1:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">2:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">3:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">5:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">6:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">7:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">8:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">9:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">10:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">11:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">12:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">13:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">14:00</a>
-                                            </div>
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">15:00</a>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                                 ng-repeat="startTime in RecodeCtrl.times">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.sTimeSelect(startTime)">{{startTime.str}}</a>
                                             </div>
                                         </ul>
                                     </div>
@@ -279,11 +166,12 @@
                                     </i>
                                     <div class="col-xs-4">
                                         <a class="title-h7 dropdown-toggle" href="#" data-toggle="dropdown">
-                                            13:30
+                                            {{RecodeCtrl.selectedEnd.str}}
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                                <a class="btn btn-align-left">8月2日</a>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                                 ng-repeat="endTime in RecodeCtrl.times">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.eTimeSelect(endTime)">{{endTime.str}}</a>
                                             </div>
                                         </ul>
                                     </div>
@@ -295,17 +183,17 @@
                                 <div class="function-select-area-type">
                                     <span class="glyphicon glyphicon-tag"></span>
                                     <a class="title-h7 dropdown-toggle" href="#" data-toggle="dropdown">
-                                        技术
+                                        {{RecodeCtrl.selectedType}}
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">技术</a>
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('技术')">技术</a>
                                         </div>
                                         <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">管理</a>
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('管理')">管理</a>
                                         </div>
                                         <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left">维护</a>
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('维护')">维护</a>
                                         </div>
                                     </ul>
                                 </div>
@@ -315,8 +203,8 @@
                     <!-- 内容填写区 -->
                     <div class="row" style="padding-top: 1em">
                         <div class="function-recode-area item-border">
-                            <textarea class="summernote" id="recode-editor">
-                            </textarea>
+                            <div class="summernote" id="recode-editor">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -324,7 +212,7 @@
             <!-- 页脚 -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" ng-click="RecodeCtrl.recodeSubmit()">Save</button>
             </div>
         </div>
     </div>
@@ -391,7 +279,8 @@
                                 </div>
                             </div>
                             <div class="form-field">
-                                <textarea class="form-control fix-textarea" role="textbox" placeholder="项目介绍" ng-model="CPCtrl.projectModule.about"></textarea>
+                                <textarea class="form-control fix-textarea" role="textbox" placeholder="项目介绍"
+                                          ng-model="CPCtrl.projectModule.about"></textarea>
                             </div>
                         </div>
                         <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(2)">
@@ -418,7 +307,8 @@
                                         <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
                                         <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
                                         <button class="btn btn-default ls5px" style="margin: 0 0 0 35px;"
-                                                style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;" ng-click="CPCtrl.rmMember(member.account)">
+                                                style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
+                                                ng-click="CPCtrl.rmMember(member.account)">
                                             删除
                                         </button>
                                     </div>
@@ -426,7 +316,8 @@
                             </div>
                         </div>
                         <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(3)">
-                            <div class="form-field" style="height: 480px; max-height: 580px; overflow: auto; width: 590px">
+                            <div class="form-field"
+                                 style="height: 480px; max-height: 580px; overflow: auto; width: 590px">
                                 <div ng-repeat="member in CPCtrl.projectModule.members" ng-show="member.showInMembers"
                                      style="padding-bottom: 8px; margin: 0 auto; width: 570px">
                                     <div>
@@ -435,16 +326,24 @@
                                         <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
                                         <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
                                         <div class="btn-group" style="margin: 0 5px 0 170px;">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            <button type="button" class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown"
                                                     style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;">
-                                                {{CPCtrl.getPermissionName(member.permission)}} <span class="caret"></span>
+                                                {{CPCtrl.getPermissionName(member.permission)}} <span
+                                                    class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;" ng-click="CPCtrl.selectedMemberPermission(member, '1')">审核</a></li>
-                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;" ng-click="CPCtrl.selectedMemberPermission(member, '0')">普通</a></li>
+                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;"
+                                                       ng-click="CPCtrl.selectedMemberPermission(member, '1')">审核</a>
+                                                </li>
+                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;"
+                                                       ng-click="CPCtrl.selectedMemberPermission(member, '0')">普通</a>
+                                                </li>
                                             </ul>
                                         </div>
-                                        <button class="btn btn-default ls5px" style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;" ng-click="CPCtrl.rmMember(member.account)">
+                                        <button class="btn btn-default ls5px"
+                                                style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
+                                                ng-click="CPCtrl.rmMember(member.account)">
                                             删除
                                         </button>
                                     </div>
@@ -491,6 +390,7 @@
 <script type="text/javascript" src="/scripts/angular/pmsoft/run.js"></script>
 <script type="text/javascript" src="/scripts/angular/pmsoft/mainform-controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/pmsoft/createproject-controller.js"></script>
+<script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
 <script type="text/javascript" src="/lib/ngStorage.js"></script>
 <script type="text/javascript" src="/scripts/jqueryFn.js"></script>

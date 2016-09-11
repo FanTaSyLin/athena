@@ -10,9 +10,9 @@
         .module('PMSoft')
         .controller('PMController', PMController);
 
-    PMController.$inject = ['$cookies', 'PMSoftServices'];
+    PMController.$inject = ['$cookies', '$rootScope', 'PMSoftServices'];
 
-    function PMController($cookies, PMSoftServices) {
+    function PMController($cookies, $rootScope, PMSoftServices) {
         var self = this;
 
         init();
@@ -23,6 +23,10 @@
                 data.forEach(function (item) {
                     $cookies.put('name', item.name);
                     $cookies.put('avatar', item.avatar);
+                    $rootScope.account = self.account;
+                    $rootScope.username = item.name;
+                    $rootScope.avatar = item.avatar;
+                    $rootScope.department = item.department;
                 });
             }, function (data, status, headers, config) {
 

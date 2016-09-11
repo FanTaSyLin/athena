@@ -31,6 +31,7 @@ mongoose.connection.on('open', function () {
     debug('Mongoose connected to the PMSoft-Mongo');
 });
 
+mongoose.Promise = global.Promise;
 
 debug('Create RESTful Server');
 var server = restify.createServer({
