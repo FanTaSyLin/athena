@@ -25,7 +25,7 @@ var JobLogSchema = new Schema({
     starTime: {type: Date}, /*工作开始时间，查询，显示*/
     endTime: {type: Date}, /*工作结束时间，查询，显示*/
     type: {type: String}, /*工作类型，查询，显示*/
-    content: {type: Buffer}, /*工作内容，显示*/
+    content: {type: String}, /*工作内容，显示*/
     duration: {type: Number}, /*工作量，统计*/
     projectID: {type: String}, /*项目ID, 查询 统计*/
     projectCName: {type: String}, /*项目名称, 显示*/
@@ -39,7 +39,7 @@ var JobLogSchema = new Schema({
     reviewerTime: {type: Date}, /*审核时间，记录 查询 统计*/
 });
 
-JobLogSchema.methods.reportInit = function (body) {
+JobLogSchema.methods.reportInit = function (body)  {
     var self = this;
 
     if (!reportVerify(body)) {
@@ -98,7 +98,7 @@ function reportVerify(body) {
     if (_.isUndefined(body.authorID) ||
         _.isUndefined(body.authorName) ||
         _.isUndefined(body.authorDepartment) ||
-        _.isUndefined(body.starTime) ||
+        _.isUndefined(body.startTime) ||
         _.isUndefined(body.endTime) ||
         _.isUndefined(body.projectID) ||
         _.isUndefined(body.projectCName) ||
