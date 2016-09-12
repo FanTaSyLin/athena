@@ -41,9 +41,6 @@
         init();
 
         function init() {
-            self.projectModule.authorID = $rootScope.account;
-            self.projectModule.authorName = $rootScope.username;
-            self.projectModule.authorAvatar = $rootScope.avatar;
 
             //项目创建者自动成为项目组成员
             self.projectModule.members.push({
@@ -149,6 +146,10 @@
         }
 
         function createProject(module) {
+
+            self.projectModule.authorID = $rootScope.account;
+            self.projectModule.authorName = $rootScope.username;
+            self.projectModule.authorAvatar = $rootScope.avatar;
 
             PMSoftServices.createProject(module, function (data, status, headers, config) {
                 selectTab(4);
