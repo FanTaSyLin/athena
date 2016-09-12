@@ -21,7 +21,8 @@
             createProject: createProject,
             getPastProjects: getPastProjects,
             getDateList: getDateList,
-            recodeSubmit: recodeSubmit
+            recodeSubmit: recodeSubmit,
+            getJobList: getJobList
         }
 
         function getEmployeeByAccount(memberAccount, successFn, errorFn) {
@@ -55,6 +56,23 @@
 
         function recodeSubmit(data, successFn, errorFn) {
             $http.post(BASEPATH + '/jobrecode', data).success(successFn).error(errorFn);
+        }
+
+        function getJobList(condition, successFn, errorFn) {
+            var conditionStr = '';
+            if (condition.username) {
+                conditionStr += ('username=' + condition.username + '&');
+            }
+            if (condition.projectID) {
+                conditionStr += ('projectid=' + condition.projectID + '&');
+            }
+            if (condition.startDate) {
+                conditionStr += ('startdate=' + condition.startDate + '&');
+            }
+            if (condition.endDate) {
+                conditionStr += ('enddate=' + condition.endDate + '&');
+            }
+            $http.get(BASEPATH + '/jobrecode/joblist?' + conditionStr).success(successFn).error(errorFn);
         }
     }
 

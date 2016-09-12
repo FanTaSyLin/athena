@@ -7,9 +7,9 @@
     angular.module('PMSoft')
         .controller('RecodeController', RecodeController);
 
-    RecodeController.$inject = ['PMSoftServices', '$rootScope']
+    RecodeController.$inject = ['PMSoftServices', '$rootScope', '$cookies']
 
-    function RecodeController(PMSoftServices, $rootScope) {
+    function RecodeController(PMSoftServices, $rootScope, $cookies) {
 
         var self = this;
         self.projects = [];
@@ -21,6 +21,9 @@
         self.selectedEnd = {};
         self.selectedType = {};
         self.markup = '';
+        self.recodedJobs = [];
+        self.showSubmitBtn = false;
+        /*已提交工作记录列表 用来比对时间是否重复*/
 
         self.dateSelect = dateSelect;
         self.getProjects = getProjects;
@@ -29,6 +32,9 @@
         self.eTimeSelect = eTimeSelect;
         self.typeSelect = typeSelect
         self.recodeSubmit = recodeSubmit;
+        self.timeFormat = timeFormat;
+        self.dateFormat = dateFormat;
+        self.dateTimeFormat = dateTimeFormat;
 
         var recodeEditor = angular.element(document.getElementById('recode-editor'));
 
@@ -55,6 +61,8 @@
 
             });
 
+
+            /*初始化界面信息*/
             self.selectedProject = {
                 _id: '',
                 cnName: '未选择',
@@ -74,6 +82,18 @@
             /*获取时间列表*/
             getTimeList();
 
+            /*获取已提交工作记录列表*/
+            getJobList({
+                username: $cookies.get('username'),
+                startDate: new Date().toISOString().substring(0, 10),
+                endDate: new Date().toISOString().substring(0, 10)
+            }, function (err) {
+                if (err) {
+                    return alert(err.message);
+                }
+                self.showSubmitBtn = true;
+            });
+
         }
 
         function dateFormat(date) {
@@ -90,8 +110,25 @@
 
         }
 
+        function dateTimeFormat(dateTime) {
+
+            var str = dateTime.toISOString();
+            return str.substring(0, 10) + ' ' + str.substring(11, 19);
+        }
+
         function dateSelect(date) {
             self.selectedDate = date;
+            self.showSubmitBtn = false;
+            getJobList({
+                username: $cookies.get('username'),
+                startDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10),
+                endDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10)
+            }, function (err) {
+                if (err) {
+                    return alert(err.message);
+                }
+                self.showSubmitBtn = true;
+            });
         }
 
         function getProjects() {
@@ -145,7 +182,7 @@
         }
 
         function typeSelect(type) {
-            self.type = type;
+            self.selectedType = type;
         }
 
         function recodeSubmit() {
@@ -155,9 +192,9 @@
             //recodeEditor.summernote('destroy');
 
             if (!dataChecked()) {
-                alert('1');
-                //TODO: 检查表单是否必选项已填
+                return;
             }
+
 
             var jobRecode = {
                 authorID: $rootScope.account,
@@ -172,11 +209,26 @@
                 date: self.selectedDate.date.substring(0, 10),
                 startTime: self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str,
                 endTime: self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str
+            };
+
+            //所选时间内是否有已提交工作记录
+            if (checkTimeConflicts(jobRecode.startTime, jobRecode.endTime)) {
+                alert('所选时间内存在已提交的工作记录，请修改后提交！');
+                return;
             }
 
             PMSoftServices.recodeSubmit(jobRecode, function (data, status, headers, config) {
 
-                //TODO: 清空表单
+                //刷新已提交记录
+                self.recodedJobs.push({
+                    startTime: new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str),
+                    endTime: new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str),
+                    cnName: self.selectedProject.cnName,
+                    enName: self.selectedProject.enName,
+                    reportTime: new Date()
+                });
+
+                //清空表单
                 clearForm();
 
             }, function (data, status, headers, config) {
@@ -187,17 +239,45 @@
 
         function dataChecked() {
             //项目必选
-            if (self.selectedProject._id === '') return false;
+            if (self.selectedProject._id === '') {
+                alert('请选择所属项目');
+                return false;
+            }
             //起止时间必选
-            if (self.selectedStart.str === '--:--') return false;
-            if (self.selectedEnd.str === '--:--') return false;
+            if (self.selectedStart.str === '--:--') {
+                alert('请选择开始时间');
+                return false;
+            }
+            if (self.selectedEnd.str === '--:--') {
+                alert('请选择结束时间');
+                return false;
+            }
             //工作内容必填
-            if (self.markup === '') return false;
+            if (self.markup === '') {
+                alert('请填写工作内容');
+                return false;
+            }
 
             return true;
 
         }
-        
+
+        function checkTimeConflicts(startTime, endTime) {
+
+            var startTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str);
+            var endTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str);
+
+            var result = true;
+
+            self.recodedJobs.forEach(function (item) {
+                if (endTime.getTime() > item.startTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
+                    result = result && false;
+                }
+            });
+
+            return !result;
+        }
+
         function clearForm() {
             self.selectedProject = {
                 _id: '',
@@ -216,6 +296,40 @@
             self.selectedType = '技术';
 
             recodeEditor.summernote('code', '');
+        }
+
+        function getJobList(condition, cb) {
+
+            PMSoftServices.getJobList(condition, function (data, status, headers, config) {
+
+                var result = data;
+
+                self.recodedJobs = [];
+                try {
+                    result.forEach(function (item) {
+                        self.recodedJobs.push({
+                            startTime: new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                            endTime: new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                            cnName: item.projectCName,
+                            enName: item.projectEName,
+                            reportTime: new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
+                        });
+                    });
+                } catch (err) {
+                    if (cb && typeof cb === 'function') {
+                        return cb();
+                    }
+                }
+
+                if (cb && typeof cb === 'function') {
+                    return cb();
+                }
+
+            }, function (data, status, headers, config) {
+                if (cb && typeof cb === 'function') {
+                    return cb(new Error('获取工作记录失败'));
+                }
+            });
         }
 
     }

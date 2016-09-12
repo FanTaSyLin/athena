@@ -30,6 +30,7 @@ var JobLogSchema = new Schema({
     projectID: {type: String}, /*项目ID, 查询 统计*/
     projectCName: {type: String}, /*项目名称, 显示*/
     projectEName: {type: String}, /*项目名称, 显示*/
+    title: {type: String}, /*工作记录的简化描述，显示*/
 
     factor: {type: Number}, /*工作量系数，统计*/
     isChecked: {type: Boolean}, /*审核标识，查询，统计*/

@@ -157,7 +157,8 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <div class="dropdown-item btn btn-align-left function-select-item-item"
                                                  ng-repeat="startTime in RecodeCtrl.times">
-                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.sTimeSelect(startTime)">{{startTime.str}}</a>
+                                                <a class="btn btn-align-left"
+                                                   ng-click="RecodeCtrl.sTimeSelect(startTime)">{{startTime.str}}</a>
                                             </div>
                                         </ul>
                                     </div>
@@ -171,7 +172,8 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <div class="dropdown-item btn btn-align-left function-select-item-item"
                                                  ng-repeat="endTime in RecodeCtrl.times">
-                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.eTimeSelect(endTime)">{{endTime.str}}</a>
+                                                <a class="btn btn-align-left"
+                                                   ng-click="RecodeCtrl.eTimeSelect(endTime)">{{endTime.str}}</a>
                                             </div>
                                         </ul>
                                     </div>
@@ -207,12 +209,34 @@
                             </div>
                         </div>
                     </div>
+                    <!--工作记录清单区-->
+                    <div style="padding-top: 1em" style="max-height: 200px; overflow: auto;">
+                        <div class="function-recode-area item-border row" style="height: 40px; margin-bottom: 8px"
+                             ng-repeat="job in RecodeCtrl.recodedJobs">
+                            <h5 style="margin-left: 8px;">
+                                <a class="col-md-8" href>
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    {{RecodeCtrl.timeFormat(job.startTime)}}
+                                    至
+                                    {{RecodeCtrl.timeFormat(job.endTime)}}
+                                    :
+                                    {{job.cnName}}({{job.enName}})
+                                </a>
+                                <a class="col-md-3 col-md-offset-1" style="font-size: 0.9em; color: #5a5a5a;">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    {{RecodeCtrl.dateTimeFormat(job.reportTime)}}提交
+                                </a>
+                            </h5>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- 页脚 -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="RecodeCtrl.recodeSubmit()">Save</button>
+                <button type="button" class="btn btn-primary" ng-disabled="!RecodeCtrl.showSubmitBtn"
+                        ng-click="RecodeCtrl.recodeSubmit()">Save
+                </button>
             </div>
         </div>
     </div>
