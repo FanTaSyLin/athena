@@ -19,6 +19,13 @@
 
         function init() {
             self.account = $cookies.get('username');
+
+            /**
+             * 页面加载后需要获取如下信息：
+             * 1 获取个人信息 （姓名、头像）
+             * 2 获取项目信息 （项目cnName enName _id)
+             */
+
             PMSoftServices.getEmployeeByAccount(self.account, function (data) {
                 data.forEach(function (item) {
                     $cookies.put('name', item.name);
@@ -31,6 +38,21 @@
             }, function (data, status, headers, config) {
 
             });
+
+            PMSoftServices.getPastProjects(self.account, function (data) {
+
+                data.forEach(function (item) {
+                    var project = {};
+                    project.cnName = item.cnName;
+                    project._id = item._id;
+                    project.enName = item.enName;
+                    PMSoftServices.pastProjects.push(project);
+                });
+
+            }, function (res) {
+
+            });
+
         }
 
     }

@@ -139,7 +139,9 @@
                 return;
             }
 
-            /*获取项目列表*/
+            self.projects = PMSoftServices.pastProjects;
+
+            /*获取项目列表
             PMSoftServices.getPastProjects($rootScope.account, function (data) {
 
                 data.forEach(function (item) {
@@ -153,7 +155,7 @@
             }, function (data, status, headers, config) {
 
             });
-
+             */
         }
 
         function projectSelect(projectModule) {
