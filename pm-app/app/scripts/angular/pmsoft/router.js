@@ -15,32 +15,36 @@
     function PMSoftRouter($routeProvider) {
 
         $routeProvider.when('/', {
-            templateUrl: 'partials/project.html',
+            templateUrl: 'partials/project.html'
             //controller: 'ProjectCtrl'
         });
 
+        $routeProvider.when('/mystatus', {
+            templateUrl: 'partials/mystatus.html'
+        });
+
         $routeProvider.when('/project', {
-            templateUrl: 'partials/project.html',
+            templateUrl: 'partials/project.html'
             //controller: 'ProjectCtrl'
         });
 
         $routeProvider.when('/maintenance', {
-            templateUrl: 'partials/maintenance.html',
+            templateUrl: 'partials/maintenance.html'
             //controller: 'MaintenanceCtrl'
         });
 
         $routeProvider.when('/myown', {
-            templateUrl: 'partials/myown.html',
+            templateUrl: 'partials/myown.html'
             //controller: 'MyOwnCtrl'
         });
 
         $routeProvider.when('/calendar', {
-            templateUrl: 'partials/calendar.html',
+            templateUrl: 'partials/calendar.html'
             //controller: 'CalendarCtrl'
         });
 
         $routeProvider.when('/building', {
-            templateUrl: 'partials/building.html',
+            templateUrl: 'partials/building.html'
             //controller: 'BuildingCtrl'
         });
 
