@@ -38,6 +38,7 @@ var server = restify.createServer({
     name: 'PMSoft-API'
 });
 
+server.use(morgan("dev"));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS());
