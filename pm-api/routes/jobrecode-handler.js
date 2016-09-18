@@ -27,7 +27,12 @@ module.exports = function (server, BASEPATH) {
     server.get({
         path: BASEPATH + '/jobrecode/joblist',
         version: '0.0.1'
-    }, getRecodes)
+    }, getRecodes);
+
+    server.get({
+        path: BASEPATH + '/jobrecode/unauditedlist',
+        version: '0.0.1'
+    }, getUnauditeds);
 
 };
 
@@ -127,4 +132,32 @@ function getRecodes(req, res, next) {
 
     });
 
+}
+
+function getUnauditeds(req, res, next) {
+    if (_.isUndefined(req.params)) {
+        //由于数据量过大 所以应该禁止无条件查询
+        return next(new ParamProviderError(415, {
+            message: 'Invalid params'
+        }));
+    }
+    var _id = req.params['projectid'];
+    if (_.isUndefined(_id)) {
+        return next(new ParamProviderError(415, {
+            message: 'Invalid params, projectid == undefined'
+        }));
+    }
+    JobLogSchema.find({
+       projectID: _id,
+       isChecked: false
+    }, function (err, doc) {
+        if (err) {
+            return next(new DBOptionError(415, err));
+        }
+        if (doc.length < 1) {
+            res.end(JSON.stringify([new JobLogSchema()]));
+        }
+
+        res.end(JSON.stringify(doc));
+    })
 }
