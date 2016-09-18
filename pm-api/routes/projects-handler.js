@@ -40,7 +40,7 @@ module.exports = function (server, BASEPATH) {
 };
 
 function getList(req, res, next) {
-    ProjectSchema.find({}, {'cnName': 1, 'enName': 1, 'type': 1}, function (err, doc) {
+    ProjectSchema.find({}, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -48,11 +48,7 @@ function getList(req, res, next) {
         var projects = [];
 
         doc.forEach(function (item) {
-            projects.push({
-                _id: item._id,
-                cnName: item.cnName,
-                enName: item.enName
-            });
+            projects.push(item);
         });
 
         res.end(JSON.stringify(projects));
@@ -72,11 +68,7 @@ function getListByAccount(req, res, next) {
         var projects = [];
 
         doc.forEach(function (item) {
-            projects.push({
-                _id: item._id,
-                cnName: item.cnName,
-                enName: item.enName
-            });
+            projects.push(item);
         });
 
         res.end(JSON.stringify(projects));
