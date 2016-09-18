@@ -60,7 +60,7 @@ function getListByAccount(req, res, next) {
     var account = req.params['account'];
     ProjectSchema.find({
         'members.account': account
-    }, {'cnName': 1, 'enName': 1, 'type': 1}, function (err, doc) {
+    }, function (err, doc) {
         if (err) {
             return next(err);
         }
