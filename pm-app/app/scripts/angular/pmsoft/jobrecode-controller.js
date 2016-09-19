@@ -26,7 +26,6 @@
         /*已提交工作记录列表 用来比对时间是否重复*/
 
         self.dateSelect = dateSelect;
-        self.getProjects = getProjects;
         self.projectSelect = projectSelect;
         self.sTimeSelect = sTimeSelect;
         self.eTimeSelect = eTimeSelect;
@@ -35,6 +34,9 @@
         self.timeFormat = timeFormat;
         self.dateFormat = dateFormat;
         self.dateTimeFormat = dateTimeFormat;
+        self.init1 = function () {
+            alert('1');
+        }
 
         var recodeEditor = angular.element(document.getElementById('recode-editor'));
 
@@ -42,25 +44,32 @@
 
         function init() {
 
+            /*获取项目列表*/
+            _getProjects();
+
             /*获取日期列表*/
-            PMSoftServices.getDateList(function (data) {
+            _getDateList(function () {
 
-                self.selectedDate = {
-                    str: dateFormat(data[0]),
-                    date: data[0]
-                };
-
-                data.forEach(function (item) {
-                    self.dates.push({
-                        str: dateFormat(item),
-                        date: item
-                    });
+                /**
+                 * 获取已提交工作记录列表
+                 * 采用这种方式主要是为了保证在本机时间与系统时间不一致的情况下 不会出现获取的已提交日志日期不对的情况
+                 * 因为还要用它来比较是否重复提交
+                 */
+                _getJobList({
+                    username: $cookies.get('username'),
+                    startDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10),
+                    endDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10)
+                }, function (err) {
+                    if (err) {
+                        return alert(err.message);
+                    }
+                    self.showSubmitBtn = true;
                 });
-
-            }, function (data, status, headers, config) {
 
             });
 
+            /*获取时间列表*/
+            _getTimeList();
 
             /*初始化界面信息*/
             self.selectedProject = {
@@ -78,22 +87,6 @@
             };
 
             self.selectedType = '技术';
-
-            /*获取时间列表*/
-            getTimeList();
-
-            /*获取已提交工作记录列表*/
-            getJobList({
-                username: $cookies.get('username'),
-                startDate: new Date().toISOString().substring(0, 10),
-                endDate: new Date().toISOString().substring(0, 10)
-            }, function (err) {
-                if (err) {
-                    return alert(err.message);
-                }
-                self.showSubmitBtn = true;
-            });
-
         }
 
         function dateFormat(date) {
@@ -119,7 +112,7 @@
         function dateSelect(date) {
             self.selectedDate = date;
             self.showSubmitBtn = false;
-            getJobList({
+            _getJobList({
                 username: $cookies.get('username'),
                 startDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10),
                 endDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10)
@@ -131,18 +124,12 @@
             });
         }
 
-        function getProjects() {
+        function _getProjects() {
 
-            //self.projects = [];
+            self.projects = [];
 
-            if (self.projects.length > 0) {
-                return;
-            }
-
-            self.projects = PMSoftServices.pastProjects;
-
-            /*获取项目列表
-            PMSoftServices.getPastProjects($rootScope.account, function (data) {
+            /*获取项目列表*/
+            PMSoftServices.getPastProjects($cookies.get('username'), function (data) {
 
                 data.forEach(function (item) {
                     var project = {};
@@ -155,14 +142,36 @@
             }, function (data, status, headers, config) {
 
             });
-             */
+        }
+
+        function _getDateList(cb) {
+            self.dates = [];
+            PMSoftServices.getDateList(function (data) {
+
+                self.selectedDate = {
+                    str: dateFormat(data[0]),
+                    date: data[0]
+                };
+
+                data.forEach(function (item) {
+                    self.dates.push({
+                        str: dateFormat(item),
+                        date: item
+                    });
+                });
+
+                cb();
+
+            }, function (data, status, headers, config) {
+
+            });
         }
 
         function projectSelect(projectModule) {
             self.selectedProject = projectModule;
         }
 
-        function getTimeList() {
+        function _getTimeList() {
 
             var startDate = new Date('2016-01-01 07:00:00')
             for (var i = 0; i < 48; i++) {
@@ -214,7 +223,7 @@
             };
 
             //所选时间内是否有已提交工作记录
-            if (checkTimeConflicts(jobRecode.startTime, jobRecode.endTime)) {
+            if (checkTimeConflicts()) {
                 alert('所选时间内存在已提交的工作记录，请修改后提交！');
                 return;
             }
@@ -264,7 +273,7 @@
 
         }
 
-        function checkTimeConflicts(startTime, endTime) {
+        function checkTimeConflicts() {
 
             var startTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str);
             var endTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str);
@@ -300,7 +309,7 @@
             recodeEditor.summernote('code', '');
         }
 
-        function getJobList(condition, cb) {
+        function _getJobList(condition, cb) {
 
             PMSoftServices.getJobList(condition, function (data, status, headers, config) {
 

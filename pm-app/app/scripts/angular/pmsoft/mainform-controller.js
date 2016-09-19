@@ -8,24 +8,28 @@
 
     angular
         .module('PMSoft')
-        .controller('PMController', PMController);
+        .controller('MainController', MainController);
 
-    PMController.$inject = ['$cookies', '$rootScope', 'PMSoftServices'];
+    MainController.$inject = ['$cookies', '$rootScope', 'PMSoftServices'];
 
-    function PMController($cookies, $rootScope, PMSoftServices) {
+    function MainController($cookies, $rootScope, PMSoftServices) {
         var self = this;
 
-        init();
+        _init();
 
-        function init() {
+        /**
+         * 初始化数据
+         * @private
+         */
+        function _init() {
             self.account = $cookies.get('username');
 
             /**
              * 页面加载后需要获取如下信息：
              * 1 获取个人信息 （姓名、头像）
              * 2 获取项目信息 （项目cnName enName _id)
+             *
              */
-
             PMSoftServices.getEmployeeByAccount(self.account, function (data) {
                 data.forEach(function (item) {
                     $cookies.put('name', item.name);
@@ -39,22 +43,7 @@
 
             });
 
-            PMSoftServices.getPastProjects(self.account, function (data) {
-
-                data.forEach(function (item) {
-                    var project = {};
-                    project.cnName = item.cnName;
-                    project._id = item._id;
-                    project.enName = item.enName;
-                    PMSoftServices.pastProjects.push(project);
-                });
-
-            }, function (res) {
-
-            });
-
         }
-
     }
 
 

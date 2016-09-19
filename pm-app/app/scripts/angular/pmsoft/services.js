@@ -22,7 +22,11 @@
             getPastProjects: getPastProjects,
             getDateList: getDateList,
             recodeSubmit: recodeSubmit,
-            getJobList: getJobList
+            getJobList: getJobList,
+            getUnauditedJobs: getUnauditedJobs,
+            pastProjects: [], /*参与过的项目列表*/
+            jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
+            recodedJobLogList: [] /*已提交工作记录列表*/
         }
 
         function getEmployeeByAccount(memberAccount, successFn, errorFn) {
@@ -73,6 +77,15 @@
                 conditionStr += ('enddate=' + condition.endDate + '&');
             }
             $http.get(BASEPATH + '/jobrecode/joblist?' + conditionStr).success(successFn).error(errorFn);
+        }
+
+        function getUnauditedJobs(project, successFn, errorFn) {
+
+            var _id = project._id;
+
+            var conditionStr = 'projectid=' + _id;
+
+            $http.get(BASEPATH + '/jobrecode/unauditedlist?' + conditionStr).success(successFn).error(errorFn);
         }
     }
 

@@ -539,3 +539,22 @@ a:hover, a:focus, a:active {
     max-width: 300px;
     min-width: 300px;
 }
+
+#myNav.affix{
+    top: 30px; /* Set the top position of pinned element */
+}
+
+#myNav a {
+    width: 230px;
+    font-size: 1.1em;
+    font-family: "Microsoft YaHei";
+    font-weight: 500;
+}
+
+#myNav.nav-pills{
+    width: 240px;
+}
+
+#lists ul li{
+    padding: 5px;
+}

@@ -28,6 +28,11 @@
             //controller: 'ProjectCtrl'
         });
 
+        $routeProvider.when('/review', {
+            templateUrl: 'partials/review.html'
+            //controller: 'ProjectCtrl'
+        });
+
         $routeProvider.when('/maintenance', {
             templateUrl: 'partials/maintenance.html'
             //controller: 'MaintenanceCtrl'
