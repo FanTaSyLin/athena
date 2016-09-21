@@ -1,0 +1,78 @@
+<div id="review-View" class="row" ng-controller="ReviewController as ReviewCtrl" data-ng-init="ReviewCtrl.init()">
+    <div class="col-xs-3">
+        <ul class="nav nav-pills nav-stacked" id="myNav">
+            <li class="active" ng-class="{active: ReviewCtrl.isSelectedProject('all')}">
+                <a href ng-click="ReviewCtrl.projectSelect('all')">
+                    全部项目 <span class="badge">{{ReviewCtrl.unauditedJobs_Container.length}}</span>
+                </a>
+            </li>
+            <li ng-repeat="project in ReviewCtrl.projects"
+                ng-class="{active: ReviewCtrl.isSelectedProject(project.enName)}">
+                <a href ng-click="ReviewCtrl.projectSelect(project.enName)">
+                    {{project.cnName}} <span class="badge">{{project.count}}</span>
+                </a>
+            </li>
+            <hr style="margin-right: 90px">
+            <li class="active" ng-class="{active: ReviewCtrl.isSelectedMember('all')}">
+                <a href ng-click="ReviewCtrl.memberSelect('all')">
+                    全部人员
+                </a>
+            </li>
+            <li ng-repeat="member in ReviewCtrl.members" ng-class="{active: ReviewCtrl.isSelectedMember(member.account)}">
+                <a href ng-click="ReviewCtrl.memberSelect(member.account)">
+                    {{member.name}}
+                </a>
+            </li>
+            <li>
+                <a href="javascript:scroll(0,0)">
+                    返回顶部
+                </a>
+            </li>
+        </ul>
+        <!--
+        <hr style="margin-right: 90px">
+        <ul class="nav nav-pills nav-stacked" id="myNav-Members">
+            <li class="active">
+                <a href>
+                    全部人员
+                </a>
+            </li>
+            <li ng-repeat="member in ReviewCtrl.members" ng-class="{active: ReviewCtrl.isSelectedTab(member.account)}">
+                <a href>
+                    {{member.name}}
+                </a>
+            </li>
+        </ul>
+        -->
+    </div>
+    <div class="col-xs-9" id="jobList">
+        <nav style="margin-top: -30px" ng-show="ReviewCtrl.isShowPagination">
+            <ul class="pagination pagination-sm">
+                <li><a href>&laquo;</a></li>
+                <li ng-repeat="pagination in ReviewCtrl.paginations"><a href>{{pagination.num}}</a></li>
+                <li><a href>&raquo;</a></li>
+            </ul>
+        </nav>
+
+        <div style="width: 100%; margin-bottom: 8px"
+             ng-repeat="unauditedJob in ReviewCtrl.unauditedJobs_View">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h4><a href>{{unauditedJob.projectCName}}({{unauditedJob.projectEName}})</a> <b style="font-size: 0.85em;font-weight: 400; color: #6e6e6e"> by {{unauditedJob.authorName}}</b></h4>
+                    <p style="max-height: 45px; min-height: 45px;
+                        overflow: hidden;">
+                        <b style="color: #6e6e6e;">
+                            {{unauditedJob.date.substring(0, 10)}}
+                            ({{unauditedJob.starTime.substring(11, 16)}} 至 {{unauditedJob.endTime.substring(11, 16)}})
+                        </b>
+                        {{unauditedJob.cleanContent}}
+                    </p>
+                </div>
+                <div class="col-xs-3" ng-if="unauditedJob.thumb !== ''">
+                    <img style="height: 80px; max-width: 100px" src="{{unauditedJob.thumb}}"/>
+                </div>
+            </div>
+            <div style="height: 1px;margin: 8px 15px 0px -5px;background-color: #d9d9d9;"></div>
+        </div>
+    </div>
+</div>

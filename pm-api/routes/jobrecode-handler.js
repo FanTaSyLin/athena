@@ -34,6 +34,11 @@ module.exports = function (server, BASEPATH) {
         version: '0.0.1'
     }, getUnauditeds);
 
+    server.get({
+        path: BASEPATH + '/jobrecode/unauditedlist-count',
+        version: '0.0.1'
+    }, getUnauditedsCount);
+
 };
 
 function getDateList(req, res, next) {
@@ -141,23 +146,74 @@ function getUnauditeds(req, res, next) {
             message: 'Invalid params'
         }));
     }
-    var _id = req.params['projectid'];
-    if (_.isUndefined(_id)) {
+    var _idList = req.params['projectid'];
+
+    var memberID = req.params['memberid'];
+    if (_.isUndefined(_idList)) {
         return next(new ParamProviderError(415, {
             message: 'Invalid params, projectid == undefined'
         }));
     }
-    JobLogSchema.find({
-       projectID: _id,
-       isChecked: false
-    }, function (err, doc) {
+    _idList = _idList.split(' ');
+
+    var condition = {};
+    condition.isChecked = false;
+    condition.projectID = {
+        $in: _idList
+    };
+    if (!_.isUndefined(memberID)) {
+        condition.authorID = memberID
+    }
+
+    JobLogSchema
+        .find(condition)
+        .limit(100)
+        .exec(function (err, doc) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+            var data = {
+                count: doc.length,
+                doc: doc
+            }
+
+            res.end(JSON.stringify(data));
+        })
+}
+
+function getUnauditedsCount(req, res, next) {
+    if (_.isUndefined(req.params)) {
+        //由于数据量过大 所以应该禁止无条件查询
+        return next(new ParamProviderError(415, {
+            message: 'Invalid params'
+        }));
+    }
+    var _idList = req.params['projectid'];
+    var memberID = req.params['memberid'];
+    if (_.isUndefined(_idList)) {
+        return next(new ParamProviderError(415, {
+            message: 'Invalid params, projectid == undefined'
+        }));
+    }
+    _idList = _idList.split(' ');
+
+    var condition = {};
+    condition.isChecked = false;
+    condition.projectID = {
+        $in: _idList
+    };
+    if (!_.isUndefined(memberID)) {
+        condition.authorID = memberID
+    }
+
+    JobLogSchema.find(condition, function (err, doc) {
         if (err) {
             return next(new DBOptionError(415, err));
         }
-        if (doc.length < 1) {
-            res.end(JSON.stringify([new JobLogSchema()]));
+        var data = {
+            count: doc.length
         }
 
-        res.end(JSON.stringify(doc));
+        res.end(JSON.stringify(data));
     })
 }

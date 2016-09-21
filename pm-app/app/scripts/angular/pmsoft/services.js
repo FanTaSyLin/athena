@@ -79,11 +79,25 @@
             $http.get(BASEPATH + '/jobrecode/joblist?' + conditionStr).success(successFn).error(errorFn);
         }
 
-        function getUnauditedJobs(project, successFn, errorFn) {
-
-            var _id = project._id;
-
-            var conditionStr = 'projectid=' + _id;
+        function getUnauditedJobs(condition, successFn, errorFn) {
+            var condition_Project = '';
+            var condition_Member = '';
+            if (condition.projectList) {
+                condition_Project = 'projectid=';
+                var _id = '';
+                for (var i = 0; i < condition.projectList.length; i++) {
+                    _id = condition.projectList[i]._id;
+                    if (i === condition.projectList.length -1) {
+                        condition_Project += _id;
+                    } else {
+                        condition_Project += (_id + '%20');
+                    }
+                }
+            }
+            if (condition.memberID) {
+                condition_Member = 'memberid=' + condition.memberID;
+            }
+            var conditionStr = condition_Project + '&' + condition_Member;
 
             $http.get(BASEPATH + '/jobrecode/unauditedlist?' + conditionStr).success(successFn).error(errorFn);
         }
