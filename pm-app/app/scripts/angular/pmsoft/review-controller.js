@@ -29,6 +29,7 @@
         self.isSelectedMember = isSelectedMember;
         self.memberSelect = memberSelect;
         self.init = init;
+        self.showJobInfo = showJobInfo;
         self.isShowPagination = false;
 
         function init() {
@@ -273,6 +274,14 @@
             });
             _getMemberList(tmpList);
             return count;
+        }
+
+        /**
+         * 显示工作日志
+         * @param jobModule
+         */
+        function showJobInfo(jobModule) {
+            alert('1');
         }
     }
 
