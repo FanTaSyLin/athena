@@ -34,9 +34,6 @@
         self.timeFormat = timeFormat;
         self.dateFormat = dateFormat;
         self.dateTimeFormat = dateTimeFormat;
-        self.init1 = function () {
-            alert('1');
-        }
 
         var recodeEditor = angular.element(document.getElementById('recode-editor'));
 
@@ -87,6 +84,11 @@
             };
 
             self.selectedType = '技术';
+
+            recodeEditor.summernote({
+                minHeight:200,
+                maxHeight:390
+            });
         }
 
         function dateFormat(date) {
