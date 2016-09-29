@@ -374,8 +374,26 @@
     <!--创建项目对话框 end-->
 
     <!--工作记录审核对话框 start-->
-    <div class="modal fade" id="JobAudited" ng-controller="ReviewController as ReviewCtrl">
+    <div class="modal fade" id="JobAudited">
+        <div class="modal-dialog size-jobsheet">
+            <div class="modal-content">
+                <!--标题-->
+                <div class="modal-header dialog-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title title-h4">工作记录审核</h4>
+                </div>
+                <!--内容-->
+                <div class="modal-body dialog-body">
+                        <h4><a href>{{ReviewCtrl.currentJob.projectCName}}({{ReviewCtrl.currentJob.projectEName}})</a></h4>
 
+                </div>
+                <!--页脚-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">完成</button>
+                </div>
+            </div>
+        </div>
     </div>
     <!--工作记录审核对话框 end-->
 
@@ -386,7 +404,7 @@
     <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
-    <script type="text/javascript" src="bower_components/chart/Chart.min.js"></script>
+    <script type="text/javascript" src="/bower_components/chart/Chart.min.js"></script>
 
 
     <script type="text/javascript" src="/scripts/angular/pmsoft/module.js"></script>
@@ -397,10 +415,10 @@
     <script type="text/javascript" src="/scripts/angular/pmsoft/createproject-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/mystatus-controller.js"></script>
-    <script type="text/javascript" src="/scripts/angular/pmsoft/review-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/unauditeds-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
     <script type="text/javascript" src="/lib/ngStorage.js"></script>
-    <script type="text/javascript" src="/scripts/jqueryFn.js"></script>
+    <!--<script type="text/javascript" src="/scripts/jqueryFn.js"></script>-->
 </body>
 
 </html>

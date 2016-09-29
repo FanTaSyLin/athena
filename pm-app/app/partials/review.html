@@ -1,25 +1,25 @@
-<div id="review-View" class="row" ng-controller="ReviewController as ReviewCtrl" data-ng-init="ReviewCtrl.init()">
+<div id="review-View" class="row" ng-controller="UnauditedListController as UnauditedsCtrl" data-ng-init="UnauditedsCtrl.init()">
     <div class="col-xs-3">
         <ul class="nav nav-pills nav-stacked" id="myNav">
-            <li class="active" ng-class="{active: ReviewCtrl.isSelectedProject('all')}">
-                <a href ng-click="ReviewCtrl.projectSelect('all')">
-                    全部项目 <span class="badge">{{ReviewCtrl.unauditedJobs_Container.length}}</span>
+            <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedProject('all')}">
+                <a href ng-click="UnauditedsCtrl.projectSelect('all')">
+                    全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Container.length}}</span>
                 </a>
             </li>
-            <li ng-repeat="project in ReviewCtrl.projects"
-                ng-class="{active: ReviewCtrl.isSelectedProject(project.enName)}">
-                <a href ng-click="ReviewCtrl.projectSelect(project.enName)">
+            <li ng-repeat="project in UnauditedsCtrl.projects"
+                ng-class="{active: UnauditedsCtrl.isSelectedProject(project.enName)}">
+                <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)">
                     {{project.cnName}} <span class="badge">{{project.count}}</span>
                 </a>
             </li>
             <hr style="margin-right: 90px">
-            <li class="active" ng-class="{active: ReviewCtrl.isSelectedMember('all')}">
-                <a href ng-click="ReviewCtrl.memberSelect('all')">
+            <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedMember('all')}">
+                <a href ng-click="UnauditedsCtrl.memberSelect('all')">
                     全部人员
                 </a>
             </li>
-            <li ng-repeat="member in ReviewCtrl.members" ng-class="{active: ReviewCtrl.isSelectedMember(member.account)}">
-                <a href ng-click="ReviewCtrl.memberSelect(member.account)">
+            <li ng-repeat="member in UnauditedsCtrl.members" ng-class="{active: UnauditedsCtrl.isSelectedMember(member.account)}">
+                <a href ng-click="UnauditedsCtrl.memberSelect(member.account)">
                     {{member.name}}
                 </a>
             </li>
@@ -46,19 +46,19 @@
         -->
     </div>
     <div class="col-xs-9" id="jobList">
-        <nav style="margin-top: -30px" ng-show="ReviewCtrl.isShowPagination">
+        <nav style="margin-top: -30px" ng-show="UnauditedsCtrl.isShowPagination">
             <ul class="pagination pagination-sm">
                 <li><a href>&laquo;</a></li>
-                <li ng-repeat="pagination in ReviewCtrl.paginations"><a href>{{pagination.num}}</a></li>
+                <li ng-repeat="pagination in UnauditedsCtrl.paginations"><a href>{{pagination.num}}</a></li>
                 <li><a href>&raquo;</a></li>
             </ul>
         </nav>
 
         <div style="width: 100%; margin-bottom: 5px"
-             ng-repeat="unauditedJob in ReviewCtrl.unauditedJobs_View">
+             ng-repeat="unauditedJob in UnauditedsCtrl.unauditedJobs_View">
             <div class="row">
                 <div class="col-xs-9">
-                    <h4><a href ng-click="ReviewCtrl.showJobInfo(unauditedJob)">{{unauditedJob.projectCName}}({{unauditedJob.projectEName}})</a> <b style="font-size: 0.85em;font-weight: 400; color: #6e6e6e"> by {{unauditedJob.authorName}}</b></h4>
+                    <h4><a href ng-click="UnauditedsCtrl.showJobInfo(unauditedJob)">{{unauditedJob.projectCName}}({{unauditedJob.projectEName}})</a> <b style="font-size: 0.85em;font-weight: 400; color: #6e6e6e"> by {{unauditedJob.authorName}}</b></h4>
                     <p style="max-height: 45px; min-height: 45px;
                         overflow: hidden;">
                         <b style="color: #6e6e6e;">

@@ -7,14 +7,15 @@
     'use strict';
 
     angular.module('PMSoft')
-        .controller('ReviewController', ReviewController);
+        .controller('UnauditedListController', UnauditedListController);
 
-    ReviewController.$inject = ['PMSoftServices', '$cookies'];
+    UnauditedListController.$inject = ['PMSoftServices', '$cookies'];
 
-    function ReviewController(PMSoftServices, $cookies) {
+    function UnauditedListController(PMSoftServices, $cookies) {
 
         var self = this;
         var myNav = angular.element(document.getElementById('myNav'));
+        var jobAudited = angular.element(document.getElementById('JobAudited'));
         self.pageSize = 40;
         self.unauditedJobs_Container = [];
         self.unauditedJobs_View = [];
@@ -24,13 +25,14 @@
         self.selectedProjectEName = 'all';
         self.selectedMemberAccount = 'all';
         self.unauditedJobsCount = 0;
+        self.isShowPagination = false;
+        self.currentJob = {};
         self.isSelectedProject = isSelectedProject;
         self.projectSelect = projectSelect;
         self.isSelectedMember = isSelectedMember;
         self.memberSelect = memberSelect;
         self.init = init;
         self.showJobInfo = showJobInfo;
-        self.isShowPagination = false;
 
         function init() {
 
@@ -69,6 +71,8 @@
                     //获取分页数据
                     _viewUnauditedJobs(self.unauditedJobs_Container, 1, self.pageSize);
                 });
+
+                self.currentJob.projectCName = "FY3C客户端项目";
 
             }, function (res) {
 
@@ -281,7 +285,8 @@
          * @param jobModule
          */
         function showJobInfo(jobModule) {
-            alert('1');
+            self.currentJob = jobModule;
+            jobAudited.modal('show');
         }
     }
 
