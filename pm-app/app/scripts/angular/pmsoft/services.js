@@ -15,7 +15,7 @@
 
         var BASEPATH = 'http://localhost:4003/api';
 
-        return {
+        var self = {
             getEmployeeByName: getEmployeeByName,
             getEmployeeByAccount: getEmployeeByAccount,
             createProject: createProject,
@@ -24,10 +24,14 @@
             recodeSubmit: recodeSubmit,
             getJobList: getJobList,
             getUnauditedJobs: getUnauditedJobs,
+            changeCurrentUnauditedJob: changeCurrentUnauditedJob,
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
-            recodedJobLogList: [] /*已提交工作记录列表*/
+            recodedJobLogList: [], /*已提交工作记录列表*/
+            currentUnauditedJob: {} /*当前待审核工作记录 为UnauditedsCtrl与 ReviewCtrl 传递参数*/
         }
+
+        return self;
 
         function getEmployeeByAccount(memberAccount, successFn, errorFn) {
             $http({
@@ -100,6 +104,12 @@
             var conditionStr = condition_Project + '&' + condition_Member;
 
             $http.get(BASEPATH + '/jobrecode/unauditedlist?' + conditionStr).success(successFn).error(errorFn);
+        }
+
+        function changeCurrentUnauditedJob(module) {
+             for (var p in module) {
+                 self.currentUnauditedJob[p] = module[p];
+             }
         }
     }
 

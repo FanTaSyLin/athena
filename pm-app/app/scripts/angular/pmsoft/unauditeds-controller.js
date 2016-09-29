@@ -285,7 +285,7 @@
          * @param jobModule
          */
         function showJobInfo(jobModule) {
-            self.currentJob = jobModule;
+            PMSoftServices.changeCurrentUnauditedJob(jobModule);
             jobAudited.modal('show');
         }
     }

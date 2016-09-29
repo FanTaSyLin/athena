@@ -375,6 +375,13 @@ a:hover, a:focus, a:active {
     color: #646464;
 }
 
+.title-h6 {
+    font-family: "Microsoft YaHei";
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #646464;
+}
+
 .title-h8 {
     margin-top: 1em;
     font-family: "Microsoft YaHei";

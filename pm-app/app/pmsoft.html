@@ -7,6 +7,7 @@
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/summernote/dist/summernote.css">
+    <link rel="stylesheet" href="/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
@@ -374,7 +375,7 @@
     <!--创建项目对话框 end-->
 
     <!--工作记录审核对话框 start-->
-    <div class="modal fade" id="JobAudited">
+    <div class="modal fade" id="JobAudited" ng-controller="ReviewController as ReviewCtrl" data-ng-init="ReviewCtrl.init()">
         <div class="modal-dialog size-jobsheet">
             <div class="modal-content">
                 <!--标题-->
@@ -384,8 +385,118 @@
                 </div>
                 <!--内容-->
                 <div class="modal-body dialog-body">
-                        <h4><a href>{{ReviewCtrl.currentJob.projectCName}}({{ReviewCtrl.currentJob.projectEName}})</a></h4>
-
+                    <form>
+                        <!-- 状态显示区 -->
+                        <div class="row">
+                            <div class="function-select-area item-border">
+                                <!--项目选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">项目</p>
+                                    <div class="function-select-area-projects">
+                                        <span class="glyphicon glyphicon-list-alt"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
+                                            {{ReviewCtrl.currentJob.projectEName}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--日期选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">日期</p>
+                                    <div class="function-select-area-date">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
+                                            {{ReviewCtrl.currentJob.date.substring(0, 10)}}
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--时间选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">起止时间</p>
+                                    <div class="row function-select-area-time">
+                                        <div class="col-xs-4 ">
+                                            <a class="title-h7 dropdown-toggle" href>
+                                                {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
+                                            </a>
+                                        </div>
+                                        <i class="col-xs-1">
+                                            -
+                                        </i>
+                                        <div class="col-xs-4">
+                                            <a class="title-h7 dropdown-toggle" href>
+                                                {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--类型选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">类型</p>
+                                    <div class="function-select-area-type">
+                                        <span class="glyphicon glyphicon-tag"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
+                                            {{ReviewCtrl.currentJob.type}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--系数设置区-->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-select-area item-border">
+                                <!--工作难度-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                        <p class="title-h6">难度系数</p>
+                                    <input id="difficulty" type="text"
+                                           data-provide="slider"
+                                           data-slider-ticks="[0.5, 1, 1.5]"
+                                           data-slider-min="0.5"
+                                           data-slider-max="1.5"
+                                           data-slider-step="0.5"
+                                           data-slider-value="1"
+                                    />
+                                </div>
+                                <!--时间系数-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                    <p class="title-h6">效率系数</p>
+                                    <input id="efficiency" type="text"
+                                           data-provide="slider"
+                                           data-slider-ticks="[0, 0.5, 1, 1.5, 2]"
+                                           data-slider-min="0"
+                                           data-slider-max="2"
+                                           data-slider-step="0.5"
+                                           data-slider-value="1"
+                                    />
+                                </div>
+                                <!--完成质量-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                    <p class="title-h6">质量系数</p>
+                                    <input id="quality" type="text"
+                                           data-provide="slider"
+                                           data-slider-ticks="[0, 0.25, 0.5, 0.75, 1]"
+                                           data-slider-min="0"
+                                           data-slider-max="1"
+                                           data-slider-step="0.25"
+                                           data-slider-value="1"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 内容显示区 -->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-recode-area item-border" style="overflow: auto; min-height: 390px; max-height: 390px">
+                                <div ng-bind-html="ReviewCtrl.currentJob.content | to_trusted">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 日志显示区 -->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-recode-area item-border" style="overflow: auto; min-height: 200px; max-height: 200px">
+                                <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                    <span class="glyphicon glyphicon-list-alt"></span> 修改日志：
+                                </p>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <!--页脚-->
                 <div class="modal-footer">
@@ -405,18 +516,21 @@
     <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
     <script type="text/javascript" src="/bower_components/chart/Chart.min.js"></script>
+    <script type="text/javascript" src="/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
 
 
     <script type="text/javascript" src="/scripts/angular/pmsoft/module.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/config.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/router.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/run.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/filter.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/mainform-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/createproject-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/mystatus-controller.js"></script>
     <script type="text/javascript" src="/scripts/angular/pmsoft/unauditeds-controller.js"></script>
-    <script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/review-controller.js"></script>
     <script type="text/javascript" src="/lib/ngStorage.js"></script>
     <!--<script type="text/javascript" src="/scripts/jqueryFn.js"></script>-->
 </body>
