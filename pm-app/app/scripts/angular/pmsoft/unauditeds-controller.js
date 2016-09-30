@@ -17,7 +17,7 @@
         var myNav = angular.element(document.getElementById('myNav'));
         var jobAudited = angular.element(document.getElementById('JobAudited'));
         self.pageSize = 40;
-        self.unauditedJobs_Container = [];
+        self.unauditedJobs_Container = []; /*存储未审核工作记录列表*/
         self.unauditedJobs_View = [];
         self.projects = [];
         self.members = [];
@@ -70,9 +70,9 @@
                     _getPagination(data);
                     //获取分页数据
                     _viewUnauditedJobs(self.unauditedJobs_Container, 1, self.pageSize);
+                    //为ReviewCtrl传递未审核工作记录列表数据
+                    PMSoftServices.pushUnauditedJobList(self.unauditedJobs_Container);
                 });
-
-                self.currentJob.projectCName = "FY3C客户端项目";
 
             }, function (res) {
 

@@ -14,18 +14,41 @@
     function ReviewController(PMSoftServices) {
 
         var self = this;
-        var recodeView = angular.element(document.getElementById('recode-view'));
 
         self.currentJob = {};
+        self.disableForwardBtn = true;
+        self.disableBackwardBtn = false;
+
 
         self.init = init;
+        self.goForwardJob = goForwardJob;
+        self.goBackwardJob = goBackwardJob;
 
         function init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
-            recodeView.summernote({
-                minHeight:200,
-                maxHeight:390
-            });
+        }
+
+
+        function goForwardJob() {
+            if (PMSoftServices.unauditedJobIndex < PMSoftServices.unauditedJobList.length - 1) {
+                PMSoftServices.unauditedJobIndex++;
+            } else {
+                self.disableForwardBtn = false;
+                self.disableBackwardBtn = true;
+            }
+            var tmpItem = PMSoftServices.unauditedJobList[PMSoftServices.unauditedJobIndex];
+            PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+        }
+
+        function goBackwardJob() {
+            if (PMSoftServices.unauditedJobIndex > 0) {
+                PMSoftServices.unauditedJobIndex--;
+            } else {
+                self.disableForwardBtn = true;
+                self.disableBackwardBtn = false;
+            }
+            var tmpItem = PMSoftServices.unauditedJobList[PMSoftServices.unauditedJobIndex];
+            PMSoftServices.changeCurrentUnauditedJob(tmpItem);
         }
 
     }

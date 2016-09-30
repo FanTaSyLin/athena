@@ -32,12 +32,23 @@ var JobLogSchema = new Schema({
     projectEName: {type: String}, /*项目名称, 显示*/
     title: {type: String}, /*工作记录的简化描述，显示*/
 
-    factor: {type: Number}, /*工作量系数，统计*/
     isChecked: {type: Boolean}, /*审核标识，查询，统计*/
     reviewerID: {type: String}, /*审核人ID，查询*/
     reviewerName: {type: String}, /*审核人姓名，显示*/
     reviewerAvatar: {type: String}, /*审核人头像，显示*/
     reviewerTime: {type: Date}, /*审核时间，记录 查询 统计*/
+    difficulty: {type: Number}, /*难度系数*/
+    efficiency: {type: Number}, /*效率系数*/
+    quality: {type: Number}, /*质量系数*/
+    factor: {type: Number}, /*总体评定系数 通过 难度系数、效率系数、质量系数相乘得到*/
+    status: {type: String},  /*该记录的当前状态 分为 Submit-提交 Decline-拒绝 Pass-审核通过*/
+    log: {
+        type: {type: String}, /*日志类型 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+        logTime: {type: Date}, /*日志时间戳*/
+        msg: {type: String}, /*日志内容*/
+        authorID: {type: String}, /*编辑人账户*/
+        authorName: {type: String} /*编辑人姓名*/
+    }
 });
 
 JobLogSchema.methods.reportInit = function (body)  {
@@ -64,12 +75,18 @@ JobLogSchema.methods.reportInit = function (body)  {
         self.projectCName = body.projectCName;
         self.projectEName = body.projectEName;
         self.duration = (Math.abs(self.endTime - self.starTime) / (1000 * 60 * 60)).toFixed(1);
-        self.factor = 0;
         self.isChecked = false;
         self.reviewerID = '';
         self.reviewerName = '';
         self.reviewerAvatar = '';
         self.reviewerTime = new Date('1900-01-01 00:00:00');
+        self.difficulty = 1; /*难度系数*/
+        self.efficiency = 1; /*效率系数*/
+        self.quality = 1; /*质量系数*/
+        self.factor = 1; /*总体评定系数 通过 难度系数、效率系数、质量系数相乘得到*/
+        self.status = 'Submit'; /*该记录的当前状态 分为 Submit-提交 Decline-拒绝 Pass-审核通过*/
+
+
     } catch (err) {
         throw new DataVerifyError("415", err);
     }
