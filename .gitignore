@@ -4,7 +4,6 @@ bower_components
 tmp
 .eslintrc.js
 typings
-tsd.json
 tags
 typings
 
