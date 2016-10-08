@@ -97,7 +97,7 @@
         }
 
         function isSelectedProject(projectEName) {
-            return self.selectedProjectEName == projectEName
+            return self.selectedProjectEName == projectEName;
         }
 
         /**
@@ -150,7 +150,7 @@
             function _isInclude(obj) {
                 for (var i = 0; i < self.members.length; i++) {
                     if (self.members[i].account === obj) {
-                        return true
+                        return true;
                     }
                 }
                 return false;

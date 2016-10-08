@@ -37,6 +37,8 @@ var JobLogSchema = new Schema({
     reviewerName: {type: String}, /*审核人姓名，显示*/
     reviewerAvatar: {type: String}, /*审核人头像，显示*/
     reviewerTime: {type: Date}, /*审核时间，记录 查询 统计*/
+
+    //以下内容为新增内容
     difficulty: {type: Number}, /*难度系数*/
     efficiency: {type: Number}, /*效率系数*/
     quality: {type: Number}, /*质量系数*/

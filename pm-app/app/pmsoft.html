@@ -546,7 +546,8 @@
             </div>
             <!--页脚-->
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning">忽 略</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal"
+                 ng-click="ReviewCtrl.ignoreThisJob(ReviewCtrl.currentJob._id)">忽 略</button>
                 <div class="btn-group dropup">
                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
                         拒 绝 <span class="caret"></span>

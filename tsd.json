@@ -6,16 +6,16 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "jquery/jquery.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "angularjs/angular.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "bootstrap/bootstrap.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "debug/debug.d.ts": {
       "commit": "db995d641cce0de40691d83673613092ab549318"
@@ -33,10 +33,10 @@
       "commit": "db995d641cce0de40691d83673613092ab549318"
     },
     "restify/restify.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "bunyan/bunyan.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "mongoose/mongoose.d.ts": {
       "commit": "db995d641cce0de40691d83673613092ab549318"

@@ -9,9 +9,9 @@
     angular.module('PMSoft')
         .controller('ReviewController', ReviewController);
 
-    ReviewController.$inject = ['PMSoftServices']
+    ReviewController.$inject = ['PMSoftServices', '$cookies'];
 
-    function ReviewController(PMSoftServices) {
+    function ReviewController(PMSoftServices, $cookies) {
 
         var self = this;
 
@@ -23,11 +23,11 @@
         self.init = init;
         self.goForwardJob = goForwardJob;
         self.goBackwardJob = goBackwardJob;
+        self.ignoreThisJob = ignoreThisJob;
 
         function init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
         }
-
 
         function goForwardJob() {
             if (PMSoftServices.unauditedJobIndex < PMSoftServices.unauditedJobList.length - 1) {
@@ -49,6 +49,16 @@
             }
             var tmpItem = PMSoftServices.unauditedJobList[PMSoftServices.unauditedJobIndex];
             PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+        }
+
+        function ignoreThisJob(id) {
+            var ignoreUnauditedJobIDList = $cookies.get('ignoreUnauditedJobIDList');
+            if (ignoreUnauditedJobIDList === undefined) {
+                $cookies.put('ignoreUnauditedJobIDList', id);
+            } else {
+                ignoreUnauditedJobIDList = ignoreUnauditedJobIDList + ',' + id;
+                $cookies.put('ignoreUnauditedJobIDList', ignoreUnauditedJobIDList);
+            }
         }
 
     }
