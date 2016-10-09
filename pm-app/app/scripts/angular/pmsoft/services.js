@@ -26,6 +26,7 @@
             getUnauditedJobs: getUnauditedJobs,
             changeCurrentUnauditedJob: changeCurrentUnauditedJob,
             pushUnauditedJobList: pushUnauditedJobList, /*为unauditedJobList添加数据*/
+            recodeCheck: recodeCheck, /*审核工作记录*/
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
             recodedJobLogList: [], /*已提交工作记录列表*/
@@ -66,7 +67,7 @@
         }
 
         function recodeSubmit(data, successFn, errorFn) {
-            $http.post(BASEPATH + '/jobrecode', data).success(successFn).error(errorFn);
+            $http.post(BASEPATH + '/jobrecode/submit', data).success(successFn).error(errorFn);
         }
 
         function getJobList(condition, successFn, errorFn) {
@@ -130,6 +131,16 @@
             modules.forEach(function (item) {
                 self.unauditedJobList.push(item);
             });
+        }
+
+        function recodeCheck(body, successFn, errorFn) {
+            //为了减少传输数据的大小 body中除了有用的信息外其他信息需清除
+            var item = {};
+            for(var pro in body){
+                item[pro] = body[pro];
+            }
+            item.content = '';
+            $http.post(BASEPATH + '/jobrecode/check', item).success(successFn).error(errorFn);
         }
     }
 
