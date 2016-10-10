@@ -25,14 +25,16 @@
             getJobList: getJobList,
             getUnauditedJobs: getUnauditedJobs,
             changeCurrentUnauditedJob: changeCurrentUnauditedJob,
-            pushUnauditedJobList: pushUnauditedJobList, /*为unauditedJobList添加数据*/
+            cleanUnauditedJobList_Total: cleanUnauditedJobList_Total, /*清空unauditedJobList_Total*/
             recodeCheck: recodeCheck, /*审核工作记录*/
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
             recodedJobLogList: [], /*已提交工作记录列表*/
             currentUnauditedJob: {}, /*当前待审核工作记录 为UnauditedsCtrl与 ReviewCtrl 传递参数*/
-            unauditedJobList: [], /*未审核工作列表 为ReviewCtrl 传递参数*/
-            unauditedJobIndex: 0 /*一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0*/
+            unauditedJobList_Total: [], /*未审核工作列表-总体 为ReviewCtrl 传递参数*/
+            unauditedJobList_Filter: [], /*未审核工作列表-筛选后保留 为ReviewCtrl 传递参数*/
+            unauditedJobList_View: [], /*未审核工作列表-分页后显示用 为ReviewCtrl 传递参数*/
+            currentUnauditedJobIndex: 0 /*一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0*/
         }
 
         return self;
@@ -114,23 +116,22 @@
              for (var p in module) {
                  self.currentUnauditedJob[p] = module[p];
              }
-             if (self.unauditedJobList.length) {
-                 for (var i = 0; i < self.unauditedJobList.length; i++) {
-                     if (self.unauditedJobList._id == module._id) {
-                         self.unauditedJobIndex = i;
+             if (self.unauditedJobList_Filter.length) {
+                 for (var i = 0; i < self.unauditedJobList_Filter.length; i++) {
+                     if (self.unauditedJobList_Filter._id == module._id) {
+
+                         self.currentUnauditedJobIndex = i;
                      }
                  }
              }
         }
 
-        function pushUnauditedJobList(modules) {
-            //清空原有数据
-            self.unauditedJobList.splice(0,self.unauditedJobList.length);
-            self.unauditedJobIndex = 0;
-            //添加新提交的数据
-            modules.forEach(function (item) {
-                self.unauditedJobList.push(item);
-            });
+        /**
+         *清空 unauditedJobList_Total 原有数据
+         */
+        function cleanUnauditedJobList_Total() {
+            self.unauditedJobList_Total.splice(0,self.unauditedJobList_Total.length);
+            self.currentUnauditedJobIndex = 0;
         }
 
         function recodeCheck(body, successFn, errorFn) {

@@ -417,7 +417,11 @@
             <!--标题-->
             <div class="modal-header dialog-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title title-h4">工作记录审核</h4>
+                <h4 class="modal-title title-h4">
+                    工作记录审核
+                    <!--<img width="30px" height="30px" src="/public/checked.png"
+                    ng-show="ReviewCtrl.currentJob.status === 'Pass'"/>-->
+                </h4>
             </div>
             <!--内容-->
             <div class="modal-body dialog-body">
@@ -538,7 +542,7 @@
                         <div class="function-recode-area item-border"
                              style="overflow: auto; min-height: 200px; max-height: 200px">
                             <p class="title-h7" style="margin-left: 15px; font-weight: 500">
-                                <span class="glyphicon glyphicon-list-alt"></span> 修改日志：
+                                <span class="glyphicon glyphicon-list-alt"></span> 日志：
                             </p>
                         </div>
                     </div>

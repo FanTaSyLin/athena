@@ -27,7 +27,8 @@
         self.goForwardJob = goForwardJob;
         self.goBackwardJob = goBackwardJob;
         self.ignoreThisJob = ignoreThisJob;
-        self.checkThisJob = checkThisJob; /*审核当前工作记录*/
+        self.checkThisJob = checkThisJob;
+        /*审核当前工作记录*/
 
         function init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
@@ -35,26 +36,33 @@
         }
 
         function goForwardJob() {
-            if (PMSoftServices.unauditedJobIndex < PMSoftServices.unauditedJobList.length - 1) {
-                PMSoftServices.unauditedJobIndex++;
+            PMSoftServices.currentUnauditedJobIndex++;
+            if (PMSoftServices.currentUnauditedJobIndex < PMSoftServices.unauditedJobList_Filter.length) {
+                var tmpItem = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
+                if (tmpItem.status === 'Pass' || tmpItem.status === 'Decline') {
+                    goForwardJob();
+                } else {
+                    PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+                }
             } else {
-                self.disableForwardBtn = false;
-                self.disableBackwardBtn = true;
-                return 'end';
+                PMSoftServices.currentUnauditedJobIndex = PMSoftServices.unauditedJobList_Filter.length -1;
+                return;
             }
-            var tmpItem = PMSoftServices.unauditedJobList[PMSoftServices.unauditedJobIndex];
-            PMSoftServices.changeCurrentUnauditedJob(tmpItem);
         }
 
         function goBackwardJob() {
-            if (PMSoftServices.unauditedJobIndex > 0) {
-                PMSoftServices.unauditedJobIndex--;
+            PMSoftServices.currentUnauditedJobIndex--;
+            if (PMSoftServices.currentUnauditedJobIndex > -1) {
+                var tmpItem = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
+                if (tmpItem.status === 'Pass' || tmpItem.status === 'Decline') {
+                    goBackwardJob();
+                } else {
+                    PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+                }
             } else {
-                self.disableForwardBtn = true;
-                self.disableBackwardBtn = false;
+                PMSoftServices.currentUnauditedJobIndex = 0;
+                return;
             }
-            var tmpItem = PMSoftServices.unauditedJobList[PMSoftServices.unauditedJobIndex];
-            PMSoftServices.changeCurrentUnauditedJob(tmpItem);
         }
 
         function ignoreThisJob(id) {
@@ -72,11 +80,18 @@
             body.reviewerName = $cookies.get('name');
             body.reviewerAvatar = $cookies.get('avatar');
             body.difficulty = difficultyEditor.slider('getValue');
-            body.efficiency = efficiencyEditor.slider('getValue');;
-            body.quality = qualityEditor.slider('getValue');;
+            body.efficiency = efficiencyEditor.slider('getValue');
+            ;
+            body.quality = qualityEditor.slider('getValue');
             PMSoftServices.recodeCheck(body, function (res) {
+
+                var item = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
+                item.status = 'Pass';
+
+                //显示下一条记录
                 if (goForwardJob()) {
                     jobAudited.modal('hide');
+                    location.reload();
                 }
             }, function (res) {
 
