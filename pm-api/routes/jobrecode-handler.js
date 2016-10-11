@@ -45,7 +45,10 @@
             version: '0.0.1'
         }, _checkJob);//审核工作记录
 
-    };
+        server.post({path: BASEPATH + '/jobrecode/turnback',
+            version: '0.0.1'}, _turnBackJob);//退回已提交的工作记录
+
+    }
 
     function _getDateList(req, res, next) {
         var now = new Date();
@@ -256,8 +259,8 @@
                 message: 'Invalid params'
             }));
         }
-        var _idList = req.params.projectid;
-        var memberID = req.params.memberid;
+        var _idList = req.params['projectid'];
+        var memberID = req.params['memberid'];
         if (_.isUndefined(_idList)) {
             return next(new ParamProviderError(415, {
                 message: 'Invalid params, projectid == undefined'
@@ -284,5 +287,50 @@
 
             res.end(JSON.stringify(data));
         });
-    } 
+    }
+
+    /**
+     * 退回已提交的工作记录
+     * @param req
+     * @param res
+     * @param next
+     * @private
+     */
+    function _turnBackJob(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = req.body;
+
+        try {
+            JobLogSchema.update({
+                _id: body._id
+            }, {
+                $set: {
+                    status: 'TurnBack'
+                },
+                $push: {
+                    logs:{
+                        type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                        logTime: new Date(), /*日志时间戳*/
+                        msg: '退回了本条记录。原因：' + body.turnBackReason + '。', /*日志内容*/
+                        authorID: body.reviewerID, /*编辑人账户*/
+                        authorName: body.reviewerName /*编辑人姓名*/
+                    }
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
+            })
+        } catch (err) {
+            return next(err);
+        }
+
+    }
 })();

@@ -32,6 +32,7 @@
         self.memberSelect = memberSelect;
         self.init = init;
         self.showJobInfo = showJobInfo;
+        self.timeFormat = _timeFormat;
 
         function init() {
 
@@ -114,6 +115,8 @@
                 doc.forEach(function (item) {
                     item.thumb = _extractImg(item.content);
                     item.cleanContent = _delHtmlTag(item.content);
+                    item.starTime = new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
+                    item.endTime = new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
                     PMSoftServices.unauditedJobList_Total.push(item);
                 });
                 cb(null, data.count);
@@ -286,6 +289,20 @@
                 _getMemberList(tmpList);
                 return PMSoftServices.unauditedJobList_Filter.length;
             });
+
+        }
+
+        /**
+         * 时间格式化
+         * @param time
+         * @returns {string}
+         * @private
+         */
+        function _timeFormat(time) {
+
+            return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
+                + ':' +
+                ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
 
         }
     }

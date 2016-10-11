@@ -63,7 +63,7 @@
                         overflow: hidden;">
                         <b style="color: #6e6e6e;">
                             {{unauditedJob.date.substring(0, 10)}}
-                            ({{unauditedJob.starTime.substring(11, 16)}} 至 {{unauditedJob.endTime.substring(11, 16)}})
+                            ({{UnauditedsCtrl.timeFormat(unauditedJob.starTime)}} 至 {{UnauditedsCtrl.timeFormat(unauditedJob.endTime)}})
                         </b>
                         {{unauditedJob.cleanContent}}
                     </p>

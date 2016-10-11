@@ -23,23 +23,24 @@
         self.disableForwardBtn = true;
         self.disableBackwardBtn = false;
 
-        self.init = init;
-        self.goForwardJob = goForwardJob;
-        self.goBackwardJob = goBackwardJob;
-        self.ignoreThisJob = ignoreThisJob;
-        self.checkThisJob = checkThisJob;
-        /*审核当前工作记录*/
+        self.init = _init;
+        self.goForwardJob = _goForwardJob;
+        self.goBackwardJob = _goBackwardJob;
+        self.ignoreThisJob = _ignoreThisJob;
+        self.checkThisJob = _checkThisJob;/*审核当前工作记录*/
+        self.turnBackJob = _turnBackJob;/*退回已提交的工作记录*/
+        self.disMissModal = _disMissModal;/*取消审核模态框*/
 
-        function init() {
+        function _init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
 
         }
 
-        function goForwardJob() {
+        function _goForwardJob() {
             PMSoftServices.currentUnauditedJobIndex++;
             if (PMSoftServices.currentUnauditedJobIndex < PMSoftServices.unauditedJobList_Filter.length) {
                 var tmpItem = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
-                if (tmpItem.status === 'Pass' || tmpItem.status === 'Decline') {
+                if (tmpItem.status === 'Pass' || tmpItem.status === 'TurnBack') {
                     goForwardJob();
                 } else {
                     PMSoftServices.changeCurrentUnauditedJob(tmpItem);
@@ -50,11 +51,11 @@
             }
         }
 
-        function goBackwardJob() {
+        function _goBackwardJob() {
             PMSoftServices.currentUnauditedJobIndex--;
             if (PMSoftServices.currentUnauditedJobIndex > -1) {
                 var tmpItem = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
-                if (tmpItem.status === 'Pass' || tmpItem.status === 'Decline') {
+                if (tmpItem.status === 'Pass' || tmpItem.status === 'TurnBack') {
                     goBackwardJob();
                 } else {
                     PMSoftServices.changeCurrentUnauditedJob(tmpItem);
@@ -65,7 +66,7 @@
             }
         }
 
-        function ignoreThisJob(id) {
+        function _ignoreThisJob(id) {
             var ignoreUnauditedJobIDList = $cookies.get('ignoreUnauditedJobIDList');
             if (ignoreUnauditedJobIDList === undefined) {
                 $cookies.put('ignoreUnauditedJobIDList', id);
@@ -75,13 +76,12 @@
             }
         }
 
-        function checkThisJob(body) {
+        function _checkThisJob(body) {
             body.reviewerID = $cookies.get('username');
             body.reviewerName = $cookies.get('name');
             body.reviewerAvatar = $cookies.get('avatar');
             body.difficulty = difficultyEditor.slider('getValue');
             body.efficiency = efficiencyEditor.slider('getValue');
-            ;
             body.quality = qualityEditor.slider('getValue');
             PMSoftServices.recodeCheck(body, function (res) {
 
@@ -89,13 +89,32 @@
                 item.status = 'Pass';
 
                 //显示下一条记录
-                if (goForwardJob()) {
+                if (_goForwardJob()) {
                     jobAudited.modal('hide');
                     location.reload();
                 }
             }, function (res) {
 
             });
+        }
+        
+        function _turnBackJob(reasonStr, body) {
+            body.turnBackReason = reasonStr;
+            PMSoftServices.recodeTurnBack(body, function (res) {
+                var item = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
+                item.status = 'TurnBack';
+                //显示下一条记录
+                if (_goForwardJob()) {
+                    jobAudited.modal('hide');
+                    location.reload();
+                }
+            }, function (res) {
+
+            });
+        }
+
+        function _disMissModal() {
+            location.reload();
         }
 
     }

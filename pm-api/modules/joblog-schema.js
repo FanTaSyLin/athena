@@ -89,7 +89,7 @@ JobLogSchema.methods.reportInit = function (body) {
         self.factor = 1;
         /*总体评定系数 通过 难度系数、效率系数、质量系数相乘得到*/
         self.status = 'Submit';
-        /*该记录的当前状态 分为 Submit-提交 Decline-拒绝 Pass-审核通过*/
+        /*该记录的当前状态 分为 Submit-提交 TurnBack-退回 Pass-审核通过*/
         self.logs.push({
             type: 'New',
             logTime: new Date(),

@@ -16,17 +16,18 @@
         var BASEPATH = 'http://localhost:4003/api';
 
         var self = {
-            getEmployeeByName: getEmployeeByName,
-            getEmployeeByAccount: getEmployeeByAccount,
-            createProject: createProject,
-            getPastProjects: getPastProjects,
-            getDateList: getDateList,
-            recodeSubmit: recodeSubmit,
-            getJobList: getJobList,
-            getUnauditedJobs: getUnauditedJobs,
-            changeCurrentUnauditedJob: changeCurrentUnauditedJob,
-            cleanUnauditedJobList_Total: cleanUnauditedJobList_Total, /*清空unauditedJobList_Total*/
-            recodeCheck: recodeCheck, /*审核工作记录*/
+            getEmployeeByName: _getEmployeeByName,
+            getEmployeeByAccount: _getEmployeeByAccount,
+            createProject: _createProject,
+            getPastProjects: _getPastProjects,
+            getDateList: _getDateList,
+            recodeSubmit: _recodeSubmit,
+            getJobList: _getJobList,
+            getUnauditedJobs: _getUnauditedJobs,
+            changeCurrentUnauditedJob: _changeCurrentUnauditedJob,
+            cleanUnauditedJobList_Total: _cleanUnauditedJobList_Total, /*清空unauditedJobList_Total*/
+            recodeCheck: _recodeCheck, /*审核工作记录*/
+            recodeTurnBack: _recodeTurnBack, /*退回工作记录*/
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
             recodedJobLogList: [], /*已提交工作记录列表*/
@@ -39,7 +40,7 @@
 
         return self;
 
-        function getEmployeeByAccount(memberAccount, successFn, errorFn) {
+        function _getEmployeeByAccount(memberAccount, successFn, errorFn) {
             $http({
                 url: BASEPATH + '/employee?account=' + memberAccount,
                 method: 'GET'
@@ -47,7 +48,7 @@
             //$http.get(BASEPATH + '/employee/' + encodeStr).success(successFn).error(errorFn);
         }
 
-        function getEmployeeByName(memberName, successFn, errorFn) {
+        function _getEmployeeByName(memberName, successFn, errorFn) {
             var encodeStr = encodeURIComponent(memberName);
             $http({
                 url: BASEPATH + '/employee?name=' + encodeStr,
@@ -56,23 +57,23 @@
             //$http.get(BASEPATH + '/employee/' + encodeStr).success(successFn).error(errorFn);
         }
 
-        function createProject(projectModule, successFn, errorFn) {
+        function _createProject(projectModule, successFn, errorFn) {
             $http.post(BASEPATH + '/project', projectModule).success(successFn).error(errorFn);
         }
 
-        function getPastProjects(account, successFn, errorFn) {
+        function _getPastProjects(account, successFn, errorFn) {
             $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
         }
 
-        function getDateList(successFn, errorFn) {
+        function _getDateList(successFn, errorFn) {
             $http.get(BASEPATH + '/jobrecode/datelist').success(successFn).error(errorFn);
         }
 
-        function recodeSubmit(data, successFn, errorFn) {
+        function _recodeSubmit(data, successFn, errorFn) {
             $http.post(BASEPATH + '/jobrecode/submit', data).success(successFn).error(errorFn);
         }
 
-        function getJobList(condition, successFn, errorFn) {
+        function _getJobList(condition, successFn, errorFn) {
             var conditionStr = '';
             if (condition.username) {
                 conditionStr += ('username=' + condition.username + '&');
@@ -89,7 +90,7 @@
             $http.get(BASEPATH + '/jobrecode/joblist?' + conditionStr).success(successFn).error(errorFn);
         }
 
-        function getUnauditedJobs(condition, successFn, errorFn) {
+        function _getUnauditedJobs(condition, successFn, errorFn) {
             var condition_Project = '';
             var condition_Member = '';
             if (condition.projectList) {
@@ -112,7 +113,7 @@
             $http.get(BASEPATH + '/jobrecode/unauditedlist?' + conditionStr).success(successFn).error(errorFn);
         }
 
-        function changeCurrentUnauditedJob(module) {
+        function _changeCurrentUnauditedJob(module) {
              for (var p in module) {
                  self.currentUnauditedJob[p] = module[p];
              }
@@ -129,12 +130,12 @@
         /**
          *清空 unauditedJobList_Total 原有数据
          */
-        function cleanUnauditedJobList_Total() {
+        function _cleanUnauditedJobList_Total() {
             self.unauditedJobList_Total.splice(0,self.unauditedJobList_Total.length);
             self.currentUnauditedJobIndex = 0;
         }
 
-        function recodeCheck(body, successFn, errorFn) {
+        function _recodeCheck(body, successFn, errorFn) {
             //为了减少传输数据的大小 body中除了有用的信息外其他信息需清除
             var item = {};
             for(var pro in body){
@@ -142,6 +143,16 @@
             }
             item.content = '';
             $http.post(BASEPATH + '/jobrecode/check', item).success(successFn).error(errorFn);
+        }
+
+        function _recodeTurnBack(body, successFn, errorFn) {
+            //为了减少传输数据的大小 body中除了有用的信息外其他信息需清除
+            var item = {};
+            for(var pro in body){
+                item[pro] = body[pro];
+            }
+            item.content = '';
+            $http.post(BASEPATH + '/jobrecode/turnback', item).success(successFn).error(errorFn);
         }
     }
 

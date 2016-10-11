@@ -557,12 +557,12 @@
                         拒 绝 <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href>项目选择错误</a></li>
-                        <li><a href>未知原因01</a></li>
-                        <li><a href>未知原因02</a></li>
+                        <li><a href ng-click="ReviewCtrl.turnBackJob('项目选择错误', ReviewCtrl.currentJob)">项目选择错误</a></li>
+                        <li><a href ng-click="ReviewCtrl.turnBackJob('描述过于简单', ReviewCtrl.currentJob)">描述过于简单</a></li>
+                        <li><a href ng-click="ReviewCtrl.turnBackJob('类型选择错误', ReviewCtrl.currentJob)">类型选择错误</a></li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ReviewCtrl.disMissModal()">取 消</button>
                 <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableBackwardBtn"
                         ng-click="ReviewCtrl.goBackwardJob()">上一条
                 </button>
