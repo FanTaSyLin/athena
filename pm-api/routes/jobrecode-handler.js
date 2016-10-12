@@ -132,7 +132,7 @@
             }
         }
 
-        JobLogSchema.find(condition, function (err, doc) {
+        JobLogSchema.find(condition).sort({'data': 1, 'starTime': 1}).exec(function (err, doc) {
 
             if (err) {
                 return next(new DBOptionError(415, err));
