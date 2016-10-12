@@ -8,8 +8,9 @@
             </li>
             <li ng-repeat="project in UnauditedsCtrl.projects"
                 ng-class="{active: UnauditedsCtrl.isSelectedProject(project.enName)}">
-                <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)">
-                    {{project.cnName}} <span class="badge">{{project.count}}</span>
+                <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)"
+                   data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
+                    {{UnauditedsCtrl.subStr(project.cnName, 10)}} <span class="badge">{{project.count}}</span>
                 </a>
             </li>
             <hr style="margin-right: 90px">

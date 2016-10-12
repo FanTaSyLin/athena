@@ -6,11 +6,11 @@
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bower_components/summernote/dist/summernote.css">
-    <link rel="stylesheet" href="/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
-<body ng-controller="MyJobListController as MyJobListCtrl">
+<body ng-controller="MyJobsController as MyJobstCtrl" data-ng-init="MyJobstCtrl.init()">
+<!--页头 start-->
 <header class="header" role="banner">
     <div class="cell">
         <div class="header-logo">
@@ -20,51 +20,47 @@
         </div>
     </div>
 </header>
-<div class="col-xs-3">
-    <ul class="nav nav-pills nav-stacked" id="myNav">
-        <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedProject('all')}">
-            <a href ng-click="UnauditedsCtrl.projectSelect('all')">
-                全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Total.length}}</span>
-            </a>
-        </li>
-        <li ng-repeat="project in UnauditedsCtrl.projects"
-            ng-class="{active: UnauditedsCtrl.isSelectedProject(project.enName)}">
-            <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)">
-                {{project.cnName}} <span class="badge">{{project.count}}</span>
-            </a>
-        </li>
-        <hr style="margin-right: 90px">
-        <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedMember('all')}">
-            <a href ng-click="UnauditedsCtrl.memberSelect('all')">
-                全部人员
-            </a>
-        </li>
-        <li ng-repeat="member in UnauditedsCtrl.members" ng-class="{active: UnauditedsCtrl.isSelectedMember(member.account)}">
-            <a href ng-click="UnauditedsCtrl.memberSelect(member.account)">
-                {{member.name}}
-            </a>
-        </li>
-        <li>
-            <a href="javascript:scroll(0,0)">
-                返回顶部
-            </a>
-        </li>
-    </ul>
-    <!--
-    <hr style="margin-right: 90px">
-    <ul class="nav nav-pills nav-stacked" id="myNav-Members">
-        <li class="active">
-            <a href>
-                全部人员
-            </a>
-        </li>
-        <li ng-repeat="member in ReviewCtrl.members" ng-class="{active: ReviewCtrl.isSelectedTab(member.account)}">
-            <a href>
-                {{member.name}}
-            </a>
-        </li>
-    </ul>
-    -->
+<!--页头 end-->
+
+<div class="main-area">
+
+    <!--侧边选择栏 start-->
+    <div class="col-xs-3">
+
+        <ul class="nav nav-pills nav-stacked" id="myNav">
+            <li class="active" ng-class="{active: MyJobstCtrl.isSelectedProject('all')}">
+                <a href ng-click="MyJobstCtrl.projectSelect('all')">
+                    全部项目
+                </a>
+            </li>
+            <hr style="margin-right: 30px">
+            <li class="active" ng-class="{active: MyJobstCtrl.isSelectedProject('all')}">
+                <a href ng-click="MyJobstCtrl.projectSelect('all')">
+                    全部项目
+                </a>
+            </li>
+            <li ng-repeat="project in MyJobstCtrl.projects"
+                ng-class="{active: MyJobstCtrl.isSelectedProject(project.enName)}">
+                <a href ng-click="MyJobstCtrl.projectSelect(project.enName)">
+                    {{project.cnName}} <span class="badge">{{project.count}}</span>
+                </a>
+            </li>
+            <hr style="margin-right: 30px">
+            <li>
+                <a href="javascript:scroll(0,0)">
+                    返回顶部
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--侧边选择栏 end-->
+
+    <!--工作记录列表 start-->
+    <div style="height: 3000px">
+
+    </div>
+    <!--工作记录列表 end-->
+
 </div>
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -75,9 +71,10 @@
 <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
 
-<script type="text/javascript" src="scripts/angular/myJobList/module.js"></script>
-<script type="text/javascript" src="scripts/angular/myJobList/config.js"></script>
-<script type="text/javascript" src="scripts/angular/myJobList/controller.js"></script>
-<script type="text/javascript" src="scripts/angular/myJobList/services.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/module.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/config.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/interceptor.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/controller.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/services.js"></script>
 </body>
 </html>

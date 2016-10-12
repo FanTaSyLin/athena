@@ -129,14 +129,17 @@
                                 <div class="function-select-area-projects">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                     <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
-                                        {{RecodeCtrl.selectedProject.enName}}
+                                        {{RecodeCtrl.subStr(RecodeCtrl.selectedProject.enName, 10)}}
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <div class="dropdown-item btn btn-align-left function-select-item-item"
                                              ng-repeat="project in RecodeCtrl.projects">
                                             <img src="/public/project-type-gongcheng.png"
                                                  style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.projectSelect(project)">{{project.enName}}</a>
+                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.projectSelect(project)"
+                                               data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
+                                                {{project.enName}}
+                                            </a>
                                         </div>
                                     </ul>
                                 </div>

@@ -34,6 +34,7 @@
         self.timeFormat = timeFormat;
         self.dateFormat = dateFormat;
         self.dateTimeFormat = dateTimeFormat;
+        self.subStr = _subStr;
 
         var recodeEditor = angular.element(document.getElementById('recode-editor'));
 
@@ -343,6 +344,11 @@
                     return cb(new Error('获取工作记录失败'));
                 }
             });
+        }
+
+
+        function _subStr(str, count) {
+            return str.substring(0, count);
         }
 
     }

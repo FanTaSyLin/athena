@@ -34,6 +34,7 @@
         self.init = init;
         self.showJobInfo = showJobInfo;
         self.timeFormat = _timeFormat;
+        self.subStr = _subStr;
 
         function init() {
 
@@ -305,6 +306,10 @@
                 + ':' +
                 ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
 
+        }
+
+        function _subStr(str, count) {
+            return str.substring(0, count);
         }
     }
 
