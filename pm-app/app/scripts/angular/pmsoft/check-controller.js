@@ -7,11 +7,11 @@
     'use strict';
 
     angular.module('PMSoft')
-        .controller('ReviewController', ReviewController);
+        .controller('JobCheckController', JobCheckController);
 
-    ReviewController.$inject = ['PMSoftServices', '$cookies'];
+    JobCheckController.$inject = ['PMSoftServices', '$cookies'];
 
-    function ReviewController(PMSoftServices, $cookies) {
+    function JobCheckController(PMSoftServices, $cookies) {
 
         var self = this;
         var difficultyEditor = angular.element(document.getElementById('difficulty'));
@@ -30,6 +30,7 @@
         self.checkThisJob = _checkThisJob;/*审核当前工作记录*/
         self.turnBackJob = _turnBackJob;/*退回已提交的工作记录*/
         self.disMissModal = _disMissModal;/*取消审核模态框*/
+        self.formatDateTime = _formatDateTime;/*格式化日期时间*/
 
         function _init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
@@ -115,6 +116,10 @@
 
         function _disMissModal() {
             location.reload();
+        }
+
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
         }
 
     }

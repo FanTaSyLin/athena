@@ -66,7 +66,7 @@
                     <span class="glyphicon glyphicon-plus glyphicon-size-middle"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-custom" role="menu">
-                    <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-target="#JobSheet">记录工作</a>
+                    <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-backdrop="false" data-target="#JobSheet">记录工作</a>
                     <a class="dropdown-item btn btn-align-left">新建维护</a>
                     <a class="dropdown-item btn btn-align-left">新建任务</a>
                     <a class="dropdown-item btn btn-align-left">新建提醒</a>
@@ -411,7 +411,7 @@
 <!--创建项目对话框 end-->
 
 <!--工作记录审核对话框 start-->
-<div class="modal fade" id="JobAudited" ng-controller="ReviewController as ReviewCtrl" data-ng-init="ReviewCtrl.init()">
+<div class="modal fade" id="JobAudited" ng-controller="JobCheckController as JobCheckCtrl" data-ng-init="JobCheckCtrl.init()">
     <div class="modal-dialog size-jobsheet">
         <div class="modal-content">
             <!--标题-->
@@ -435,7 +435,7 @@
                                 <div class="function-select-area-projects">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                     <a class="title-h7 dropdown-toggle" href>
-                                        {{ReviewCtrl.currentJob.projectEName}}
+                                        {{JobCheckCtrl.currentJob.projectEName}}
                                     </a>
                                 </div>
                             </div>
@@ -445,7 +445,7 @@
                                 <div class="function-select-area-date">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                     <a class="title-h7 dropdown-toggle" href>
-                                        {{ReviewCtrl.currentJob.date.substring(0, 10)}}
+                                        {{JobCheckCtrl.currentJob.date.substring(0, 10)}}
                                     </a>
                                 </div>
                             </div>
@@ -455,7 +455,7 @@
                                 <div class="function-select-area-type">
                                     <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
                                     <a class="title-h7 dropdown-toggle" href>
-                                        {{ReviewCtrl.currentJob.duration}}小时
+                                        {{JobCheckCtrl.currentJob.duration}}小时
                                     </a>
                                 </div>
                                 <!--
@@ -482,7 +482,7 @@
                                 <div class="function-select-area-type">
                                     <span class="glyphicon glyphicon-tag"></span>
                                     <a class="title-h7 dropdown-toggle" href>
-                                        {{ReviewCtrl.currentJob.type}}
+                                        {{JobCheckCtrl.currentJob.type}}
                                     </a>
                                 </div>
                             </div>
@@ -544,6 +544,9 @@
                             <p class="title-h7" style="margin-left: 15px; font-weight: 500">
                                 <span class="glyphicon glyphicon-list-alt"></span> 日志：
                             </p>
+                            <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500" ng-repeat="log in JobCheckCtrl.currentJob.logs" >
+                                <b>{{log.authorName}}</b>: {{log.msg}}             {{JobCheckCtrl.formatDateTime(log.logTime)}}
+                            </p>
                         </div>
                     </div>
                 </form>
@@ -557,19 +560,19 @@
                         拒 绝 <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href ng-click="ReviewCtrl.turnBackJob('项目选择错误', ReviewCtrl.currentJob)">项目选择错误</a></li>
-                        <li><a href ng-click="ReviewCtrl.turnBackJob('描述过于简单', ReviewCtrl.currentJob)">描述过于简单</a></li>
-                        <li><a href ng-click="ReviewCtrl.turnBackJob('类型选择错误', ReviewCtrl.currentJob)">类型选择错误</a></li>
+                        <li><a href ng-click="JobCheckCtrl.turnBackJob('项目选择错误', JobCheckCtrl.currentJob)">项目选择错误</a></li>
+                        <li><a href ng-click="JobCheckCtrl.turnBackJob('描述过于简单', JobCheckCtrl.currentJob)">描述过于简单</a></li>
+                        <li><a href ng-click="JobCheckCtrl.turnBackJob('类型选择错误', JobCheckCtrl.currentJob)">类型选择错误</a></li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ReviewCtrl.disMissModal()">取 消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="JobCheckCtrl.disMissModal()">取 消</button>
                 <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableBackwardBtn"
-                        ng-click="ReviewCtrl.goBackwardJob()">上一条
+                        ng-click="JobCheckCtrl.goBackwardJob()">上一条
                 </button>
                 <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableForwardBtn"
-                        ng-click="ReviewCtrl.goForwardJob()">下一条
+                        ng-click="JobCheckCtrl.goForwardJob()">下一条
                 </button>
-                <button type="button" class="btn btn-success" ng-click="ReviewCtrl.checkThisJob(ReviewCtrl.currentJob)">审 核</button>
+                <button type="button" class="btn btn-success" ng-click="JobCheckCtrl.checkThisJob(JobCheckCtrl.currentJob)">审 核</button>
             </div>
         </div>
     </div>
@@ -598,7 +601,7 @@
 <script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/pmsoft/mystatus-controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/pmsoft/unauditeds-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/review-controller.js"></script>
+<script type="text/javascript" src="/scripts/angular/pmsoft/check-controller.js"></script>
 <script type="text/javascript" src="/lib/ngStorage.js"></script>
 <!--<script type="text/javascript" src="/scripts/jqueryFn.js"></script>-->
 </body>
