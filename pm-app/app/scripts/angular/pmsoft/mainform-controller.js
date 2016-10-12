@@ -15,6 +15,8 @@
     function MainController($cookies, $rootScope, PMSoftServices) {
         var self = this;
 
+        self.gotoMyJobsPage = _gotoMyJobsPage;
+        
         _init();
 
         /**
@@ -43,6 +45,10 @@
 
             });
 
+        }
+        
+        function _gotoMyJobsPage() {
+            window.open("pm-soft/myjobs");
         }
     }
 

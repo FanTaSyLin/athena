@@ -3,7 +3,7 @@
         <ul class="nav nav-pills nav-stacked" id="myNav">
             <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedProject('all')}">
                 <a href ng-click="UnauditedsCtrl.projectSelect('all')">
-                    全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Container.length}}</span>
+                    全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Total.length}}</span>
                 </a>
             </li>
             <li ng-repeat="project in UnauditedsCtrl.projects"

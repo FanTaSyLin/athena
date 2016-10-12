@@ -66,7 +66,7 @@
                 $cookies.put('token', data.token, {'expires': expireTime});
 
 
-                window.location.href = 'http://localhost:4002/pm-soft';
+                window.location.href = 'pm-soft';
 
 
             }, function (data, status, headers, config) {

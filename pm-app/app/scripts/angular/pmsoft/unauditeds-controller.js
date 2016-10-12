@@ -18,6 +18,7 @@
         var jobAudited = angular.element(document.getElementById('JobAudited'));
         self.pageSize = 40;
         self.unauditedJobs_View = PMSoftServices.unauditedJobList_View;
+        self.unauditedJobs_Total = PMSoftServices.unauditedJobList_Total;
         self.projects = [];
         self.members = [];
         self.paginations = [];
