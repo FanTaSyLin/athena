@@ -28,12 +28,22 @@
         server.get({
             path: BASEPATH + '/jobrecode/joblist',
             version: '0.0.1'
-        }, _getRecodes);
+        }, _getRecodes); //获取工作记录
+
+        server.get({
+            path: BASEPATH + '/jobrecode/joblist/count',
+            version: '0.0.1'
+        }, _getRecodesCount); //获取工作记录的分页信息
+
+        server.get({
+            path: BASEPATH + '/jobrecode/joblist/pagination',
+            version: '0.0.1'
+        }, _getRecodesPagination); //获取工作记录,分页查询
 
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist',
             version: '0.0.1'
-        }, _getUnauditedList);
+        }, _getUnauditedList);//获取未审核工作记录
 
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist-count',
@@ -109,17 +119,23 @@
         }
 
         var condition = {};
+        var accountList = req.params['memberid'];
+        var projectList = req.params['projectid'];
 
-        if (!_.isUndefined(req.params['username'])) {
+        if (!_.isUndefined(accountList)) {
             //添加查询条件： ==username
-            var username = req.params['username'];
-            condition.authorID = username;
+            accountList = accountList.split(' ');
+            condition.authorID = {
+                $in: accountList
+            };
         }
 
-        if (!_.isUndefined(req.params['projectid'])) {
+        if (!_.isUndefined(projectList)) {
             //添加查询条件： ==projectid
-            var projectID = req.params['projectid'];
-            condition.projectID = projectID;
+            projectList = projectList.split(' ');
+            condition.projectID = {
+                $in: projectList
+            };;
         }
 
         if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
@@ -146,6 +162,77 @@
 
         });
 
+    }
+
+    /**
+     * 分页查询工作记录
+     * @param req
+     * @param res
+     * @param next
+     * @private
+     */
+    function _getRecodesPagination(req, res, next) {
+
+        if (_.isUndefined(req.params)) {
+
+            //由于数据量过大 所以应该禁止无条件查询
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+
+        }
+
+        var condition = {};
+        var accountList = req.params['memberid'];
+        var projectList = req.params['projectid'];
+        var startNum = req.params['startnum'];
+        var pageSize = req.params['pagesize'];
+
+        if (!_.isUndefined(accountList)) {
+            //添加查询条件： ==username
+            accountList = accountList.split(' ');
+            condition.authorID = {
+                $in: accountList
+            };
+        }
+
+        if (!_.isUndefined(projectList)) {
+            //添加查询条件： ==projectid
+            projectList = projectList.split(' ');
+            condition.projectID = {
+                $in: projectList
+            };;
+        }
+
+        if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
+            //添加查询条件： >=startdate
+            var startDate = new Date(req.params['startdate']);
+            var endDate = new Date(req.params['enddate']);
+            condition.date = {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }
+
+        JobLogSchema
+            .find(condition)
+            .skip(startNum-1)
+            .limit(pageSize)
+            .sort({'data': 1, 'starTime': 1})
+            .exec(function (err, doc) {
+
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+
+            var data = {
+                count: doc.length,
+                doc: doc
+            }
+
+            res.end(JSON.stringify(data));
+
+        });
     }
 
     /**
@@ -331,6 +418,65 @@
         } catch (err) {
             return next(err);
         }
+
+    }
+
+    /**
+     * 获取工作记录的分页信息
+     * @param req
+     * @param res
+     * @param next
+     * @private
+     */
+    function _getRecodesCount(req, res, next) {
+        if (_.isUndefined(req.params)) {
+
+            //由于数据量过大 所以应该禁止无条件查询
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+
+        }
+
+        var condition = {};
+        var accountList = req.params['memberid'];
+        var projectList = req.params['projectid'];
+
+        if (!_.isUndefined(accountList)) {
+            //添加查询条件： ==username
+            accountList = accountList.split(' ');
+            condition.authorID = {
+                $in: accountList
+            };
+        }
+
+        if (!_.isUndefined(projectList)) {
+            //添加查询条件： ==projectid
+            projectList = projectList.split(' ');
+            condition.projectID = {
+                $in: projectList
+            };;
+        }
+
+        if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
+            //添加查询条件： >=startdate
+            var startDate = new Date(req.params['startdate']);
+            var endDate = new Date(req.params['enddate']);
+            condition.date = {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }
+
+        JobLogSchema.count(condition, function (err, doc) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+            var data = {
+                count: doc
+            };
+            res.end(JSON.stringify(data));
+        });
 
     }
 })();
