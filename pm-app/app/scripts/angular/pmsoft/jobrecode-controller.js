@@ -21,9 +21,9 @@
         self.selectedEnd = {};
         self.selectedType = {};
         self.markup = '';
+        /*已提交工作记录列表 用来比对时间是否重复*/
         self.recodedJobs = [];
         self.showSubmitBtn = false;
-        /*已提交工作记录列表 用来比对时间是否重复*/
 
         self.dateSelect = dateSelect;
         self.projectSelect = projectSelect;
