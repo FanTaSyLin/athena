@@ -348,7 +348,7 @@
 
 
         function _subStr(str, count) {
-            return str.substring(0, count);
+            return (str.length > count) ? str.substring(0, count) + '...' : str.substring(0, count);
         }
 
     }
