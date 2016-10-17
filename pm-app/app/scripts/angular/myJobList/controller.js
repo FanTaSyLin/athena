@@ -14,15 +14,77 @@
     function MyJobsControllerFn($cookies, MyJobsServices) {
 
         var self = this;
+        var account = '';
         var myNav = angular.element(document.getElementById('myNav'));
+        var JobInfo = angular.element(document.getElementById('JobInfo'));
+        var mySummerNote = angular.element(document.getElementById('mySummerNote'));
 
-        self.selectedProjectEName = 'all';
-        self.projects = [];/*参与的项目列表*/
+        self.pageSize = 10;
+        self.selectedProject = {enName: 'all'};
 
-        self.init = _init; /*页面加载时初始化数据*/
-        self.isSelectedProject = _isSelectedProject; /*是否选中项目 判断*/
-        self.projectSelect = _projectSelect; /*选中项目 判断*/
+        /*参与的项目列表*/
+        self.projects = [];
+        /*是否显示分页标签*/
+        self.isShowPagination = false;
+        /*分页标签列表*/
+        self.paginations = [];
+        /*工作记录列表*/
+        self.myJobList = [];
+        /*当前页*/
+        self.currentPage = 1;
+        /*最大页码*/
+        self.maxPage = 0;
+        /*最小页码*/
+        self.minPage = 0;
+        /*当前模态框中的显示对象*/
+        self.currentJobInfo = {
+            selectedProject: {},
+            selectedDate: new Date(),
+            timeList: [],
+            selectedStartTime: new Date(),
+            selectedEndTime: new Date(),
+            selectedJobType: '',
+            content: '',
+            jobModule: {},
+            /*是否显示保存按钮*/
+            isShowSaveBtn: false,
+            /*是否显示编辑按钮*/
+            isShowEditBtn: true,
+            /*是否提交按钮可用*/
+            enableSubmitBtn: false,
+            /*已提交的工作列表  用来比对时间是否冲突*/
+            recodedJobs: [],
+            /*本条工作记录相关的操作日志*/
+            logs:[]
+        };
 
+        /*页面加载时初始化数据*/
+        self.init = _init;
+        /*是否选中项目 判断*/
+        self.isSelectedProject = _isSelectedProject;
+        /*选中项目 判断*/
+        self.projectSelect = _projectSelect;
+        self.subStr = _subStr;
+        /*前翻页*/
+        self.pageBackward = _pageBackward;
+        /*后翻页*/
+        self.pageForward = _pageForward;
+        /*到指定页*/
+        self.pageGoTo = _pageGoTo;
+        /*格式化时间*/
+        self.timeFormat = _timeFormat;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        /*显示工作记录详情*/
+        self.showJobInfo = _showJobInfo;
+        /*模态框选择函数*/
+        self.modalSTimeSelect = _modalSTimeSelect;
+        self.modalETimeSelect = _modalETimeSelect;
+        self.modalTypeSelect = _modalTypeSelect;
+        self.modalProjectSelect = _modalProjectSelect;
+        self.modalEditContent = _modalEditContent;
+        self.modalSaveContent = _modalSaveContent;
+        self.modalUpdateRecode = _modalUpdateRecode;
 
         function _init() {
 
@@ -33,25 +95,397 @@
                 }
             });
 
-            var account = $cookies.get('username');
+            //生成模态框的时间列表
+            self.currentJobInfo.timeList = _getTimeList();
+
+            account = $cookies.get('username');
             //获取项目列表
             MyJobsServices.getPastProjects(account, function (data) {
-                self.projects.splice(0,self.projects.length);
+                self.projects.splice(0, self.projects.length);
                 data.forEach(function (item) {
                     self.projects.push(item);
+                });
+
+                var condition = {
+                    projectList: self.projects,
+                    account: account
+                };
+                //获取工作记录列表的分页信息
+                _getJobListPagination(condition, function (err, data) {
+                    if (err) {
+                        return;
+                    }
+
+                    //生成分页标签
+                    _getPagination(data);
+                    //获取首页数据
+                    condition.startNum = 1;
+                    condition.pageSize = self.pageSize;
+                    _getJobListByPage(condition, function (err) {
+
+                    });
+
                 });
             }, function (data) {
 
             });
         }
 
-        function _isSelectedProject(projectEName) {
-            return self.selectedProjectEName == projectEName;
+        function _isSelectedProject(project) {
+            return self.selectedProject.enName == project.enName;
         }
 
-        function _projectSelect(projectEName) {
-            self.selectedProjectEName = projectEName;
+        function _projectSelect(project) {
+            self.selectedProject = project;
             return;
+        }
+
+        function _modalSTimeSelect(timeObj) {
+            self.currentJobInfo.selectedStartTime = timeObj.time;
+        }
+
+        function _modalETimeSelect(timeObj) {
+            self.currentJobInfo.selectedEndTime = timeObj.time;
+        }
+
+        function _modalTypeSelect(type) {
+            self.currentJobInfo.selectedJobType = type;
+        }
+
+        function _subStr(str, count) {
+            if (str === undefined) {
+                return '';
+            }
+            return (str.length > count) ? str.substring(0, count) + '...' : str.substring(0, count);
+        }
+
+        function _getJobListPagination(condition, cb) {
+            MyJobsServices.getJobListPagination(condition, function (data) {
+                cb(null, data.count);
+            }, function (data) {
+                cb(new Error(data), null);
+            });
+        }
+
+        /**
+         * 获取页面的分页标签
+         * @param count
+         * @private
+         */
+        function _getPagination(count) {
+            var pageCount = Math.ceil(count / self.pageSize);
+            self.paginations = [];
+            self.minPage = 1;
+            self.maxPage = pageCount;
+            for (var i = 1; i <= pageCount; i++) {
+                self.paginations.push({
+                    num: i
+                });
+            }
+            if (count > self.pageSize) {
+                self.isShowPagination = true;
+            } else {
+                self.isShowPagination = false;
+            }
+        }
+
+        /**
+         * 按分页获取工作记录
+         * @param condition
+         * @param cb
+         * @private
+         */
+        function _getJobListByPage(condition, cb) {
+            MyJobsServices.getJobListByPage(condition, function (data) {
+                var doc = data.doc;
+                self.myJobList.splice(0, self.myJobList.length);
+                doc.forEach(function (item) {
+                    item.thumb = _extractImg(item.content);
+                    item.cleanContent = _delHtmlTag(item.content);
+                    item.starTime = new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
+                    item.endTime = new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
+                    self.myJobList.push(item);
+                });
+                cb(null);
+            }, function (err) {
+                cb(new Error(err));
+            });
+        }
+
+        /**
+         * 提取字符串中的 Data URL 数据
+         * @param str
+         * @returns {*}
+         * @private
+         */
+        function _extractImg(str) {
+            var rex = /<img.*?src=(?:"|')?([^ "']*)/ig;
+            var res = rex.exec(str);
+            if (res && res.length > 0) {
+                return res[1];
+            } else {
+                return '';
+            }
+        }
+
+        /**
+         * 清除html标签
+         * @param str
+         * @returns {*}
+         * @private
+         */
+        function _delHtmlTag(str) {
+            var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+            tmpStr = tmpStr.replace(/&NBSP;/g, "");
+            tmpStr = tmpStr.replace(/&nbsp;/g, "");
+            if (tmpStr.length > 130) {
+                tmpStr = tmpStr.substring(0, 130) + '...';
+            }
+            return tmpStr;
+        }
+
+        /**
+         * 向前翻页
+         * @private
+         */
+        function _pageBackward() {
+            if (self.currentPage > self.minPage) {
+                self.currentPage--;
+                var condition = {};
+                condition.account = account;
+                if (self.selectedProject.enName === 'all') {
+                    condition.projectList = self.projects;
+                } else {
+                    condition.projectList = [self.selectedProject];
+                }
+                condition.startNum = (self.currentPage - 1) * self.pageSize + 1;
+                condition.pageSize = self.pageSize;
+                _getJobListByPage(condition, function (err) {
+
+                });
+            }
+        }
+
+        /**
+         * 向后翻页
+         * @private
+         */
+        function _pageForward() {
+            if (self.currentPage < self.maxPage) {
+                self.currentPage++;
+                var condition = {};
+                condition.account = account;
+                if (self.selectedProject.enName === 'all') {
+                    condition.projectList = self.projects;
+                } else {
+                    condition.projectList = [self.selectedProject];
+                }
+                condition.startNum = (self.currentPage - 1) * self.pageSize + 1;
+                condition.pageSize = self.pageSize;
+                _getJobListByPage(condition, function (err) {
+
+                });
+            }
+        }
+
+        /**
+         * 到指定页
+         * @param num
+         * @private
+         */
+        function _pageGoTo(num) {
+            self.currentPage = num;
+            var condition = {};
+            condition.account = account;
+            if (self.selectedProject.enName === 'all') {
+                condition.projectList = self.projects;
+            } else {
+                condition.projectList = [self.selectedProject];
+            }
+            condition.startNum = (num - 1) * self.pageSize + 1;
+            condition.pageSize = self.pageSize;
+            _getJobListByPage(condition, function (err) {
+
+            });
+        }
+
+        /**
+         * 时间格式化
+         * @param time
+         * @returns {string}
+         * @private
+         */
+        function _timeFormat(time) {
+
+            return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
+                + ':' +
+                ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
+
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 显示工作记录详情
+         * @param {Object} jobModule 工作记录对象
+         * @private
+         */
+        function _showJobInfo(jobModule) {
+            self.projects.forEach(function (item) {
+                if (item._id === jobModule.projectID) {
+                    self.currentJobInfo.selectedProject = item;
+                }
+            });
+            self.currentJobInfo.selectedDate = jobModule.starTime;
+            self.currentJobInfo.selectedStartTime = jobModule.starTime;
+            self.currentJobInfo.selectedEndTime =  jobModule.endTime;
+            self.currentJobInfo.selectedJobType = jobModule.type;
+            self.currentJobInfo.content = jobModule.content;
+            self.currentJobInfo.logs = jobModule.logs;
+            self.currentJobInfo.jobModule = jobModule;
+            if (jobModule.status === 'TurnBack') {
+                self.currentJobInfo.isShowEditBtn = true;
+            } else {
+                self.currentJobInfo.isShowEditBtn = false
+            }
+            self.currentJobInfo.isShowSaveBtn = false;
+            JobInfo.modal({backdrop: 'static', keyboard: false});
+            if (true) {
+                var condition = {
+                    username: account,
+                    startDate: new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
+                    endDate: new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
+                };
+                MyJobsServices.getJobList(condition, function (data) {
+                    var result = data;
+                    self.currentJobInfo.recodedJobs.splice(0, self.currentJobInfo.recodedJobs.length);
+                    try {
+                        result.forEach(function (item) {
+                            if (item._id !== self.currentJobInfo.jobModule._id) {
+                                self.currentJobInfo.recodedJobs.push({
+                                    startTime: new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    endTime: new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    cnName: item.projectCName,
+                                    enName: item.projectEName,
+                                    reportTime: new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
+                                });
+                            }
+                        });
+                    } catch (err) {
+                        alert(err);
+                    }
+                }, function (data) {
+
+                });
+            }
+        }
+
+        /**
+         * 获取时间列表
+         * @private
+         */
+        function _getTimeList() {
+
+            var startDate = new Date('2016-01-01 07:00:00');
+            var timeList = [];
+            for (var i = 0; i < 48; i++) {
+                var time = new Date(startDate.getTime() + i * 0.5 * 60 * 60 * 1000);
+                timeList.push({
+                    str: _timeFormat(time),
+                    time: time
+                });
+            }
+            return timeList;
+        }
+
+        /**
+         * 模态框中的项目选择函数
+         * @private
+         */
+        function _modalProjectSelect(project) {
+            self.currentJobInfo.selectedProject = project;
+        }
+
+        /**
+         * 点击编辑模态框中的内容
+         * @private
+         */
+        function _modalEditContent() {
+            mySummerNote.summernote({
+                minHeight:200,
+                maxHeight:390
+            });
+            mySummerNote.summernote({focus: true});
+            self.currentJobInfo.isShowSaveBtn = true;
+            self.currentJobInfo.isShowEditBtn = false;
+        }
+
+        /**
+         * 点击保存模态框中的内容
+         * @private
+         */
+        function _modalSaveContent() {
+            self.currentJobInfo.content = mySummerNote.summernote('code');
+            mySummerNote.summernote('destroy');
+            self.currentJobInfo.isShowSaveBtn = false;
+            self.currentJobInfo.isShowEditBtn = true;
+            self.currentJobInfo.enableSubmitBtn = true;
+        }
+
+        /**
+         * 提交修改后的工作记录
+         * @private
+         */
+        function _modalUpdateRecode() {
+            //时间冲突检查
+            if (_checkTimeConflicts()) {
+                alert('所选时间内存在已提交的工作记录，请修改后提交！');
+                return;
+            }
+            self.currentJobInfo.jobModule.starTime = self.currentJobInfo.selectedStartTime;
+            self.currentJobInfo.jobModule.endTime = self.currentJobInfo.selectedEndTime;
+            self.currentJobInfo.jobModule.type = self.currentJobInfo.selectedJobType;
+            self.currentJobInfo.jobModule.projectID = self.currentJobInfo.selectedProject._id;
+            self.currentJobInfo.jobModule.projectCName = self.currentJobInfo.selectedProject.cnName;
+            self.currentJobInfo.jobModule.projectEName = self.currentJobInfo.selectedProject.enName;
+            self.currentJobInfo.jobModule.content = self.currentJobInfo.content;
+            self.currentJobInfo.jobModule.duration = (Math.abs(self.currentJobInfo.selectedEndTime - self.currentJobInfo.selectedStartTime) / (1000 * 60 * 60)).toFixed(1)
+            MyJobsServices.recodeUpdate(self.currentJobInfo.jobModule, function (data) {
+                self.currentJobInfo.jobModule.status = 'Submit';
+                JobInfo.modal('hide');
+                location.reload();
+            }, function (data) {
+
+            });
+        }
+
+        /**
+         * 时间冲突检查
+         * @returns {boolean}
+         * @private
+         */
+        function _checkTimeConflicts() {
+
+            var startTime = self.currentJobInfo.jobModule.starTime;
+            var endTime = self.currentJobInfo.jobModule.endTime;
+
+            var result = true;
+
+            self.currentJobInfo.recodedJobs.forEach(function (item) {
+                if (endTime.getTime() > item.startTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
+                    result = result && false;
+                }
+            });
+
+            return !result;
         }
 
     }

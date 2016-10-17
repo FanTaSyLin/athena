@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
-<body ng-controller="MyJobsController as MyJobstCtrl" data-ng-init="MyJobstCtrl.init()">
+<body ng-controller="MyJobsController as MyJobsCtrl" data-ng-init="MyJobsCtrl.init()">
 <!--页头 start-->
 <header class="header" role="banner">
     <div class="cell">
@@ -22,27 +22,22 @@
 </header>
 <!--页头 end-->
 
+<!--主体部分 start-->
 <div class="main-area">
 
     <!--侧边选择栏 start-->
     <div class="col-xs-3">
-
         <ul class="nav nav-pills nav-stacked" id="myNav">
-            <li class="active" ng-class="{active: MyJobstCtrl.isSelectedProject('all')}">
-                <a href ng-click="MyJobstCtrl.projectSelect('all')">
+            <li class="active" ng-class="{active: MyJobsCtrl.isSelectedProject({enName: 'all'})}">
+                <a href ng-click="MyJobsCtrl.projectSelect({enName: 'all'})">
                     全部项目
                 </a>
             </li>
-            <hr style="margin-right: 30px">
-            <li class="active" ng-class="{active: MyJobstCtrl.isSelectedProject('all')}">
-                <a href ng-click="MyJobstCtrl.projectSelect('all')">
-                    全部项目
-                </a>
-            </li>
-            <li ng-repeat="project in MyJobstCtrl.projects"
-                ng-class="{active: MyJobstCtrl.isSelectedProject(project.enName)}">
-                <a href ng-click="MyJobstCtrl.projectSelect(project.enName)">
-                    {{project.cnName}} <span class="badge">{{project.count}}</span>
+            <li ng-repeat="project in MyJobsCtrl.projects"
+                ng-class="{active: MyJobsCtrl.isSelectedProject(project)}">
+                <a href ng-click="MyJobsCtrl.projectSelect(project)"
+                   data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
+                    {{MyJobsCtrl.subStr(project.cnName, 14)}}
                 </a>
             </li>
             <hr style="margin-right: 30px">
@@ -56,12 +51,221 @@
     <!--侧边选择栏 end-->
 
     <!--工作记录列表 start-->
-    <div style="height: 3000px">
+    <div class="col-xs-9" id="jobList">
+
+        <!--分页标签 start-->
+        <nav style="margin-top: -30px" ng-show="MyJobsCtrl.isShowPagination">
+            <ul class="pagination pagination-sm">
+                <li><a href ng-click="MyJobsCtrl.pageBackward()">&laquo;</a></li>
+                <li ng-repeat="pagination in MyJobsCtrl.paginations">
+                    <a href ng-click="MyJobsCtrl.pageGoTo(pagination.num)">
+                        {{pagination.num}}
+                    </a>
+                </li>
+                <li><a href ng-click="MyJobsCtrl.pageForward()">&raquo;</a></li>
+            </ul>
+        </nav>
+        <!--分页标签 end-->
+
+        <!--列表 start-->
+        <div style="width: 100%; margin-bottom: 5px"
+             ng-repeat="myJob in MyJobsCtrl.myJobList">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h4>
+                        <a href ng-click="MyJobsCtrl.showJobInfo(myJob)">
+                            {{myJob.projectCName}}({{myJob.projectEName}})
+                        </a>
+                        <b style="font-size: 0.85em;font-weight: 400; color: #6e6e6e">
+                            by {{myJob.authorName}}
+                        </b>
+                    </h4>
+                    <p style="max-height: 45px; min-height: 45px;margin-bottom: -5px;
+                        overflow: hidden;">
+                        <b style="color: #6e6e6e;">
+                            {{myJob.date.substring(0, 10)}}
+                            ({{MyJobsCtrl.timeFormat(myJob.starTime)}} 至 {{MyJobsCtrl.timeFormat(myJob.endTime)}})
+                        </b>
+                        {{myJob.cleanContent}}
+                    </p>
+                </div>
+                <div class="col-xs-3" ng-if="myJob.thumb !== ''">
+                    <img style="height: 80px; max-width: 100px" ng-src="{{myJob.thumb}}"/>
+                </div>
+            </div>
+            <div style="height: 1px;margin: 8px 15px 0px -5px;background-color: #d9d9d9;"></div>
+        </div>
+        <!--列表 start-->
 
     </div>
     <!--工作记录列表 end-->
 
 </div>
+<!--主体部分 end-->
+
+<!--工作记录填写对话框 start-->
+<div class="modal fade" id="JobInfo">
+    <div class="modal-dialog size-jobsheet">
+        <div class="modal-content">
+            <!-- 标题 start-->
+            <div class="modal-header dialog-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title title-h4">工作记录详情</h4>
+            </div>
+            <!-- 标题 end-->
+
+            <!-- 内容 -->
+            <div class="modal-body dialog-body">
+                <div class="container">
+                    <!-- 状态选择区 -->
+                    <div class="row">
+                        <div class="function-select-area item-border">
+                            <!--项目选择-->
+                            <div class="col-md-3 function-select-item item-border">
+                                <p class="title-h8">项目</p>
+                                <div class="function-select-area-projects">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                        <b data-toggle="tooltip" data-placement="right" title="{{MyJobsCtrl.currentJobInfo.selectedProject.cnName}}">
+                                            {{MyJobsCtrl.subStr(MyJobsCtrl.currentJobInfo.selectedProject.cnName, 8)}}
+                                        </b>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                             ng-repeat="project in MyJobsCtrl.projects">
+                                            <img src="/public/project-type-gongcheng.png"
+                                                 style="width: 20px;height: 20px"/>
+                                            <a class="btn btn-align-left" ng-click="MyJobsCtrl.modalProjectSelect(project)"
+                                               data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
+                                                {{project.enName}}
+                                            </a>
+                                        </div>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <!--日期选择-->
+                            <div class="col-md-3 function-select-item item-border">
+                                <p class="title-h8">日期</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    <a class="title-h7" href>
+                                        {{MyJobsCtrl.currentJobInfo.selectedDate.toLocaleDateString()}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--时间选择-->
+                            <div class="col-md-3 function-select-item item-border">
+                                <p class="title-h8">起止时间</p>
+                                <div class="row function-select-area-time">
+                                    <div class="col-xs-4 ">
+                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                            {{MyJobsCtrl.timeFormat(MyJobsCtrl.currentJobInfo.selectedStartTime)}}
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                                 ng-repeat="startTime in MyJobsCtrl.currentJobInfo.timeList">
+                                                <a class="btn btn-align-left"
+                                                   ng-click="MyJobsCtrl.modalSTimeSelect(startTime)">{{startTime.str}}</a>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    <i class="col-xs-1">
+                                        -
+                                    </i>
+                                    <div class="col-xs-4">
+                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                            {{MyJobsCtrl.timeFormat(MyJobsCtrl.currentJobInfo.selectedEndTime)}}
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
+                                                 ng-repeat="endTime in MyJobsCtrl.currentJobInfo.timeList">
+                                                <a class="btn btn-align-left"
+                                                   ng-click="MyJobsCtrl.modalETimeSelect(endTime)">{{endTime.str}}</a>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--类型选择-->
+                            <div class="col-md-3 function-select-item item-border">
+                                <p class="title-h8">类型</p>
+                                <div class="function-select-area-type">
+                                    <span class="glyphicon glyphicon-tag"></span>
+                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                        {{MyJobsCtrl.currentJobInfo.selectedJobType}}
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                            <a class="btn btn-align-left" ng-click="MyJobsCtrl.modalTypeSelect('技术')">技术</a>
+                                        </div>
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                            <a class="btn btn-align-left" ng-click="MyJobsCtrl.modalTypeSelect('管理')">管理</a>
+                                        </div>
+                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                            <a class="btn btn-align-left" ng-click="MyJobsCtrl.modalTypeSelect('维护')">维护</a>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 内容填写区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 390px; max-height: 390px">
+                            <div>
+                                <h5 class="title-h8">描述
+                                    <a href ng-click="MyJobsCtrl.modalEditContent()" ng-show="MyJobsCtrl.currentJobInfo.isShowEditBtn">编辑</a>
+                                    <a href ng-click="MyJobsCtrl.modalSaveContent()" ng-show="MyJobsCtrl.currentJobInfo.isShowSaveBtn">保存</a>
+                                </h5>
+                            </div>
+                            <div id="mySummerNote" ng-bind-html="MyJobsCtrl.currentJobInfo.content | to_trusted">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 日志显示区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 200px; max-height: 200px">
+                            <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                            </p>
+                            <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500" ng-repeat="log in MyJobsCtrl.currentJobInfo.logs" >
+                                <b>{{log.authorName}}</b>: {{log.msg}}             {{MyJobsCtrl.formatDateTime(log.logTime)}}
+                            </p>
+                        </div>
+                    </div>
+                    <!--工作记录清单区-->
+                    <div style="padding-top: 1em" style="max-height: 200px; overflow: auto;">
+                        <div class="function-recode-area item-border row" style="height: 40px; margin-bottom: 8px"
+                             ng-repeat="job in MyJobsCtrl.currentJobInfo.recodedJobs">
+                            <h5 style="margin-left: 8px;">
+                                <a class="col-md-8" href>
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    {{MyJobsCtrl.timeFormat(job.startTime)}}
+                                    至 {{MyJobsCtrl.timeFormat(job.endTime)}} : {{job.cnName}}({{job.enName}})
+                                </a>
+                                <a class="col-md-3 col-md-offset-1" style="font-size: 0.9em; color: #5a5a5a;">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    {{MyJobsCtrl.dateTimeFormat(job.reportTime)}}提交
+                                </a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 页脚 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-disabled="!MyJobsCtrl.currentJobInfo.enableSubmitBtn"
+                        ng-click="MyJobsCtrl.modalUpdateRecode()">Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--工作记录填写对话框 end-->
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -74,6 +278,7 @@
 <script type="text/javascript" src="/scripts/angular/myJobList/module.js"></script>
 <script type="text/javascript" src="/scripts/angular/myJobList/config.js"></script>
 <script type="text/javascript" src="/scripts/angular/myJobList/interceptor.js"></script>
+<script type="text/javascript" src="/scripts/angular/myJobList/filter.js"></script>
 <script type="text/javascript" src="/scripts/angular/myJobList/controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/myJobList/services.js"></script>
 </body>

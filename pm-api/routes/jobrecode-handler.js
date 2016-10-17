@@ -25,6 +25,11 @@
             version: '0.0.1'
         }, _submitRecode);
 
+        server.post({
+            path: BASEPATH + '/jobrecode/update',
+            version: '0.0.1'
+        }, _updateRecode); //更改工作记录
+
         server.get({
             path: BASEPATH + '/jobrecode/joblist',
             version: '0.0.1'
@@ -218,7 +223,7 @@
             .find(condition)
             .skip(startNum-1)
             .limit(pageSize)
-            .sort({'data': 1, 'starTime': 1})
+            .sort({'data': -1, 'starTime': -1})
             .exec(function (err, doc) {
 
             if (err) {
@@ -271,6 +276,7 @@
         JobLogSchema
             .find(condition)
             .limit(100)
+            .sort({'data': -1, 'starTime': -1})
             .exec(function (err, doc) {
                 if (err) {
                     return next(new DBOptionError(415, err));
@@ -318,8 +324,8 @@
                             type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
                             logTime: new Date(), /*日志时间戳*/
                             msg: '审核了本条记录。', /*日志内容*/
-                            authorID: body.reviewerID, /*编辑人账户*/
-                            authorName: body.reviewerName /*编辑人姓名*/
+                            authorID: body.reviewerID.toString(), /*编辑人账户*/
+                            authorName: body.reviewerName.toString() /*编辑人姓名*/
                         }
                     }
                 }, function (err) {
@@ -328,7 +334,7 @@
                     } else {
                         res.end();
                     }
-                })
+                });
             }
         } catch (err) {
             return next(err);
@@ -404,8 +410,8 @@
                         type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
                         logTime: new Date(), /*日志时间戳*/
                         msg: '退回了本条记录。原因：' + body.turnBackReason + '。', /*日志内容*/
-                        authorID: body.reviewerID, /*编辑人账户*/
-                        authorName: body.reviewerName /*编辑人姓名*/
+                        authorID: body.reviewerID.toString(), /*编辑人账户*/
+                        authorName: body.reviewerName.toString() /*编辑人姓名*/
                     }
                 }
             }, function (err) {
@@ -478,5 +484,66 @@
             res.end(JSON.stringify(data));
         });
 
+    }
+
+    /**
+     * 更改工作记录
+     * @param req
+     * @param res
+     * @param next
+     * @private
+     */
+    function _updateRecode(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = req.body;
+
+        try {
+
+            var recodeSchema = new JobLogSchema();
+
+            if (recodeSchema.reportVerify(body)) {
+                JobLogSchema.update({
+                    _id: body._id
+                }, {
+                    $set: {
+                        starTime: body.starTime,
+                        endTime: body.endTime,
+                        type: body.type,
+                        content: body.content,
+                        projectID: body.projectID,
+                        projectCName: body.projectCName,
+                        projectEName: body.projectEName,
+                        duration: body.duration,
+                        status: 'Submit'
+                    },
+                    $push: {
+                        logs:{
+                            type: 'Edit', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                            logTime: new Date(), /*日志时间戳*/
+                            msg: '修改了本条记录。', /*日志内容*/
+                            authorID: body.authorID.toString(), /*编辑人账户*/
+                            authorName: body.authorName.toString() /*编辑人姓名*/
+                        }
+                    }
+                }, function (err) {
+                    if (err) {
+                        return next(new DBOptionError(415, err));
+                    } else {
+                        res.end();
+                    }
+                });
+            } else {
+                return next(new ParamProviderError(415, {
+                    message: 'Invalid body'
+                }));
+            }
+        } catch (err) {
+            return next(new DBOptionError(415, err));
+        }
     }
 })();

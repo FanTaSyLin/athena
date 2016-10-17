@@ -119,6 +119,10 @@ JobLogSchema.methods.reviewVerify = function (body) {
     }
 }
 
+JobLogSchema.methods.reportVerify = function (body) {
+    return reportVerify(body);
+}
+
 module.exports = mongoose.model('JobLog', JobLogSchema);
 
 function reportVerify(body) {
@@ -128,8 +132,8 @@ function reportVerify(body) {
 
     if (_.isUndefined(body.authorID) ||
         _.isUndefined(body.authorName) ||
-        _.isUndefined(body.authorDepartment) ||
-        _.isUndefined(body.startTime) ||
+        //_.isUndefined(body.authorDepartment) ||
+        _.isUndefined(body.starTime) ||
         _.isUndefined(body.endTime) ||
         _.isUndefined(body.projectID) ||
         _.isUndefined(body.projectCName) ||
