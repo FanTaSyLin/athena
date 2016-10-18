@@ -230,7 +230,7 @@
                 projectCName: self.selectedProject.cnName,
                 projectEName: self.selectedProject.enName,
                 date: self.selectedDate.date.substring(0, 10),
-                startTime: self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str,
+                starTime: self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str,
                 endTime: self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str
             };
 
