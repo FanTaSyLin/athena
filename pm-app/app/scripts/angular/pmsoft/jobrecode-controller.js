@@ -141,7 +141,7 @@
             self.projects = [];
 
             /*获取项目列表*/
-            PMSoftServices.getPastProjects($cookies.get('username'), function (data) {
+            PMSoftServices.getPastProjects(accountID, function (data) {
 
                 data.forEach(function (item) {
                     var project = {};
