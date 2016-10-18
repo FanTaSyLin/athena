@@ -350,7 +350,11 @@
             self.currentJobInfo.selectedEndTime =  jobModule.endTime;
             self.currentJobInfo.selectedJobType = jobModule.type;
             self.currentJobInfo.content = jobModule.content;
-            self.currentJobInfo.logs = jobModule.logs;
+            self.currentJobInfo.logs = jobModule.logs.sort(function (a, b) {
+                var x = new Date(a.logTime).getTime();
+                var y = new Date(b.logTime).getTime();
+                return y-x;
+            });
             self.currentJobInfo.jobModule = jobModule;
             if (jobModule.status === 'TurnBack') {
                 self.currentJobInfo.isShowEditBtn = true;
@@ -359,7 +363,7 @@
             }
             self.currentJobInfo.isShowSaveBtn = false;
             JobInfo.modal({backdrop: 'static', keyboard: false});
-            if (true) {
+            if (jobModule.status === 'TurnBack') {
                 var condition = {
                     username: account,
                     startDate: new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
