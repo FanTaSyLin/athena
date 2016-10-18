@@ -138,6 +138,9 @@
 
         function _projectSelect(project) {
             self.selectedProject = project;
+            _refreshJobListByProject(project, function (err) {
+
+            });
             return;
         }
 
@@ -493,6 +496,32 @@
             });
 
             return !result;
+        }
+
+        /**
+         * 根据所选项目刷新工作记录列表
+         * @private
+         */
+        function _refreshJobListByProject(project, cb) {
+            var condition = {
+                projectList: [project],
+                account: account
+            };
+            //获取工作记录列表的分页信息
+            _getJobListPagination(condition, function (err, data) {
+                if (err) {
+                    return cb(err);
+                }
+
+                //生成分页标签
+                _getPagination(data);
+                //获取首页数据
+                condition.startNum = 1;
+                condition.pageSize = self.pageSize;
+                _getJobListByPage(condition, function (err) {
+                    cb(err);
+                });
+            });
         }
 
     }
