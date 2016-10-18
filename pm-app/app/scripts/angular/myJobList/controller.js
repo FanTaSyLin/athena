@@ -358,8 +358,10 @@
             self.currentJobInfo.jobModule = jobModule;
             if (jobModule.status === 'TurnBack') {
                 self.currentJobInfo.isShowEditBtn = true;
+                self.currentJobInfo.enableSubmitBtn = true;
             } else {
                 self.currentJobInfo.isShowEditBtn = false
+                self.currentJobInfo.enableSubmitBtn = false;
             }
             self.currentJobInfo.isShowSaveBtn = false;
             JobInfo.modal({backdrop: 'static', keyboard: false});
