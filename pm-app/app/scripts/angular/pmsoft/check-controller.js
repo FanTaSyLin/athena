@@ -14,6 +14,9 @@
     function JobCheckController(PMSoftServices, $cookies) {
 
         var self = this;
+        var accountID = '';
+        var accountName = '';
+        var accountAvatar = '';
         var difficultyEditor = angular.element(document.getElementById('difficulty'));
         var efficiencyEditor = angular.element(document.getElementById('efficiency'));
         var qualityEditor = angular.element(document.getElementById('quality'));
@@ -34,7 +37,9 @@
 
         function _init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
-
+            accountID = $cookies.get('username');;
+            accountName = $cookies.get('name');
+            accountAvatar = $cookies.get('avatar');
         }
 
         function _goForwardJob() {
@@ -78,9 +83,9 @@
         }
 
         function _checkThisJob(body) {
-            body.reviewerID = $cookies.get('username');
-            body.reviewerName = $cookies.get('name');
-            body.reviewerAvatar = $cookies.get('avatar');
+            body.reviewerID = accountID;
+            body.reviewerName = accountName;
+            body.reviewerAvatar = accountAvatar;
             body.difficulty = difficultyEditor.slider('getValue');
             body.efficiency = efficiencyEditor.slider('getValue');
             body.quality = qualityEditor.slider('getValue');
@@ -101,6 +106,8 @@
         
         function _turnBackJob(reasonStr, body) {
             body.turnBackReason = reasonStr;
+            body.reviewerID = accountID;
+            body.reviewerName = accountName;
             PMSoftServices.recodeTurnBack(body, function (res) {
                 var item = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
                 item.status = 'TurnBack';
