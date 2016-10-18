@@ -98,7 +98,8 @@
             //生成模态框的时间列表
             self.currentJobInfo.timeList = _getTimeList();
 
-            account = $cookies.get('username');
+            account = $cookies.get('account');
+
             //获取项目列表
             MyJobsServices.getPastProjects(account, function (data) {
                 self.projects.splice(0, self.projects.length);

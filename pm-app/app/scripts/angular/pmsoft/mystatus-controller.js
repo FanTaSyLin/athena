@@ -16,7 +16,7 @@
         var self = this;
         var ctxByDay = angular.element(document.getElementById('Chart-ByDay'));
         var ctxByPj = angular.element(document.getElementById('Chart-ByPj'));
-        self.account = $cookies.get('username');
+        self.account = $cookies.get('account');
 
         init();
 

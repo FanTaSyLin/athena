@@ -44,7 +44,7 @@
                 }
             });
 
-            self.account = $cookies.get('username');
+            self.account = $cookies.get('account');
 
             PMSoftServices.getPastProjects(self.account, function (data) {
 

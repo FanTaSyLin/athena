@@ -10,9 +10,9 @@
         .module('PMSoft')
         .controller('MainController', MainController);
 
-    MainController.$inject = ['$cookies', '$rootScope', 'PMSoftServices'];
+    MainController.$inject = ['$cookies', 'PMSoftServices'];
 
-    function MainController($cookies, $rootScope, PMSoftServices) {
+    function MainController($cookies, PMSoftServices) {
         var self = this;
 
         self.gotoMyJobsPage = _gotoMyJobsPage;
@@ -24,7 +24,7 @@
          * @private
          */
         function _init() {
-            self.account = $cookies.get('username');
+            self.account = $cookies.get('account');
 
             /**
              * 页面加载后需要获取如下信息：
@@ -36,10 +36,7 @@
                 data.forEach(function (item) {
                     $cookies.put('name', item.name);
                     $cookies.put('avatar', item.avatar);
-                    $rootScope.account = self.account;
-                    $rootScope.username = item.name;
-                    $rootScope.avatar = item.avatar;
-                    $rootScope.department = item.department;
+                    $cookies.put('department', item.department);
                 });
             }, function (data, status, headers, config) {
 

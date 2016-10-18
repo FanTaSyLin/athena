@@ -32,7 +32,7 @@
                     }, function (data, status, headers, config) {
                         var expireTime = new Date();
                         expireTime.setDate(expireTime.getDate() + 7);
-                        $cookies.put('username', data.username, {'expires': expireTime});
+                        $cookies.put('account', data.username, {'expires': expireTime});
                         $cookies.put('token', data.token, {'expires': expireTime});
                         window.location.href = 'http://localhost:4002/signin?username=' + data.username;
 
@@ -62,7 +62,7 @@
             AuthService.login(credentials, function (data, status, headers, config) {
                 var expireTime = new Date();
                 expireTime.setDate(expireTime.getDate() + 7);
-                $cookies.put('username', data.username, {'expires': expireTime});
+                $cookies.put('account', data.username, {'expires': expireTime});
                 $cookies.put('token', data.token, {'expires': expireTime});
 
 

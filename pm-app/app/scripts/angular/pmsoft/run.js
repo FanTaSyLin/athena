@@ -10,7 +10,7 @@
         .module('PMSoft')
         .run(main);
 
-    main.$inject = ['$rootScope']
+    main.$inject = ['$']
 
     function main($rootScope) {
 

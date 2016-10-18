@@ -9,9 +9,13 @@
 
     RecodeController.$inject = ['PMSoftServices', '$rootScope', '$cookies']
 
-    function RecodeController(PMSoftServices, $rootScope, $cookies) {
+    function RecodeController(PMSoftServices, $cookies) {
 
         var self = this;
+        var accountID = '';
+        var accountName = '';
+        var accountAvatar = '';
+        var accountDepartment = '';
         self.projects = [];
         self.dates = [];
         self.times = [];
@@ -41,6 +45,11 @@
         init();
 
         function init() {
+
+            accountID = $cookies.get('account');
+            accountName = $cookies.get('name');
+            accountAvatar = $cookies.get('avatar');
+            accountDepartment = $cookies.get('department');
 
             /*获取项目列表*/
             _getProjects();
@@ -211,10 +220,10 @@
 
 
             var jobRecode = {
-                authorID: $rootScope.account,
-                authorName: $rootScope.username,
-                authorAvatar: $rootScope.avatar,
-                authorDepartment: $rootScope.department,
+                authorID: accountID,
+                authorName: accountName,
+                authorAvatar: accountAvatar,
+                authorDepartment: accountDepartment,
                 type: self.selectedType,
                 content: self.markup,
                 projectID: self.selectedProject._id,
