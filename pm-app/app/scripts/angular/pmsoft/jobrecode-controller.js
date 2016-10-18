@@ -7,7 +7,7 @@
     angular.module('PMSoft')
         .controller('RecodeController', RecodeController);
 
-    RecodeController.$inject = ['PMSoftServices', '$rootScope', '$cookies']
+    RecodeController.$inject = ['PMSoftServices', '$cookies']
 
     function RecodeController(PMSoftServices, $cookies) {
 
