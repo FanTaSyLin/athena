@@ -335,6 +335,10 @@
                         res.end();
                     }
                 });
+            } else {
+                return next(new ParamProviderError(415, {
+                    message: 'Invalid params'
+                }));
             }
         } catch (err) {
             return next(err);
