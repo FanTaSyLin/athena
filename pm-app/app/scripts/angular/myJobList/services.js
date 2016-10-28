@@ -13,7 +13,7 @@
 
     function MyJobsServicesFn($http) {
 
-        var BASEPATH = 'http://localhost:4003/api';
+        var BASEPATH = 'http://123.56.135.196:4003/api';
 
         var self= {};
 
