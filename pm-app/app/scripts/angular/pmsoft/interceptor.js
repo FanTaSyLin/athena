@@ -18,7 +18,7 @@
 
         interceptorFn.$inject = ['$q', '$localStorage', '$cookies', '$location'];
 
-        function interceptorFn($q, $localStorage, $cookies, $location) {
+        function interceptorFn($q, $cookies) {
 
             var interceptor = {
                 'request': reqInterceptor,
@@ -32,8 +32,6 @@
                 var token = $cookies.get('token');
 
                 var username = $cookies.get('username');
-
-                $localStorage.username = username;
 
                 if (token) {
                     config.headers.Authorization = 'Bearer ' + token;
