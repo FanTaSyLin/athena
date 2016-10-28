@@ -14,7 +14,7 @@
     function MyJobsConfigFn($httpProvider) {
 
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
-
+        //$httpProvider.defaults.withCredentials = true;
         /*
          //Disable IE ajax request caching start
          if (!$httpProvider.defaults.headers.get) {
@@ -26,8 +26,6 @@
          */
 
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
-        $httpProvider.defaults.headers.common = {};
     }
 
 })();
