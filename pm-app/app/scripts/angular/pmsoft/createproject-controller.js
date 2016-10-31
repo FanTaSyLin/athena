@@ -119,7 +119,10 @@
                             permission: '0',
                             showInMembers: true
                         }
+
                         self.projectModule.members.push(member);
+
+                        self.newMemberName = '';
                     });
                 }, function (data, status, headers, config) {
 
