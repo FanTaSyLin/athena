@@ -31,7 +31,7 @@ ProjectSchema.methods.initData = function (body) {
 
     if (!verify(body)) {
         throw new DataVerifyError("415", {
-            message: 'Invalid JobLog body'
+            message: 'Invalid project body'
         });
     }
 
