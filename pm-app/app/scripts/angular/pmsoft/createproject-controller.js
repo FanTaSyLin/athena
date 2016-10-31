@@ -49,6 +49,9 @@
             accountID = $cookies.get('account');
             accountName = $cookies.get('name');
             accountAvatar = $cookies.get('avatar');
+            self.projectModule.authorID = accountID;
+            self.projectModule.authorName = accountName;
+            self.projectModule.authorAvatar = accountAvatar;
 
             //项目创建者自动成为项目组成员
             self.projectModule.members.push({
