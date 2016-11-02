@@ -56,7 +56,12 @@
                     project._id = item._id;
                     project.enName = item.enName;
                     project.reviewers = item.reviewers;
-                    self.projects.push(project);
+                    for (var i = 0; i < item.reviewers.length; i++) {
+                        if (item.reviewers[i].account === self.account) {
+                            self.projects.push(project);
+                            break;
+                        }
+                    }
                 });
 
                 //获取未审核工作记录
@@ -177,7 +182,7 @@
             var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
             tmpStr = tmpStr.replace(/&NBSP;/g, "");
             tmpStr = tmpStr.replace(/&nbsp;/g, "");
-            if(tmpStr.length > 130) {
+            if (tmpStr.length > 130) {
                 tmpStr = tmpStr.substring(0, 130) + '...';
             }
             return tmpStr;
@@ -190,7 +195,7 @@
          * @private
          */
         function _extractImg(str) {
-            var rex =  /<img.*?src=(?:"|')?([^ "']*)/ig;
+            var rex = /<img.*?src=(?:"|')?([^ "']*)/ig;
             var res = rex.exec(str);
             if (res && res.length > 0) {
                 return res[1];
@@ -205,7 +210,7 @@
          * @private
          */
         function _getPagination(count) {
-            var pageCount = Math.ceil(count/self.pageSize);
+            var pageCount = Math.ceil(count / self.pageSize);
             self.paginations = [];
             for (var i = 1; i <= pageCount; i++) {
                 self.paginations.push({
@@ -228,10 +233,10 @@
          */
         function _viewUnauditedJobs(pageNum, pageSize) {
             //清空原数组
-            PMSoftServices.unauditedJobList_View.splice(0,PMSoftServices.unauditedJobList_View.length);
+            PMSoftServices.unauditedJobList_View.splice(0, PMSoftServices.unauditedJobList_View.length);
 
-            for (var i = 0; i <  PMSoftServices.unauditedJobList_Filter.length; i++) {
-                if (i >= (pageNum - 1) * pageSize  && i < pageNum * pageSize) {
+            for (var i = 0; i < PMSoftServices.unauditedJobList_Filter.length; i++) {
+                if (i >= (pageNum - 1) * pageSize && i < pageNum * pageSize) {
                     self.unauditedJobs_View.push(PMSoftServices.unauditedJobList_Filter[i]);
                 }
             }
@@ -258,21 +263,21 @@
             var tmpList = [];
 
             //清空原数组
-            PMSoftServices.unauditedJobList_Filter.splice(0,PMSoftServices.unauditedJobList_Filter.length);
+            PMSoftServices.unauditedJobList_Filter.splice(0, PMSoftServices.unauditedJobList_Filter.length);
 
             PMSoftServices.unauditedJobList_Total.forEach(function (item) {
                 if (projectEName === 'all') {
-                     if (memberID === 'all') {
-                         PMSoftServices.unauditedJobList_Filter.push(item);
-                         tmpList.push(item);
-                     } else {
-                         if (memberID === item.authorID) {
-                             PMSoftServices.unauditedJobList_Filter.push(item);
-                             tmpList.push(item);
-                         } else {
-                             tmpList.push(item);
-                         }
-                     }
+                    if (memberID === 'all') {
+                        PMSoftServices.unauditedJobList_Filter.push(item);
+                        tmpList.push(item);
+                    } else {
+                        if (memberID === item.authorID) {
+                            PMSoftServices.unauditedJobList_Filter.push(item);
+                            tmpList.push(item);
+                        } else {
+                            tmpList.push(item);
+                        }
+                    }
                 } else {
                     if (projectEName === item.projectEName) {
                         if (memberID === 'all') {
