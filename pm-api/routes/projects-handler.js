@@ -25,7 +25,7 @@ module.exports = function (server, BASEPATH) {
      * GET /project/projectlist
      */
     server.get({
-        path: BASEPATH + '/project/projectlist/:account',
+        path: BASEPATH + '/project/projectlist',
         version: '0.0.1'
     }, getList);
 
