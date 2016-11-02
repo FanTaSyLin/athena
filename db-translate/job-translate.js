@@ -21,7 +21,7 @@
 
         //从mongoDB中获取项目列表
         request('http://123.56.135.196:4003/api/project/projectlist', function (err, res, body) {
-            if (err) return console.error('获取工作记录失败，' + err.message);
+            if (err) return console.error('获取项目列表失败，' + err.message);
             var list = JSON.parse(body);
             list.forEach(function (item) {
                 projectList.push(item);
@@ -65,7 +65,14 @@
         recodeSchema.projectCName = item.ChnName;
         recodeSchema.projectEName = item.EngName;
         recodeSchema.title = '';
-
+        recodeSchema.logs = [];
+        recodeSchema.logs.push({
+            type: 'New',
+            logTime: new Date(),
+            msg: '添加了本条记录',
+            authorID: recodeSchema.authorID,
+            authorName: recodeSchema.authorName
+        });
 
         if (item.IsChecked === 1) {
             //审核过的
@@ -78,14 +85,13 @@
             recodeSchema.quality = item.Quality || 1;
             recodeSchema.factor = item.Factor;
             recodeSchema.status = 'Pass';
-            recodeSchema.logs = [];
             recodeSchema.logs.push({
-                type: 'New',
+                type: 'Change',
                 logTime: new Date(),
-                msg: '导入了此记录',
-                authorID: 'FanTaSyLin',
-                authorName: '范霖'
-            })
+                msg: '审核了本条记录',
+                authorID: recodeSchema.reviewerID,
+                authorName: recodeSchema.reviewerName
+            });
         } else {
             //未审核的
             recodeSchema.reviewerID = '';
@@ -97,15 +103,15 @@
             recodeSchema.quality = 1;
             recodeSchema.factor = 1;
             recodeSchema.status = 'Submit';
-            recodeSchema.logs = [];
-            recodeSchema.logs.push({
-                type: 'New',
-                logTime: new Date(),
-                msg: '导入了此记录',
-                authorID: 'FanTaSyLin',
-                authorName: '范霖'
-            });
         }
+
+        recodeSchema.logs.push({
+            type: 'New',
+            logTime: new Date(),
+            msg: '导入了本条记录',
+            authorID: 'FanTaSyLin',
+            authorName: '范霖'
+        });
 
         request({
             url: 'http://123.56.135.196:4003/api/jobrecode/translate',
@@ -115,7 +121,7 @@
                 "content-type": "application/json",
             },
             body: JSON.stringify(recodeSchema)
-        }, function(error, response, body) {
+        }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 _submit();
             }
@@ -123,7 +129,7 @@
     }
 
     function _getJobList(req, cb) {
-        jobList = [];
+        //jobList = [];
         var strSQL = "\
         select \
             w.UserID as UserID, \
@@ -150,9 +156,12 @@
         "
 
         req.query(strSQL).then(function (recordset) {
-            recordset.forEach(function (item) {
-                jobList.push(item);
-            });
+            /*recordset.forEach(function (item) {
+             jobList.push(item);
+             });*/
+            for (var i = 0; i < recordset.length; i++) {
+                jobList.push(recordset[i]);
+            }
             cb(null);
         }).catch(function (err) {
             cb(err);
