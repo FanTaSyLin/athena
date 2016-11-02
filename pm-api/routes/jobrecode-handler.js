@@ -26,6 +26,11 @@
         }, _submitRecode);
 
         server.post({
+            path: BASEPATH + '/jobrecode/translate',
+            version: '0.0.1'
+        }, _translate);
+
+        server.post({
             path: BASEPATH + '/jobrecode/update',
             version: '0.0.1'
         }, _updateRecode); //更改工作记录
@@ -110,6 +115,38 @@
 
         }
 
+    }
+
+    function _translate(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = JSON.parse(req.body);
+
+        try {
+
+            var recodeSchema = new JobLogSchema();
+
+            recodeSchema.translateInit(body);
+
+            recodeSchema.save(function (err) {
+
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
+
+            });
+
+        } catch (err) {
+
+            return next(err);
+
+        }
     }
 
     function _getRecodes(req, res, next) {

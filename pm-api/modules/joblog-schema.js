@@ -24,7 +24,7 @@ var JobLogSchema = new Schema({
     date: {type: Date}, /*工作记录的日期，查询，显示*/
     starTime: {type: Date}, /*工作开始时间，查询，显示*/
     endTime: {type: Date}, /*工作结束时间，查询，显示*/
-    type: {type: String}, /*工作类型，查询，显示*/
+    type: {type: String}, /*工作类型，查询，显示 分为：技术 管理 维护*/
     content: {type: String}, /*工作内容，显示*/
     duration: {type: Number}, /*工作量，统计*/
     projectID: {type: String}, /*项目ID, 查询 统计*/
@@ -121,6 +121,52 @@ JobLogSchema.methods.reviewVerify = function (body) {
 
 JobLogSchema.methods.reportVerify = function (body) {
     return reportVerify(body);
+}
+
+JobLogSchema.methods.translateInit = function (body) {
+    var self = this;
+
+    if (!reportVerify(body)) {
+        throw new DataVerifyError("415", {
+            message: 'Invalid JobLog body'
+        });
+    }
+
+    try {
+        self.authorID = body.authorID;
+        self.authorName = body.authorName;
+        self.authorAvatar = body.authorAvatar || ''; //默认值
+        self.authorDepartment = body.authorDepartment;
+        self.reportTime = new Date();
+        self.date = new Date(body.date);
+        self.starTime = new Date(body.starTime);
+        self.endTime = new Date(body.endTime);
+        self.type = body.type;
+        self.content = body.content;
+        self.projectID = body.projectID;
+        self.projectCName = body.projectCName;
+        self.projectEName = body.projectEName;
+        self.duration = body.duration;
+        self.reviewerID = body.reviewerID;
+        self.reviewerName = body.reviewerName;
+        self.reviewerAvatar = '';
+        self.reviewerTime = body.reviewerTime;
+        self.difficulty = body.difficulty;
+        /*难度系数*/
+        self.efficiency = body.efficiency;
+        /*效率系数*/
+        self.quality = body.quality;
+        /*质量系数*/
+        self.factor = body.factor;
+        /*总体评定系数 通过 难度系数、效率系数、质量系数相乘得到*/
+        self.status = body.status;
+        /*该记录的当前状态 分为 Submit-提交 TurnBack-退回 Pass-审核通过*/
+        body.logs.forEach(function (item) {
+            self.logs.push(item);
+        });
+    } catch (err) {
+        throw new DataVerifyError("415", err);
+    }
 }
 
 module.exports = mongoose.model('JobLog', JobLogSchema);
