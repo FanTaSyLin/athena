@@ -16,6 +16,7 @@
         var self = this;
 
         self.gotoMyJobsPage = _gotoMyJobsPage;
+        self.signOut = _signOut;
         
         _init();
 
@@ -46,6 +47,12 @@
         
         function _gotoMyJobsPage() {
             window.open("pm-soft/myjobs");
+        }
+
+        function _signOut() {
+            $cookies.remove('token');
+            $cookies.remove('account');
+            window.location.reload();
         }
     }
 

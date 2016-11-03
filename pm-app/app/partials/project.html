@@ -1,3 +1,68 @@
-<div class="main-area-item area-project">
+<div class="main-area-item area-project" ng-controller="ProjectListController as ProjectListCtrl"
+     data-ng-init="ProjectListCtrl.init()">
+    <h3 style="color: #4d4d4d; font-size: 1pc; font-weight: 700">
+        <span class="glyphicon glyphicon-star-empty" style="font-size: 1.3pc"></span> 加星标的项目
+    </h3>
+
+    <!--加星标的项目排列区  start-->
+    <div style="height: auto; min-height: 100px;">
+        <ul class="boards-page-board-section-list" style="list-style: none;">
+            <li class="boards-page-board-section-list-item" ng-repeat="starProject in ProjectListCtrl.starProjectList">
+                <a class="board-tile" ng-class="{'background-green': starProject.type === '工程', 'background-blue': starProject.type === '自研'}">
+                    <span></span>
+                    <span class="board-tile-details is-badged">
+                        <span title="{{starProject.cnName}}" class="board-tile-details-name" dir="auto">{{starProject.cnName}}</span>
+                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: 100人天</span>
+                    </span>
+                    <span class="board-tile-options">
+                        <span title="点击加星这个项目。它将会显示在你的看办列表上方。"
+                              class="glyphicon glyphicon-star-empty board-tile-options-star-icon"
+                              ng-class="{'un-starred': starProject.isStarred === false, 'is-starred': starProject.isStarred === true}"
+                              ng-click="ProjectListCtrl.starred(starProject)"></span>
+                    </span>
+                    <span class="board-tile-unread" ng-show="starProject.unread === true">
+                        <span title="项目里没有新的动态。"
+                              class="glyphicon glyphicon-certificate board-tile-options-star-icon is-unread"></span>
+                    </span>
+                    <span class="board-tile-badges"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--加星标的项目排列区  end-->
+
+    <h3 style="color: #4d4d4d; font-size: 1pc; font-weight: 700">
+        <span class="glyphicon glyphicon-user" style="font-size: 1.3pc"></span> 我参与的项目
+    </h3>
+
+    <!--我参与的项目排列区  start-->
+    <div style="height: auto; min-height: 200px;">
+        <ul class="boards-page-board-section-list" style="list-style: none;">
+            <li class="boards-page-board-section-list-item" ng-repeat="project in ProjectListCtrl.projectList">
+                <a class="board-tile" ng-class="{'background-green': project.type === '工程', 'background-blue': project.type === '自研'}">
+                    <span></span>
+                    <span class="board-tile-details is-badged">
+                        <span title="{{project.cnName}}" class="board-tile-details-name"
+                              dir="auto">{{project.cnName}}</span>
+                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: 100人天</span>
+                    </span>
+                    <span class="board-tile-options">
+                        <span title="点击加星这个项目。它将会显示在你的看办列表上方。"
+                              class="glyphicon glyphicon-star-empty board-tile-options-star-icon"
+                              ng-class="{'un-starred': project.isStarred === false, 'is-starred': project.isStarred === true}"
+                              ng-click="ProjectListCtrl.starred(project)"></span>
+                    </span>
+                    <span class="board-tile-unread" ng-show="project.unread === true">
+                        <span title="项目里没有新的动态。"
+                              class="glyphicon glyphicon-certificate board-tile-options-star-icon is-unread"></span>
+                    </span>
+                    <span class="board-tile-badges"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--我参与的项目排列区  end-->
 
 </div>
+
+

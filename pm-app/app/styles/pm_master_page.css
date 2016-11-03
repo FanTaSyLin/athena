@@ -313,7 +313,7 @@ a:hover, a:focus, a:active {
     width: 100%;
     height: auto;
     min-height: 10em;
-    background: #4fff5b;
+    /*background: #4fff5b;*/
 }
 
 .area-maintenance {
@@ -547,7 +547,7 @@ a:hover, a:focus, a:active {
     min-width: 300px;
 }
 
-#myNav.affix{
+#myNav.affix {
     top: 30px; /* Set the top position of pinned element */
 }
 
@@ -558,10 +558,150 @@ a:hover, a:focus, a:active {
     font-weight: 500;
 }
 
-#myNav.nav-pills{
+#myNav.nav-pills {
     width: 240px;
 }
 
-#jobList ul li{
+#jobList ul li {
     padding: 5px;
 }
+
+.boards-page-board-section-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.boards-page-board-section-list-item {
+    transform: translate3d(0px, 0px, 0px);
+    box-sizing: border-box;
+    padding: 0 1pc 8px 0;
+    position: relative;
+    width: 25%;
+}
+
+.board-tile-details.is-badged {
+    min-height: 60px;
+    padding-bottom: 20px;
+}
+
+.board-tile-details {
+    display: block;
+    padding-right: 36px;
+    position: relative;
+}
+
+.board-tile {
+    background-color: #959da1;
+    background-size: cover;
+    background-position: center center;
+    border-radius: 3px;
+    color: #fff;
+    display: block;
+    line-height: 20px;
+    margin-bottom: 8px;
+    padding: 8px 9pt;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.board-tile:hover, .board-tile:focus, .board-tile:active{
+    color: #fff;
+}
+
+.board-tile-details-name {
+    font-size: 1pc;
+    font-weight: 700;
+    display: inline-block;
+    overflow: hidden;
+    max-height: 40px;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+.board-tile-details-sub-name {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+    padding-top: 5px;
+}
+
+.background-green {
+    background-color: rgb(81, 152, 57);
+}
+
+.background-blue {
+    background-color: rgb(0, 121, 191);
+}
+
+.board-tile-details-sub-name:hover, .board-tile-details-sub-name:active, .board-tile-details-sub-name:focus {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+}
+
+.board-tile-options {
+    position: absolute;
+    right: 18px;
+    top: 0px;
+    z-index: 3;
+}
+
+
+.board-tile-options-star-icon {
+    color: #fff;
+    bottom: 0px;
+    font-size: 1.2em;
+    width: 0px;
+    height: 18px;
+    opacity: 0;
+    padding: 9px;
+    right: 0px;
+    top: 0px;
+    -webkit-transition-duration: 0.15s;
+    transition-duration: 0.15s;
+    -webkit-transition-property: color, background, opacity, transform, width;
+    transition-property: color, background, opacity, transform, width;
+}
+
+
+
+.board-tile-options-star-icon.is-starred {
+    color: #e6c60d;
+    opacity: 1;
+    width: 18px;
+}
+
+.board-tile-options-star-icon.un-starred {
+    color: rgba(255, 255, 255, 0.65);
+    opacity: 1;
+    width: 18px;
+}
+
+.board-tile-options-star-icon.is-unread {
+    color: #696969;
+    opacity: 1;
+    width: 18px;
+}
+
+.board-tile-badges {
+    bottom: 3px;
+    left: 6px;
+    opacity: 0.8;
+    position: absolute;
+}
+
+.board-tile-unread {
+    position: absolute;
+    right: 40px;
+    top: 0px;
+    z-index: 3;
+}
+
+
+
+
