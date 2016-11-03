@@ -21,6 +21,7 @@
 
         self.init = _init;
         self.starred = _starred;
+        self.openTheProject = _openTheProject;
 
 
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
@@ -127,6 +128,12 @@
             var expireTime = new Date();
             expireTime.setDate(expireTime.getDate() + 7000);
             $cookies.putObject('mystar-project', myStar, {'expires': expireTime});
+        }
+
+        function _openTheProject(project) {
+            var url = 'pm-soft/projectinfo?projectid=' + project._id;
+
+            window.open(url);
         }
 
     }
