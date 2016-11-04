@@ -46,47 +46,51 @@
 
             self.account = $cookies.get('account');
 
-            PMSoftServices.getPastProjects(self.account, function (data) {
+            if (window.location.hash === '#/review') {
 
-                //TODO: 目前只添加了需要的字段，后续如果不够吃再加
-                self.projects = [];
-                data.forEach(function (item) {
-                    var project = {};
-                    project.cnName = item.cnName;
-                    project._id = item._id;
-                    project.enName = item.enName;
-                    project.reviewers = item.reviewers;
-                    for (var i = 0; i < item.reviewers.length; i++) {
-                        if (item.reviewers[i].account === self.account) {
-                            self.projects.push(project);
-                            break;
+                PMSoftServices.getPastProjects(self.account, function (data) {
+
+                    //TODO: 目前只添加了需要的字段，后续如果不够吃再加
+                    self.projects = [];
+                    data.forEach(function (item) {
+                        var project = {};
+                        project.cnName = item.cnName;
+                        project._id = item._id;
+                        project.enName = item.enName;
+                        project.reviewers = item.reviewers;
+                        for (var i = 0; i < item.reviewers.length; i++) {
+                            if (item.reviewers[i].account === self.account) {
+                                self.projects.push(project);
+                                break;
+                            }
                         }
-                    }
+                    });
+
+                    //获取未审核工作记录
+                    _getUnauditedJobs({
+                        projectList: self.projects,
+                        memberID: null
+                    }, function (err, dataCount) {
+                        if (err) {
+                            return;
+                        }
+                        //统计各个项目未审核工作的数量
+                        _unauditedJobsStatics();
+                        //获取项目成员列表
+                        _getMemberList(PMSoftServices.unauditedJobList_Total);
+                        //生成分页标签
+                        _getPagination(dataCount);
+                        //根据选项筛选数据
+                        _filterUnauditedJobs('all', 'all');
+                        //获取分页数据
+                        _viewUnauditedJobs(1, self.pageSize);
+                    });
+
+                }, function (res) {
+
                 });
 
-                //获取未审核工作记录
-                _getUnauditedJobs({
-                    projectList: self.projects,
-                    memberID: null
-                }, function (err, dataCount) {
-                    if (err) {
-                        return;
-                    }
-                    //统计各个项目未审核工作的数量
-                    _unauditedJobsStatics();
-                    //获取项目成员列表
-                    _getMemberList(PMSoftServices.unauditedJobList_Total);
-                    //生成分页标签
-                    _getPagination(dataCount);
-                    //根据选项筛选数据
-                    _filterUnauditedJobs('all', 'all');
-                    //获取分页数据
-                    _viewUnauditedJobs(1, self.pageSize);
-                });
-
-            }, function (res) {
-
-            });
+            }
         }
 
         function memberSelect(memberAccount) {
