@@ -9,9 +9,15 @@
     angular.module('ProjectInfo')
         .config(ProjectInfoConfig);
 
-    ProjectInfoConfig.$inject = ['$httpProvider'];
+    ProjectInfoConfig.$inject = ['$httpProvider', '$locationProvider'];
 
-    function ProjectInfoConfig($httpProvider) {
+    function ProjectInfoConfig($httpProvider, $locationProvider) {
+
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        }
+    );
 
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 

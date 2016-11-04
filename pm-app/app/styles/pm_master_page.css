@@ -70,6 +70,17 @@ a:hover, a:focus, a:active {
     align-items: center;
 }
 
+.project-info-logo{
+    /*position: absolute;
+    display: flex;
+    left: 25px;
+    top: 2px;*/
+    display: flex;
+    width: 10%;
+    align-items: center;
+    margin: auto;
+}
+
 .header-logo:active, .header-logo:focus, .header-logo:hover {
     opacity: 0.75
 }
@@ -702,6 +713,40 @@ a:hover, a:focus, a:active {
     z-index: 3;
 }
 
+.project-info-header {
+    height: 35px;
+}
+
+.project-info-top {
+    display: flex;
+    margin: 15px 5px 10px 80px;
+}
+
+.project-info-top-title {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #474c50;/*color: #2f2f2f;*/
+    font-family: "Microsoft YaHei";
+}
+
+.project-info-top-star {
+    font-size: 2em;
+    padding-left: 10px;
+    color:  #e6c60d;
+    cursor: pointer;
+}
+
+.project-info-top-star.is-starred {
+    color: #e6c60d;
+    opacity: 1;
+    width: 18px;
+}
+
+.project-info-top-star.un-starred {
+    color: rgba(105, 105, 105, 0.81);
+    opacity: 1;
+    width: 18px;
+}
 
 
 

@@ -9,18 +9,30 @@
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
-<body>
+<body ng-controller="MainController as MainCtrl" data-ng-init="MainCtrl.init()">
 <!--页头 start-->
-<header class="header" role="banner">
-    <div class="cell">
-        <div class="header-logo">
-            <a href="/">
-                <img alt="PM-Soft" src="/public/PMSoft-LOGO.png"/>
-            </a>
-        </div>
+<header class="header project-info-header" role="banner" ng-controller="MainController as MainCtrl">
+    <div class="project-info-logo">
+        <a href="/">
+            <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px"/>
+        </a>
     </div>
 </header>
 <!--页头 end-->
+
+<div class="project-info-top">
+    <span class="project-info-top-title">新一代极轨卫星林火监测项目</span>
+    <span class="project-info-top-star glyphicon glyphicon-star-empty"
+          ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"
+          ng-click="MainCtrl.starred()"
+          title="点击加星或取消加星这个项目。已加星的项目将会在你的项目列表上方显示。"></span>
+</div>
+
+<!--项目统计区 start-->
+<div>
+
+</div>
+<!--项目统计区 end-->
 
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -34,7 +46,7 @@
 <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
-
-
+<script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/main-controller.js"></script>
 </body>
 </html>

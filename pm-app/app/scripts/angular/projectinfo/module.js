@@ -8,9 +8,7 @@
 
     angular.module('ProjectInfo', [
         'ngCookies',
-        'ngStorage',
-        'ngRoute',
-        'ngAnimate'
+        'ngRoute'
     ]);
 
 })();
