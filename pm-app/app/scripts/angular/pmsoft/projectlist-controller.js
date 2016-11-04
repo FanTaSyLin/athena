@@ -24,11 +24,11 @@
         self.openTheProject = _openTheProject;
 
 
-        $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+        /*$rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
 
             _init();
 
-        });
+        });*/
 
         function _init() {
 
