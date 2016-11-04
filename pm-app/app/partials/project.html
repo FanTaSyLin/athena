@@ -10,9 +10,9 @@
             <li class="boards-page-board-section-list-item" ng-repeat="starProject in ProjectListCtrl.starProjectList">
                 <a class="board-tile"
                    ng-class="{'background-green': starProject.type === '工程', 'background-blue': starProject.type === '自研'}"
-                   ng-click="ProjectListCtrl.openTheProject(starProject)">
+                   >
                     <span></span>
-                    <span class="board-tile-details is-badged">
+                    <span class="board-tile-details is-badged" ng-click="ProjectListCtrl.openTheProject(starProject)">
                         <span title="{{starProject.cnName}}" class="board-tile-details-name" dir="auto">{{starProject.cnName}}</span>
                         <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: 100人天</span>
                     </span>
@@ -43,9 +43,9 @@
             <li class="boards-page-board-section-list-item" ng-repeat="project in ProjectListCtrl.projectList">
                 <a class="board-tile"
                    ng-class="{'background-green': project.type === '工程', 'background-blue': project.type === '自研'}"
-                   ng-click="ProjectListCtrl.openTheProject(project)">
+                   >
                     <span></span>
-                    <span class="board-tile-details is-badged">
+                    <span class="board-tile-details is-badged" ng-click="ProjectListCtrl.openTheProject(project)">
                         <span title="{{project.cnName}}" class="board-tile-details-name"
                               dir="auto">{{project.cnName}}</span>
                         <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: 100人天</span>
