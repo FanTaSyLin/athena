@@ -18,7 +18,7 @@ module.exports = function () {
 
     router.route('/pm-soft/myjobs').get(myJobList);
 
-    router.route('pm-soft/projectinfo').get(projectInfo);
+    router.route('/pm-soft/projectinfo').get(projectInfo);
 
     router.unless = require('express-unless');
 
