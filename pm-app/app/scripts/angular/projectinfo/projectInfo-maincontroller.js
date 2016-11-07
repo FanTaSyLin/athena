@@ -42,7 +42,7 @@
 
             //TODO: 获取项目的统计信息
             ProjectInfoServices.getProjectStaticInfo(projectID, function (res) {
-
+                    
             });
         }
 

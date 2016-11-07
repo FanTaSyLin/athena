@@ -16,7 +16,8 @@
         var BASEPATH = 'http://123.56.135.196:4003/api';
         
         var service = {
-            getProjectBaseInfo: _getProjectBaseInfo
+            getProjectBaseInfo: _getProjectBaseInfo,
+            getProjectStaticInfo: _getProjectStaticInfo
         };
 
         return service;
@@ -27,6 +28,14 @@
          */
         function _getProjectBaseInfo(projectID, successFn, errorFn) {
             $http.get(BASEPATH + '/project?id=' + projectID).success(successFn).error(errorFn);
+        }
+
+        /**
+         * 获取项目的统计信息
+         * @param {String} projectID 项目ID (_id)
+         */
+        function _getProjectStaticInfo(projectID, successFn, errorFn) {
+            $http.get(BASEPATH + '/project/static?id=' + projectID).success(successFn).error(errorFn);
         }
 
     }
