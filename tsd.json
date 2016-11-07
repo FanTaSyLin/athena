@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
+      "commit": "121ddf1be68def3f5dc245eacd0d0471eac590b0"
     },
     "jquery/jquery.d.ts": {
       "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
@@ -39,10 +39,10 @@
       "commit": "4c76db9b47091930da087a41d0b02f316ead37b0"
     },
     "mongoose/mongoose.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "121ddf1be68def3f5dc245eacd0d0471eac590b0"
     },
     "mongodb/mongodb.d.ts": {
-      "commit": "db995d641cce0de40691d83673613092ab549318"
+      "commit": "121ddf1be68def3f5dc245eacd0d0471eac590b0"
     }
   }
 }
