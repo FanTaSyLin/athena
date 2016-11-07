@@ -29,6 +29,11 @@ module.exports = function (server, BASEPATH) {
         version: '0.0.1'
     }, getList);
 
+    server.get({
+        path: BASEPATH + '/project',
+        version: '0.0.1'
+    }, _getProjectByID);
+
     /**
      * 创建新项目
      * POST /project
@@ -57,7 +62,7 @@ function getList(req, res, next) {
 }
 
 function getListByAccount(req, res, next) {
-    var account = req.params['account'];
+    var account = req.params.account;
     ProjectSchema.find({
         'members.account': account
     }, function (err, doc) {
@@ -97,5 +102,24 @@ function createProject(req, res, next) {
         } else {
             res.end();
         }
+    });
+}
+
+function _getProjectByID(req, res, next) {
+    var id = req.params.id;
+    ProjectSchema.find({
+        _id: id
+    }, function (err, doc) {
+        if (err) {
+            return next(err);
+        }
+
+        var result = {
+            status: 'success',
+            data: doc
+        };
+
+        res.end(JSON.stringify(result));
+        return next();
     });
 }

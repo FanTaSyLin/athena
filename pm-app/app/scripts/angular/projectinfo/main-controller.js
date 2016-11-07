@@ -7,11 +7,11 @@
     'use strict';
     
     angular.module('ProjectInfo')
-        .controller('MainController', MainControllerFn);
+        .controller('ProjectInfo-MainController', MainControllerFn);
 
-    MainControllerFn.$inject = ['$location'];
+    MainControllerFn.$inject = ['$location', '$cookies', 'ProjectInfoServices'];
 
-    function MainControllerFn($location) {
+    function MainControllerFn($location, $cookies, ProjectInfoServices) {
         var self = this;
 
         self.isStarred = false;
@@ -21,13 +21,39 @@
         
         function _init() {
 
-            //TODO: 获取参数修改标题
+            //TODO: 从url中截取 projectid 继而获取整个项目的属性
             var projectID = $location.search().projectid;
 
+            //判断该项目是否为加星项目
+            self.isStarred = _checkIsStarred(projectID);
+
+            //获取整个项目的基本属性 （projectSchema）
+            ProjectInfoServices.getProjectBaseInfo(projectID, function (data){
+
+            }, function (err) {
+
+            });
+        }
+
+        function _checkIsStarred(projectID) {            
+            var stars = $cookies.getObject('mystar-project');
+            var result = false;
+            for (var i = 0; i < stars.length; i++) {
+                if (stars[i] === projectID) {
+                    result = true; 
+                    break;                   
+                }
+            }
+            return result;
         }
 
         function _starred() {
             self.isStarred = !self.isStarred;
+            if (self.isStarred === true) {
+                //TODO: cookies 对应修改状态
+            } else {
+                //TODO: cookies 对应修改状态
+            }
         }
     }
     

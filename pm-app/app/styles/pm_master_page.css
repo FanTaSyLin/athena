@@ -28,7 +28,7 @@ a:hover, a:focus, a:active {
 }
 
 .header {
-    /*background: black*/;
+    /*background: black*/
     position: relative;
     display: flex;
     margin: 0;
@@ -86,7 +86,7 @@ a:hover, a:focus, a:active {
 }
 
 .header-nav {
-    /*background: lightgrey*/;
+    /*background: lightgrey*/
     display: flex;
     align-items: center;
     max-width: 70em;
