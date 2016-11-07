@@ -68,7 +68,7 @@
         server.post({path: BASEPATH + '/jobrecode/turnback',
             version: '0.0.1'}, _turnBackJob);//退回已提交的工作记录
 
-    }
+    };
 
     function _getDateList(req, res, next) {
         var now = new Date();
@@ -161,8 +161,8 @@
         }
 
         var condition = {};
-        var accountList = req.params['memberid'];
-        var projectList = req.params['projectid'];
+        var accountList = req.params.memberid;
+        var projectList = req.params.projectid;
 
         if (!_.isUndefined(accountList)) {
             //添加查询条件： ==username
@@ -177,17 +177,17 @@
             projectList = projectList.split(' ');
             condition.projectID = {
                 $in: projectList
-            };;
+            };
         }
 
-        if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
+        if (!_.isUndefined(req.params.startdate) && !_.isUndefined(req.params.enddate)) {
             //添加查询条件： >=startdate
-            var startDate = new Date(req.params['startdate']);
-            var endDate = new Date(req.params['enddate']);
+            var startDate = new Date(req.params.startdate);
+            var endDate = new Date(req.params.enddate);
             condition.date = {
                 $gte: startDate,
                 $lte: endDate
-            }
+            };
         }
 
         JobLogSchema.find(condition).sort({'data': 1, 'starTime': 1}).exec(function (err, doc) {
@@ -225,10 +225,10 @@
         }
 
         var condition = {};
-        var accountList = req.params['memberid'];
-        var projectList = req.params['projectid'];
-        var startNum = req.params['startnum'];
-        var pageSize = req.params['pagesize'];
+        var accountList = req.params.memberid;
+        var projectList = req.params.projectid;
+        var startNum = req.params.startnum;
+        var pageSize = req.params.pagesize;
 
         if (!_.isUndefined(accountList)) {
             //添加查询条件： ==username
@@ -243,17 +243,17 @@
             projectList = projectList.split(' ');
             condition.projectID = {
                 $in: projectList
-            };;
+            };
         }
 
-        if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
+        if (!_.isUndefined(req.params.startdate) && !_.isUndefined(req.params.enddate)) {
             //添加查询条件： >=startdate
-            var startDate = new Date(req.params['startdate']);
-            var endDate = new Date(req.params['enddate']);
+            var startDate = new Date(req.params.startdate);
+            var endDate = new Date(req.params.enddate);
             condition.date = {
                 $gte: startDate,
                 $lte: endDate
-            }
+            };
         }
 
         JobLogSchema
@@ -270,7 +270,7 @@
             var data = {
                 count: doc.length,
                 doc: doc
-            }
+            };
 
             res.end(JSON.stringify(data));
 
@@ -291,9 +291,9 @@
                 message: 'Invalid params'
             }));
         }
-        var _idList = req.params['projectid'];
+        var _idList = req.params.projectid;
 
-        var memberID = req.params['memberid'];
+        var memberID = req.params.memberid;
         if (_.isUndefined(_idList)) {
             return next(new ParamProviderError(415, {
                 message: 'Invalid params, projectid == undefined'
@@ -321,10 +321,10 @@
                 var data = {
                     count: doc.length,
                     doc: doc
-                }
+                };
 
                 res.end(JSON.stringify(data));
-            })
+            });
     }
 
     /**
@@ -393,8 +393,8 @@
                 message: 'Invalid params'
             }));
         }
-        var _idList = req.params['projectid'];
-        var memberID = req.params['memberid'];
+        var _idList = req.params.projectid;
+        var memberID = req.params.memberid;
         if (_.isUndefined(_idList)) {
             return next(new ParamProviderError(415, {
                 message: 'Invalid params, projectid == undefined'
@@ -461,7 +461,7 @@
                 } else {
                     res.end();
                 }
-            })
+            });
         } catch (err) {
             return next(err);
         }
@@ -486,8 +486,8 @@
         }
 
         var condition = {};
-        var accountList = req.params['memberid'];
-        var projectList = req.params['projectid'];
+        var accountList = req.params.memberid;
+        var projectList = req.params.projectid;
 
         if (!_.isUndefined(accountList)) {
             //添加查询条件： ==username
@@ -502,17 +502,17 @@
             projectList = projectList.split(' ');
             condition.projectID = {
                 $in: projectList
-            };;
+            };
         }
 
-        if (!_.isUndefined(req.params['startdate']) && !_.isUndefined(req.params['enddate'])) {
+        if (!_.isUndefined(req.params.startdate) && !_.isUndefined(req.params.enddate)) {
             //添加查询条件： >=startdate
-            var startDate = new Date(req.params['startdate']);
-            var endDate = new Date(req.params['enddate']);
+            var startDate = new Date(req.params.startdate);
+            var endDate = new Date(req.params.enddate);
             condition.date = {
                 $gte: startDate,
                 $lte: endDate
-            }
+            };
         }
 
         JobLogSchema.count(condition, function (err, doc) {
