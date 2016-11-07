@@ -36,12 +36,12 @@
         var item = projectList.shift();
         _submitSingle(item, function () {
             _submit();
-        })
+        });
     }
 
     function _submitSingle(item, cb) {
         var schema = {};
-        schema.isClosed = item.IsValid;
+        schema.isClosed = (item.IsValid === 1) ? false : true;
         schema.about = (item.Description.length < 2) ? '' : item.Description;
         schema.type = '工程';
         schema.createTime = _getTimeByCode(item.Code);
@@ -67,7 +67,7 @@
             }
         };
 
-        var req = http.request(options, function(res){
+        var req = http.request(options, function (res) {
             /*res.setEncoding('uft8');
             res.on('end', function(){
                 //cb();
@@ -110,12 +110,12 @@
     }
 
     function _getTimeByCode(str) {
-        return new Date(str.substring(0,4)
-            + '-' + str.substring(4,2)
-            + '-' + str.substring(6,2)
-            + ' ' + str.substring(8,2)
-            + ':' + str.substring(10,2)
-            + ':' + str.substring(12,2));
+        return new Date(str.substring(0, 4) +
+            '-' + str.substring(4, 2) +
+            '-' + str.substring(6, 2) +
+            ' ' + str.substring(8, 2) +
+            ':' + str.substring(10, 2) +
+            ':' + str.substring(12, 2));
     }
 
     function _getProjectInfoConfig(req, cb) {
@@ -131,7 +131,7 @@
     }
 
     function _getProjectMembers(req, cb) {
-        var strSQL = "select m.Account as Account, m.ProjectID as ProjectID, m.IsTeamLeader as IsTeamLeader, replace(u.name,' ','') as Name from ProjectMemberConfig m left join UserInfo u on m.Account = u.Account;"
+        var strSQL = "select m.Account as Account, m.ProjectID as ProjectID, m.IsTeamLeader as IsTeamLeader, replace(u.name,' ','') as Name from ProjectMemberConfig m left join UserInfo u on m.Account = u.Account;";
         memberList = [];
         req.query(strSQL).then(function (recordset) {
             recordset.forEach(function (item) {
@@ -140,7 +140,7 @@
             cb(null);
         }).catch(function (err) {
             cb(err);
-        })
+        });
     }
 
 })();
