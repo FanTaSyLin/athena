@@ -21,7 +21,7 @@
 <!--页头 end-->
 
 <div class="project-info-top">
-    <span class="project-info-top-title">新一代极轨卫星林火监测项目</span>
+    <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
     <span class="glyphicon glyphicon-star-empty project-info-top-star"
           ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"
           ng-click="MainCtrl.starred()"
@@ -47,6 +47,6 @@
 <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
-<script type="text/javascript" src="/scripts/angular/projectinfo/main-controller.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
 </body>
 </html>
