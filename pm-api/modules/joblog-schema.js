@@ -2,6 +2,8 @@
  * Created by FanTaSyLin on 2016/8/18.
  */
 
+///<reference path="./../../typings/index.d.ts" />
+
 var mongoose = require('mongoose');
 var _ = require('lodash');
 var DataVerifyError = require('./../errors/DataVerifyError.js');
@@ -100,7 +102,7 @@ JobLogSchema.methods.reportInit = function (body) {
     } catch (err) {
         throw new DataVerifyError("415", err);
     }
-}
+};
 
 JobLogSchema.methods.reviewVerify = function (body) {
     if (_.isUndefined(body)) {
@@ -117,11 +119,11 @@ JobLogSchema.methods.reviewVerify = function (body) {
     } else {
         return true;
     }
-}
+};
 
 JobLogSchema.methods.reportVerify = function (body) {
     return reportVerify(body);
-}
+};
 
 JobLogSchema.methods.translateInit = function (body) {
     var self = this;
@@ -167,7 +169,7 @@ JobLogSchema.methods.translateInit = function (body) {
     } catch (err) {
         throw new DataVerifyError("415", err);
     }
-}
+};
 
 module.exports = mongoose.model('JobLog', JobLogSchema);
 
