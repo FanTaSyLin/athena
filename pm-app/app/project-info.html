@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/bower_components/summernote/dist/summernote.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
@@ -24,13 +23,14 @@
     <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
     <span class="glyphicon glyphicon-star-empty project-info-top-star"
           ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"
-          ng-click="MainCtrl.starred()"
-          title="点击加星或取消加星这个项目。已加星的项目将会在你的项目列表上方显示。"></span>
+          ></span>
 </div>
 
 <!--项目统计区 start-->
-<div>
-
+<div class="row">
+    <div class="col-lg-8">
+        <canvas id='Chart-ByMember' class="chart-area"></canvas>
+    </div>
 </div>
 <!--项目统计区 end-->
 

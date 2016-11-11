@@ -748,5 +748,10 @@ a:hover, a:focus, a:active {
     width: 18px;
 }
 
+#Chart-ByMember.chart-area {
+    width: 380px;
+    height: 130px;
+}
+
 
 

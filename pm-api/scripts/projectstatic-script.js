@@ -72,19 +72,10 @@
             });
 
             // //统计当月工作量
-            // _projectStaticByMonthMember(projectList1, month1);
+            _projectStaticByMonthMember(projectList1, month1);
             // //统计上月工作量
-            // _projectStaticByMonthMember(projectList2, month2);  
+            _projectStaticByMonthMember(projectList2, month2);
 
-            _projectStaticByMonthMember(projectList1, '201601');
-            _projectStaticByMonthMember(projectList1, '201602');
-            _projectStaticByMonthMember(projectList1, '201603');
-            _projectStaticByMonthMember(projectList1, '201604');
-            _projectStaticByMonthMember(projectList1, '201605');
-            _projectStaticByMonthMember(projectList1, '201606');
-            _projectStaticByMonthMember(projectList1, '201607');
-            _projectStaticByMonthMember(projectList1, '201608');
-            _projectStaticByMonthMember(projectList1, '201609');
         });
 
     });
@@ -131,7 +122,7 @@
     /**
      * 根据月份 统计项目组成员的工作量 
      * @param {Array} projectList - 项目列表
-     * @param {any} month - '201609'/'201610'.....
+     * @param {String} month - '201609'/'201610'.....
      */
     function _projectStaticByMonthMember(projectList, month) {
         _projectStatic(projectList, month, function () {

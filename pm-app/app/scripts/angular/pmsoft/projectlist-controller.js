@@ -78,7 +78,7 @@
         function _getStarProjectList() {
             self.starProjectList = [];
             for (var i = 0; i < self.projectList.length; i++) {
-                var item = self.projectList[i]
+                var item = self.projectList[i];
                 for (var j = 0; j < myStar.length; j++) {
                     if (myStar[j] === item._id) {
                         item.isStarred = true;
@@ -115,9 +115,9 @@
                     myStar.splice(index, 1);
                 }
                 index = -1;
-                for (var i = 0; i < self.starProjectList.length; i++) {
-                    if (self.starProjectList[i]._id === project._id) {
-                        index = i;
+                for (var j = 0; j < self.starProjectList.length; j++) {
+                    if (self.starProjectList[j]._id === project._id) {
+                        index = j;
                         break;
                     }
                 }
