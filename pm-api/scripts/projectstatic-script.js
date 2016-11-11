@@ -51,8 +51,8 @@
     });
 
     timer.on('tick', function () {
-        
-        
+
+
         if (new Date().format('hh:mm:ss') !== '03:00:00') return;
 
         var y = new Date().getFullYear();
@@ -71,14 +71,62 @@
                 projectList2.push(item);
             });
 
-            //统计当月工作量
-            _projectStaticByMonthMember(projectList1, month1);
-            //统计上月工作量
-            _projectStaticByMonthMember(projectList2, month2);
+            // //统计当月工作量
+            // _projectStaticByMonthMember(projectList1, month1);
+            // //统计上月工作量
+            // _projectStaticByMonthMember(projectList2, month2);  
+
+            _projectStaticByMonthMember(projectList1, '201601');
+            _projectStaticByMonthMember(projectList1, '201602');
+            _projectStaticByMonthMember(projectList1, '201603');
+            _projectStaticByMonthMember(projectList1, '201604');
+            _projectStaticByMonthMember(projectList1, '201605');
+            _projectStaticByMonthMember(projectList1, '201606');
+            _projectStaticByMonthMember(projectList1, '201607');
+            _projectStaticByMonthMember(projectList1, '201608');
+            _projectStaticByMonthMember(projectList1, '201609');
         });
 
     });
 
+    /* 临时补全用
+    _getProjectList(function (err, data) {
+        if (err) {
+            console.error(err.stack);
+        }
+        var projectList1 = [];
+        var projectList2 = [];
+        var projectList3 = [];
+        var projectList4 = [];
+        var projectList5 = [];
+        var projectList6 = [];
+        var projectList7 = [];
+        var projectList8 = [];
+        var projectList9 = [];
+
+        data.forEach(function (item) {
+            projectList1.push(item);
+            projectList2.push(item);
+            projectList3.push(item);
+            projectList4.push(item);
+            projectList5.push(item);
+            projectList6.push(item);
+            projectList7.push(item);
+            projectList8.push(item);
+            projectList9.push(item);
+        });
+
+        _projectStaticByMonthMember(projectList1, '201601');
+        _projectStaticByMonthMember(projectList2, '201602');
+        _projectStaticByMonthMember(projectList3, '201603');
+        _projectStaticByMonthMember(projectList4, '201604');
+        _projectStaticByMonthMember(projectList5, '201605');
+        _projectStaticByMonthMember(projectList6, '201606');
+        _projectStaticByMonthMember(projectList7, '201607');
+        _projectStaticByMonthMember(projectList8, '201608');
+        _projectStaticByMonthMember(projectList9, '201609');
+    });
+    */
 
     /**
      * 根据月份 统计项目组成员的工作量 
@@ -100,7 +148,7 @@
         }
 
         var projectItem = projectList.shift();
-        
+
 
         //根据项目ID 获取相关工作记录列表
         _getJobListByProjectID(projectItem._id, month, function (err, data) {
