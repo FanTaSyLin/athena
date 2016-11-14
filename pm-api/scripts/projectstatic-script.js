@@ -72,15 +72,16 @@
             });
 
             // //统计当月工作量
-            _projectStaticByMonthMember(projectList1, month1);
+            //_projectStaticByMonthMember(projectList1, month1);
             // //统计上月工作量
-            _projectStaticByMonthMember(projectList2, month2);
+            //_projectStaticByMonthMember(projectList2, month2);
 
         });
 
     });
 
     /* 临时补全用
+    */
     _getProjectList(function (err, data) {
         if (err) {
             console.error(err.stack);
@@ -94,6 +95,8 @@
         var projectList7 = [];
         var projectList8 = [];
         var projectList9 = [];
+        var projectList10 = [];
+        var projectList11 = [];
 
         data.forEach(function (item) {
             projectList1.push(item);
@@ -105,6 +108,8 @@
             projectList7.push(item);
             projectList8.push(item);
             projectList9.push(item);
+            projectList10.push(item);
+            projectList11.push(item);
         });
 
         _projectStaticByMonthMember(projectList1, '201601');
@@ -116,8 +121,9 @@
         _projectStaticByMonthMember(projectList7, '201607');
         _projectStaticByMonthMember(projectList8, '201608');
         _projectStaticByMonthMember(projectList9, '201609');
+        _projectStaticByMonthMember(projectList10, '2016010');
+        _projectStaticByMonthMember(projectList11, '2016011');
     });
-    */
 
     /**
      * 根据月份 统计项目组成员的工作量 
@@ -145,7 +151,7 @@
         _getJobListByProjectID(projectItem._id, month, function (err, data) {
 
             //TODO: 统计
-            var projectStatic = _staticData(projectItem._id, month, data);
+            var projectStatic = _staticData(projectItem, month, data);
 
             //首先尝试删除原纪录
             _deleteProjectStaticResult(projectItem._id, month, function (err) {
@@ -167,12 +173,12 @@
     /**
      * @description 统计
      * 
-     * @param {String} _id - projectID
+     * @param {Object} project - 
      * @param {String} month -'201609'/'201610' ......
      * @param {any} data
      * @returns {mongoose.Schema} result
      */
-    function _staticData(projectID, month, data) {
+    function _staticData(project, month, data) {
         var schema = new ProjectStaticSchema();
         var joblog = {};
         var memberList = [];
@@ -200,7 +206,9 @@
             }
 
         }
-        schema.projectID = projectID;
+        schema.projectID = project._id;
+        schema.projectCName = project.cnName;
+        schema.projectEName = project.enName;
         schema.month = month;
         schema.staticByMember = memberList;
         return schema;

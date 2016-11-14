@@ -8,7 +8,14 @@ var _ = require('lodash');
 var ParamProviderError = require('./../errors/ParamProviderError.js');
 var DBOptionError = require('./../errors/DBOptionError.js');
 var ProjectSchema = require('./../modules/project-schema.js');
+var ProjectStaticSchema = require('./../modules/project-static-schema.js');
 
+/**
+ * 
+ * 
+ * @param {any} server
+ * @param {any} BASEPATH
+ */
 module.exports = function (server, BASEPATH) {
 
     /**
@@ -42,6 +49,13 @@ module.exports = function (server, BASEPATH) {
     server.post({
         path: BASEPATH + '/project'
     }, createProject);
+
+    /**
+     * 获取项目统计结果 
+     */
+    server.get({
+        path: BASEPATH + '/project/static'
+    }, _getProjectStatic);
 };
 
 function getList(req, res, next) {
@@ -122,4 +136,46 @@ function _getProjectByID(req, res, next) {
         res.end(JSON.stringify(result));
         return next();
     });
+}
+
+function _getProjectStatic(req, res, next) {
+    var projectIDs = req.params.id;
+    var startMonth = req.params.smonth;
+    var endMonth = req.params.emonth;
+    var conditions = {};
+    if (startMonth !== undefined && endMonth !== undefined) {
+        startMonth = Number(startMonth);
+        endMonth = Number(endMonth);
+        if (startMonth > endMonth) {
+            var tmp = startMonth;
+            startMonth = endMonth;
+            endMonth = tmp;
+        }
+        conditions.month = {
+            '$gte': startMonth,
+            '$lte': endMonth
+        };
+    }
+    var idList = projectIDs.split(' ');
+    if (projectIDs.length > 0) {
+        conditions.projectID = {
+            $in: idList
+        };
+    }
+
+    ProjectStaticSchema
+        .find(conditions)
+        .sort({ 'projectID': -1, 'month': -1 })
+        .exec(function (err, doc) {
+            var data = {};
+            if (err) {
+                data.status = 'error';
+                data.error = err;
+                data.doc = null;
+            }
+            data.status = 'success';
+            data.doc = doc;
+            res.end(JSON.stringify(data));
+        });
+
 }

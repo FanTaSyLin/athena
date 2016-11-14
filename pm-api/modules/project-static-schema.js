@@ -13,6 +13,8 @@
     var ProjectStaticSchema = new Schema({
         //项目ID 
         projectID: {type: String},
+        projectCName: {type: String},
+        projectEName: {type: String},
         //月份 (201609, 201610, 201611 .......)
         month: {type: Number},
         //根据项目成员统计人天数
