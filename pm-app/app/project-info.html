@@ -1,52 +1,110 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="ProjectInfo">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
+    <link rel="stylesheet" href="/styles/buttons.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
+
 <body ng-controller="ProjectInfo-MainController as MainCtrl" data-ng-init="MainCtrl.init()">
-<!--页头 start-->
-<header class="header project-info-header" role="banner">
-    <div class="project-info-logo">
-        <a href="/">
-            <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px"/>
-        </a>
+    <!--页头 start-->
+    <header class="header project-info-header" role="banner">
+        <div class="project-info-logo">
+            <a href="/">
+                <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px" />
+            </a>
+        </div>
+    </header>
+    <!--页头 end-->
+
+    <div class="project-info-top">
+        <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
+        <span class="glyphicon glyphicon-star-empty project-info-top-star" ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"></span>
     </div>
-</header>
-<!--页头 end-->
 
-<div class="project-info-top">
-    <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
-    <span class="glyphicon glyphicon-star-empty project-info-top-star"
-          ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"
-          ></span>
-</div>
-
-<!--项目统计区 start-->
-<div class="row">
-    <div class="col-lg-8">
-        <canvas id='Chart-ByMember' class="chart-area"></canvas>
+    <!--项目统计区 start-->
+    <div id="accordion" class="panel-group" id="accordion" role="tab">
+        <div class="chart-title">
+            <a class="button button-glow button-border button-rounded button-primary collapsed" data-toggle="collapse" data-parent="#accordion"
+               href="#dateSelectArea" aria-expanded="false" aria-controls="dateSelectArea"
+               title="点击打开日期选择面板，再次点击确认选择">
+               {{MainCtrl.title}}
+            </a>
+        </div>
+        <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div style="height: 80px;">
+                <div class="date-select">
+                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.startYearSubstract()"></span>
+                    {{MainCtrl.monthRange.startYear}}年
+                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.startYearAdd()"></span>
+                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.startMonthSubstract()"></span>
+                    {{MainCtrl.monthRange.startMonth}}月
+                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.startMonthAdd()"></span>
+                    至
+                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.endYearSubstract()"></span>
+                    {{MainCtrl.monthRange.endYear}}年
+                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.endYearAdd()"></span>
+                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.endMonthSubstract()"></span>
+                    {{MainCtrl.monthRange.endMonth}}月
+                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.endMonthAdd()"></span>
+                </div>
+                <!--<a>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    2016年
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <a>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    9月
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                至
+                <a>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    2016年
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <a>
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    11月
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <a class="button button-primary button-pill button-tiny">Go</a>-->
+            </div>
+        </div>
     </div>
-</div>
-<!--项目统计区 end-->
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id='Chart-ByMember-bar' height="2" width="4" class="chart-area"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id='Chart-ByMember-pie' height="1" width="2" class="chart-area"></canvas>
+        </div>
+    </div>
+    <!--项目统计区 end-->
 
+    <div>
 
-<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
-<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
-<script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+    </div>
 
-<script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
-<script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
-<script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
-<script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
-<script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+
+    <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
+    <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
+    <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
+    <script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
+    <script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
 </body>
+
 </html>

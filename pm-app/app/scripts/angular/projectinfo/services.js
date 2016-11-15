@@ -32,10 +32,23 @@
 
         /**
          * 获取项目的统计信息
-         * @param {String} projectID 项目ID (_id)
+         * @param {Object} option 包含三个属性：option.projectID, option.startMonth, option.endMonth
+         * @param {Function} successFn
+         * @param {Function} errorFn
          */
-        function _getProjectStaticInfo(projectID, successFn, errorFn) {
-            $http.get(BASEPATH + '/project/static?id=' + projectID).success(successFn).error(errorFn);
+        function _getProjectStaticInfo(option, successFn, errorFn) {
+            var projectID = option.projectID;
+            var startMonth = option.startMonth;
+            var endMonth = option.endMonth;
+            var condition = '';
+            if (projectID) {
+                condition +='id=' + projectID;
+            }
+            if (startMonth && endMonth) {
+                condition += '&smonth=' + startMonth.toString();
+                condition += '&emonth=' + endMonth.toString();
+            }
+            $http.get(BASEPATH + '/project/static?' + condition).success(successFn).error(errorFn);
         }
 
     }

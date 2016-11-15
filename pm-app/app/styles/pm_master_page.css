@@ -748,10 +748,31 @@ a:hover, a:focus, a:active {
     width: 18px;
 }
 
-#Chart-ByMember.chart-area {
-    width: 380px;
-    height: 130px;
+#Chart-ByMember-bar.chart-area {
+    margin-left: 20px;
 }
 
+#Chart-ByMember-pie.chart-area {
+    margin-left: 20px;
+}
 
+.chart-title{
+    /*position: absolute;
+    display: flex;
+    left: 25px;
+    top: 2px;*/
+    display: flex;
+    width: 20%;
+    align-items: center;
+    margin: auto;
+}
 
+.date-select {
+    font-size: 1.3em;
+    font-weight: 500;
+    font-family: "Microsoft YaHei";
+    color: #1398fd;
+    width: 24%;
+    align-items: center;
+    margin: 20px auto;
+}
