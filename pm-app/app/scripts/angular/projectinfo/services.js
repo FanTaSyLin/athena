@@ -17,10 +17,22 @@
         
         var service = {
             getProjectBaseInfo: _getProjectBaseInfo,
-            getProjectStaticInfo: _getProjectStaticInfo
+            getProjectStaticInfo: _getProjectStaticInfo,
+            setProjectMemberAuthority: _setProjectMemberAuthority
         };
 
         return service;
+
+        /**
+         * 设置项目组成员的权限
+         * @param {Object} opt opt.projectID, opt.member, opt.isReviewer
+         * @param successFn
+         * @param errorFn
+         * @private
+         */
+        function _setProjectMemberAuthority(opt, successFn, errorFn) {
+            $http.post(BASEPATH + '/project', projectModule).success(successFn).error(errorFn);
+        }
 
         /**
          * 获取项目的基础信息

@@ -77,11 +77,21 @@
 
         /**
          * 设置显示在模态框中的项目成员的权限
-         * @param isReviewerFlg
+         * @param isReviewer
          * @private
          */
-        function _setShowedMemberAuthority(isReviewerFlg) {
-            self.showedMember.isReviewer = isReviewerFlg;
+        function _setShowedMemberAuthority(isReviewer) {
+            if (isReviewer === true) {
+                ProjectInfoServices.setProjectMemberAuthority({
+                    projectID: self.thisProjectInfo._id,
+                    member: self.showedMember,
+                    isReviewer: isReviewer
+                }, function (res) {
+                    self.showedMember.isReviewer = isReviewer;
+                }, function (res) {
+
+                });
+            }
         }
 
         /**
@@ -264,7 +274,7 @@
         }
 
         /**
-         *　根据所选日期范围查询统计结果
+         * 根据所选日期范围查询统计结果
          * @private
          */
         function _selectMonthRange() {

@@ -51,12 +51,29 @@ module.exports = function (server, BASEPATH) {
     }, createProject);
 
     /**
+     * 设置项目组成员的权限
+     * POST /project/项目ID/项目成员账号/权限标识
+     */
+    server.post({
+        path: BASEPATH + '/project/:projectid/:memberaccount/:authority'
+    }, _setMemberAuthority);
+
+    /**
      * 获取项目统计结果 
      */
     server.get({
         path: BASEPATH + '/project/static'
     }, _getProjectStatic);
 };
+
+
+function _setMemberAuthority(req, res, next) {
+    var projectID = req.params.projectid;
+    var memberAccout = req.params.memberaccount;
+    var authority = req.params.authority;
+
+    /*ProjectSchema.update({})*/
+}
 
 function getList(req, res, next) {
     ProjectSchema.find({}, function (err, doc) {
