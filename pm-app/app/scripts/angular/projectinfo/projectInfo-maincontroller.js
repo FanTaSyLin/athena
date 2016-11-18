@@ -17,12 +17,16 @@
         var self = this;
         var myStar = [];
         var projectID = '';
+        var rmShowedMemberClickCount = 1; //用来记录移除成员时的点击次数
         var ctxByMember_Bar = angular.element(document.getElementById('Chart-ByMember-bar'));
         var ctxByMember_Pie = angular.element(document.getElementById('Chart-ByMember-pie'));
         var dateSelectArea = angular.element(document.getElementById('dateSelectArea'));
+        var editProjectInfo = angular.element(document.getElementById('edit-project-info'));
+        var memberStatusModal = angular.element(document.getElementById('member-status-modal'));
 
         self.isStarred = false;
         self.thisProject = {};
+        self.thisProjectInfo = {};
         self.title = '';
         self.monthRange = {
             startYear: '',
@@ -30,6 +34,9 @@
             endYear: '',
             endMonth: ''
         };
+        self.isShowMenu = false;
+        self.showedMember = {};
+        self.descriptionForRmBtn = '从项目组移除';
 
         self.init = _init;
         self.starred = _starred;
@@ -42,12 +49,88 @@
         self.endYearSubstract = _endYearSubstract;
         self.endMonthAdd = _endMonthAdd;
         self.endMonthSubstract = _endMonthSubstract;
+        self.showMenu = _showMenu;
+        self.submitProjectInfo = _submitProjectInfo;
+        self.cancelProjectInfo = _cancelProjectInfo;
+        self.showMemberStatus = _showMemberStatus;
+        self.setShowedMemberAuthority = _setShowedMemberAuthority;
+        self.rmShowedMember = _rmShowedMember;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
             _selectMonthRange();
         })
 
+
+        /**
+         * 移除显示在模态框中的项目成员
+         * @private
+         */
+        function _rmShowedMember() {
+            rmShowedMemberClickCount++;
+            if (rmShowedMemberClickCount % 2 === 0) {
+                self.descriptionForRmBtn = '再次点击确认移除';
+            } else if (rmShowedMemberClickCount % 2 === 1) {
+                self.descriptionForRmBtn = '从项目组移除';
+            }
+        }
+
+        /**
+         * 设置显示在模态框中的项目成员的权限
+         * @param isReviewerFlg
+         * @private
+         */
+        function _setShowedMemberAuthority(isReviewerFlg) {
+            self.showedMember.isReviewer = isReviewerFlg;
+        }
+
+        /**
+         * 显示项目组成员的信息
+         * @param {Object} member
+         * @private
+         */
+        function _showMemberStatus(member) {
+            /*for (var p in member) {
+                self.showedMember[p] = member[p];
+            }*/
+            self.showedMember = member;
+            memberStatusModal.modal({backdrop: 'static', keyboard: false});
+        }
+
+        /**
+         * 取消对项目信息的修改
+         * @private
+         */
+        function _cancelProjectInfo() {
+            self.thisProjectInfo.cnName = self.thisProject.cnName;
+            self.thisProjectInfo.enName = self.thisProject.enName;
+            self.thisProjectInfo.type = self.thisProject.type;
+            self.thisProjectInfo.about = self.thisProject.about;
+            editProjectInfo.collapse('hide');
+        }
+
+        /**
+         * 提交对项目信息的修改
+         * @private
+         */
+        function _submitProjectInfo() {
+            self.thisProject.cnName = self.thisProjectInfo.cnName;
+            self.thisProject.enName = self.thisProjectInfo.enName;
+            self.thisProject.type = self.thisProjectInfo.type;
+            self.thisProject.about = self.thisProjectInfo.about;
+            //TODO: 向服务器提交修改内容
+
+
+        }
+
+        /**
+         * 显示、隐藏菜单栏
+         * @param {Boolean} flg
+         * @private
+         */
+        function _showMenu(flg) {
+            self.isShowMenu = flg;
+        }
 
         function _startYearAdd() {
             var year = Number(self.monthRange.startYear);
@@ -122,6 +205,17 @@
                     var doc = res.data[0];
                     for (var p in doc) {
                         self.thisProject[p] = doc[p];
+                    }
+                    self.thisProjectInfo.cnName = self.thisProject.cnName;
+                    self.thisProjectInfo.enName = self.thisProject.enName;
+                    self.thisProjectInfo.type = self.thisProject.type;
+                    self.thisProjectInfo.about = self.thisProject.about;
+                    for (var i = 0; i < self.thisProject.members.length; i++) {
+                        for (var j = 0; j < self.thisProject.reviewers.length; j++) {
+                            if (self.thisProject.members[i].account === self.thisProject.reviewers[j].account) {
+                                self.thisProject.members[i].isReviewer = true;
+                            }
+                        }
                     }
                 }
             }, function (err) {
@@ -214,6 +308,14 @@
             var colors = ["#4F81BD", "#C0504D", "#9BBB59", "#8064A2", "#4BACC6", "#F79646"];
             var bgColorList = [];
             var total = 0;
+
+            if (data === undefined || data.length < 1) {
+                total = 100;
+                labels.push('无数据');
+                duration_Checked_List.push(100);
+                bgColorList.push("#444");
+            }
+
             for (var j = 0; j < data.length; j++) {
                 total += data[j].duration_Checked;
             }
@@ -248,13 +350,24 @@
             var x_Labels = [];
             var duration_Checked_List = [];
             var duration_Real_List = [];
-            for (var i = 0; i < data.length; i++) {
-                x_Labels.push(data[i].name);
-                duration_Checked_List.push(data[i].duration_Checked.toFixed(2));
-                duration_Real_List.push(data[i].duration_Real.toFixed(2));
+            var config = {};
+
+            if (data === undefined || data.length < 1) {
+                self.thisProject.members.forEach(function (member) {
+                    x_Labels.push(member.name);
+                    duration_Checked_List.push(0);
+                    duration_Real_List.push(0);
+                });
+            } else {
+                for (var i = 0; i < data.length; i++) {
+                    x_Labels.push(data[i].name);
+                    duration_Checked_List.push(data[i].duration_Checked.toFixed(2));
+                    duration_Real_List.push(data[i].duration_Real.toFixed(2));
+                }
+
             }
 
-            var config = {
+            config = {
                 type: 'bar',
                 data: {
                     labels: x_Labels,

@@ -12,99 +12,242 @@
 </head>
 
 <body ng-controller="ProjectInfo-MainController as MainCtrl" data-ng-init="MainCtrl.init()">
-    <!--页头 start-->
-    <header class="header project-info-header" role="banner">
-        <div class="project-info-logo">
-            <a href="/">
-                <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px" />
-            </a>
-        </div>
-    </header>
-    <!--页头 end-->
-
-    <div class="project-info-top">
-        <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
-        <span class="glyphicon glyphicon-star-empty project-info-top-star" ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"></span>
+<!--页头 start-->
+<header class="header project-info-header" role="banner">
+    <div class="project-info-logo">
+        <a href="/">
+            <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px"/>
+        </a>
     </div>
+</header>
+<!--页头 end-->
 
-    <!--项目统计区 start-->
-    <div id="accordion" class="panel-group" id="accordion" role="tab">
-        <div class="chart-title">
-            <a class="button button-glow button-border button-rounded button-primary collapsed" data-toggle="collapse" data-parent="#accordion"
-               href="#dateSelectArea" aria-expanded="false" aria-controls="dateSelectArea"
-               title="点击打开日期选择面板，再次点击确认选择">
-               {{MainCtrl.title}}
-            </a>
-        </div>
-        <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div style="height: 80px;">
-                <div class="date-select">
-                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.startYearSubstract()"></span>
-                    {{MainCtrl.monthRange.startYear}}年
-                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.startYearAdd()"></span>
-                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.startMonthSubstract()"></span>
-                    {{MainCtrl.monthRange.startMonth}}月
-                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.startMonthAdd()"></span>
-                    至
-                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.endYearSubstract()"></span>
-                    {{MainCtrl.monthRange.endYear}}年
-                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.endYearAdd()"></span>
-                    <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer" ng-click="MainCtrl.endMonthSubstract()"></span>
-                    {{MainCtrl.monthRange.endMonth}}月
-                    <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer" ng-click="MainCtrl.endMonthAdd()"></span>
-                </div>
-                <!--<a>
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    2016年
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a>
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    9月
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
+<div class="project-info-top">
+    <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
+    （<span class="project-info-top-title">{{MainCtrl.thisProject.enName}}</span>）
+    <span class="glyphicon glyphicon-star-empty project-info-top-star"
+          ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"></span>
+</div>
+
+<!--项目统计区 start-->
+<div class="panel-group" id="accordion" role="tab">
+    <div class="chart-title">
+        <a class="button button-glow button-border button-rounded button-primary collapsed" data-toggle="collapse"
+           data-parent="#accordion"
+           href="#dateSelectArea" aria-expanded="false" aria-controls="dateSelectArea"
+           title="点击打开日期选择面板，再次点击确认选择">
+            {{MainCtrl.title}}
+        </a>
+    </div>
+    <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div style="height: 80px;">
+            <div class="date-select">
+                <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                      ng-click="MainCtrl.startYearSubstract()"></span>
+                {{MainCtrl.monthRange.startYear}}年
+                <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                      ng-click="MainCtrl.startYearAdd()"></span>
+                <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                      ng-click="MainCtrl.startMonthSubstract()"></span>
+                {{MainCtrl.monthRange.startMonth}}月
+                <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                      ng-click="MainCtrl.startMonthAdd()"></span>
                 至
-                <a>
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    2016年
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a>
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    11月
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-                <a class="button button-primary button-pill button-tiny">Go</a>-->
+                <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                      ng-click="MainCtrl.endYearSubstract()"></span>
+                {{MainCtrl.monthRange.endYear}}年
+                <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                      ng-click="MainCtrl.endYearAdd()"></span>
+                <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                      ng-click="MainCtrl.endMonthSubstract()"></span>
+                {{MainCtrl.monthRange.endMonth}}月
+                <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                      ng-click="MainCtrl.endMonthAdd()"></span>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <canvas id='Chart-ByMember-bar' height="2" width="4" class="chart-area"></canvas>
-        </div>
-        <div class="col-md-6">
-            <canvas id='Chart-ByMember-pie' height="1" width="2" class="chart-area"></canvas>
-        </div>
+</div>
+<div>
+    <div class="col-md-6">
+        <canvas id='Chart-ByMember-bar' height="2" width="4" class="chart-area"></canvas>
     </div>
-    <!--项目统计区 end-->
+    <div class="col-md-6">
+        <canvas id='Chart-ByMember-pie' height="1" width="2" class="chart-area"></canvas>
+    </div>
+</div>
+<!--项目统计区 end-->
 
+<!--显示菜单-->
+<div class="project-info-main-menu-btn">
+    <div class="font-border">
+        <a ng-click="MainCtrl.showMenu(true)">...显示菜单</a>
+    </div>
+</div>
+<div class="project-info-main-menu-body hide" ng-class="{hide: MainCtrl.isShowMenu==false}">
     <div>
-
+        <h3 class="project-info-main-menu-header-title ">菜 单</h3>
+        <a title="关闭菜单" class="project-info-main-menu-header-closebtn" ng-click="MainCtrl.showMenu(false)">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
+        <hr class="project-info-main-menu-header-divider"/>
     </div>
+    <div>
+        <div>
+            <ul class="project-info-main-menu-members">
+                <li class="member" ng-repeat="member in MainCtrl.thisProject.members"
+                    ng-click="MainCtrl.showMemberStatus(member)">
+                    <span class="member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
+                    <span class="glyphicon glyphicon-chevron-up member-reviewer-flg" title="该成员具有审核权限"
+                          ng-show="member.isReviewer === true"></span>
+                </li>
+            </ul>
+        </div>
+        <a class="project-info-main-menu-addmember">
+            <span class="glyphicon glyphicon-user"></span>
+            &nbsp添加成员...
+        </a>
+        <hr class="project-info-main-menu-header-divider"/>
+    </div>
+    <div>
+        <div class="panel-group" id="project-info-edit" role="tab">
+            <a class="project-info-main-menu-editbtn collapsed" title="点击修改项目信息" data-toggle="collapse"
+               data-parent="#project-info-edit" href="#edit-project-info" aria-expanded="false"
+               aria-controls="edit-project-info">
+                <span class="glyphicon glyphicon-cog"></span>
+                &nbsp修改项目信息<!--{{MainCtrl.thisProject.cnName}}-->
+            </a>
+            <div id="edit-project-info" class="panel-collapse collapse project-info-main-menu-edit-item" role="tabpanel"
+                 aria-labelledby="headingOne">
+                <div class="form-field">
+                    <p>项目全称</p>
+                    <input class="form-control" required="" type="text" placeholder="项目全称"
+                           ng-model="MainCtrl.thisProjectInfo.cnName"/>
+                </div>
+                <div class="form-field">
+                    <p>项目简称</p>
+                    <input class="form-control" required="" type="text" placeholder="项目简称"
+                           ng-model="MainCtrl.thisProjectInfo.enName"/>
+                </div>
+                <div class="form-field">
+                    <p>项目类型</p>
+                    <div class="input-group">
+                        <input class="form-control" required="" type="text"
+                               ng-model="MainCtrl.thisProjectInfo.type"/>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                    <img src="/public/project-type-gongcheng.png"
+                                         style="width: 20px;height: 20px"/>
+                                    <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('工程')">工程类</a>
+                                </div>
+                                <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                    <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
+                                    <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('自研')">自研类</a>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <p>项目介绍</p>
+                    <textarea class="form-control fix-textarea" role="textbox" placeholder="项目介绍"
+                              ng-model="MainCtrl.thisProjectInfo.about"></textarea>
+                </div>
+                <a class="project-info-main-menu-addmember" ng-click="MainCtrl.submitProjectInfo()">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    &nbsp提交修改...
+                </a>
+                <a class="project-info-main-menu-addmember" ng-click="MainCtrl.cancelProjectInfo()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    &nbsp取消修改...
+                </a>
+            </div>
+        </div>
+        <hr class="project-info-main-menu-header-divider"/>
+    </div>
+    <div>
+        <p class="project-info-main-menu-active">
+            <span class="glyphicon glyphicon-list"></span>
+            &nbsp活动
+        </p>
+    </div>
+</div>
+<!---->
 
-    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
-    <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+<!--项目组成员列表 start-->
+<div>
 
-    <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
+</div>
+<!--项目组成员列表 end-->
+
+<!--成员状态模态框 start-->
+<div class="modal fade" id="member-status-modal">
+    <div class="modal-dialog member-status-dialog">
+        <!-- 标题 start-->
+        <div class="modal-header dialog-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <div class="member-status-modal-img">
+                <span class="member-status-modal-img-initials">{{MainCtrl.showedMember.name.substring(MainCtrl.showedMember.name.length-1, MainCtrl.showedMember.name.length)}}</span>
+            </div>
+            <span class="member-status-modal-img-initials-name">{{MainCtrl.showedMember.name}}</span>
+            <span class="member-status-modal-img-initials-account">@{{MainCtrl.showedMember.account}}</span>
+        </div>
+        <!-- 标题 end-->
+        <!--内容-->
+        <div class="modal-body dialog-body">
+            <div style="height: 200px;">
+                <p class="project-info-main-menu-active" style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;">
+                    <span class="glyphicon glyphicon-list"></span>
+                    &nbsp更改权限
+                </p>
+                <ul class="member-status-modal-authority-item-list">
+                    <li>
+                        <a ng-click="MainCtrl.setShowedMemberAuthority(true)">
+                            管理员
+                            <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.showedMember.isReviewer === true"></span>
+                            <p class="sub-name">
+                                可以查看并审核已提交的工作记录、移除成员和修改项目设置。
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="MainCtrl.setShowedMemberAuthority(false)">
+                            正常
+                            <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.showedMember.isReviewer !== true"></span>
+                            <p class="sub-name">
+                                可以提交工作记录并查看编辑属于自己的工作记录。
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a class="project-info-main-menu-editbtn" style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;"
+            ng-click="MainCtrl.rmShowedMember()" ng-class="{'normal': MainCtrl.descriptionForRmBtn === '从项目组移除', 'alert': MainCtrl.descriptionForRmBtn !== '从项目组移除'}">
+                <span class="glyphicon glyphicon-ban-circle"></span>
+                &nbsp{{MainCtrl.descriptionForRmBtn}}
+            </a>
+        </div>
+    </div>
+</div>
+<!--成员状态模态框 end-->
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+<script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+
+<script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
 </body>
 
 </html>
