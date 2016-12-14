@@ -153,7 +153,7 @@
             left join UserInfo u on w.UserID = u.Account \
             left join ProjectInfoConfig p on w.ProjectID = p.Code \
             left join UserInfo x on w.CheckedMan = x.Account;\
-        "
+        ";
 
         req.query(strSQL).then(function (recordset) {
             /*recordset.forEach(function (item) {

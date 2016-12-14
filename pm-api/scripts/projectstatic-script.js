@@ -97,6 +97,7 @@
         var projectList9 = [];
         var projectList10 = [];
         var projectList11 = [];
+        var projectList12 = [];
 
         data.forEach(function (item) {
             projectList1.push(item);
@@ -110,6 +111,7 @@
             projectList9.push(item);
             projectList10.push(item);
             projectList11.push(item);
+            projectList12.push(item);
         });
 
         _projectStaticByMonthMember(projectList1, '201601');
@@ -123,6 +125,7 @@
         _projectStaticByMonthMember(projectList9, '201609');
         _projectStaticByMonthMember(projectList10, '2016010');
         _projectStaticByMonthMember(projectList11, '2016011');
+        _projectStaticByMonthMember(projectList12, '2016012');
     });
 
     /**
