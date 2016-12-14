@@ -24,12 +24,6 @@
         self.openTheProject = _openTheProject;
 
 
-        /*$rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-
-            _init();
-
-        });*/
-
         function _init() {
 
             if (window.location.hash === '#/project') {
@@ -61,12 +55,13 @@
                         project.unread = false;
                         project.isStarred = false;
                         project.reviewers = item.reviewers;
-                        for (var i = 0; i < item.reviewers.length; i++) {
-                            if (item.reviewers[i].account === self.account) {
-                                self.projectList.push(project);
-                                break;
-                            }
-                        }
+                        // for (var i = 0; i < item.reviewers.length; i++) {
+                        //     if (item.reviewers[i].account === self.account) {
+                        //         self.projectList.push(project);
+                        //         break;
+                        //     }
+                        // }
+                        self.projectList.push(project);
                     });
                     //获取星标项目
                     _getStarProjectList();
