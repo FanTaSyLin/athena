@@ -26,7 +26,7 @@
 
         function _init() {
 
-            if (window.location.hash === '#/project') {
+            if (window.location.hash === '#/project' || window.location.hash === "#/") {
 
                 //alert('ProjectListController');
 

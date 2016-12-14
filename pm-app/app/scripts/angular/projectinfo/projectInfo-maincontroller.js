@@ -17,6 +17,7 @@
         var self = this;
         var myStar = [];
         var projectID = '';
+        var account = '';
         var rmShowedMemberClickCount = 1; //用来记录移除成员时的点击次数
         var ctxByMember_Bar = angular.element(document.getElementById('Chart-ByMember-bar'));
         var ctxByMember_Pie = angular.element(document.getElementById('Chart-ByMember-pie'));
@@ -37,6 +38,7 @@
         self.isShowMenu = false;
         self.showedMember = {};
         self.descriptionForRmBtn = '从项目组移除';
+        self.iamManager = false;
 
         self.init = _init;
         self.starred = _starred;
@@ -104,7 +106,7 @@
                 self.showedMember[p] = member[p];
             }*/
             self.showedMember = member;
-            memberStatusModal.modal({backdrop: 'static', keyboard: false});
+            memberStatusModal.modal({ backdrop: 'static', keyboard: false });
         }
 
         /**
@@ -206,6 +208,9 @@
             //从cookies中读取mystar
             myStar = $cookies.getObject('mystar-project');
 
+            //从cookies中获取账号
+            account = $cookies.get('account');
+
             //判断该项目是否为加星项目
             self.isStarred = _checkIsStarred(projectID);
 
@@ -227,6 +232,15 @@
                             }
                         }
                     }
+
+                    /**
+                     * 判断是否为项目经理 (创建者为项目经理) 
+                     * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建
+                     */
+                    if (account === self.thisProject.authorID) {
+                        self.iamManager = true;
+                    }
+
                 }
             }, function (err) {
 
@@ -487,7 +501,7 @@
             }
             var expireTime = new Date();
             expireTime.setDate(expireTime.getDate() + 7000);
-            $cookies.putObject('mystar-project', myStar, {'expires': expireTime});
+            $cookies.putObject('mystar-project', myStar, { 'expires': expireTime });
         }
     }
 

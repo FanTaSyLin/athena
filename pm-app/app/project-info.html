@@ -30,7 +30,7 @@
 </div>
 
 <!--项目统计区 start-->
-<div class="panel-group" id="accordion" role="tab">
+<div class="panel-group" id="accordion" role="tab" ng-show="MainCtrl.iamManager===true">
     <div class="chart-title">
         <a class="button button-glow button-border button-rounded button-primary collapsed" data-toggle="collapse"
            data-parent="#accordion"
@@ -67,7 +67,7 @@
         </div>
     </div>
 </div>
-<div>
+<div ng-show="MainCtrl.iamManager===true">
     <div class="col-md-6">
         <canvas id='Chart-ByMember-bar' height="2" width="4" class="chart-area"></canvas>
     </div>
