@@ -109,8 +109,8 @@
             type: 'New',
             logTime: new Date(),
             msg: '导入了本条记录',
-            authorID: 'FanTaSyLin',
-            authorName: '范霖'
+            authorID: 'System',
+            authorName: '系统'
         });
 
         request({
