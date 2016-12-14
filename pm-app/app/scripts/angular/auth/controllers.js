@@ -56,9 +56,16 @@
             password: ''
         };
 
-        self.login = login;
+        self.login = _login;
+        self.loginByKey = _loginByKey;
 
-        function login(credentials) {
+        function _loginByKey($event, credentials) {
+            if ($event.keyCode === 13) {
+                _login(credentials);
+            }
+        }
+
+        function _login(credentials) {
             AuthService.login(credentials, function (data, status, headers, config) {
                 var expireTime = new Date();
                 expireTime.setDate(expireTime.getDate() + 7);
