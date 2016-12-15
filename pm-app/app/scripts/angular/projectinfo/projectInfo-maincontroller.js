@@ -61,7 +61,7 @@
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
             _selectMonthRange();
-        })
+        });
 
 
         /**
@@ -75,6 +75,8 @@
             } else if (rmShowedMemberClickCount % 2 === 1) {
                 self.descriptionForRmBtn = '从项目组移除';
             }
+
+            
         }
 
         /**
