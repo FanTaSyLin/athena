@@ -15,14 +15,14 @@ var ProjectSchema = new Schema({
     authorName: {type: String}, /*创建者姓名 保留*/
     type: {type: String}, /*项目类型 统计*/
     about: {type: String}, /*项目简介 显示*/
-    members: [{
+    members: [Schema({
         account: {type: String}, /*成员账号 查询*/
         name: {type: String} /*成员姓名 显示*/
-    }],
-    reviewers: [{
+    }, {_id: false})],
+    reviewers: [Schema({
         account: {type: String}, /*成员账号 查询*/
         name: {type: String} /*成员姓名 显示*/
-    }],
+    }, {_id: false})],
     isClosed: {type: Boolean} /*是否已关闭*/
 });
 
