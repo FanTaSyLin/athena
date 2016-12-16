@@ -55,7 +55,7 @@ module.exports = function (server, BASEPATH) {
      * POST /project/项目ID/项目成员账号/权限标识
      */
     server.post({
-        path: BASEPATH + '/project/:projectid/:memberaccount/:authority'
+        path: BASEPATH + '/project/setauthority/:projectid'
     }, _setMemberAuthority);
 
     /**
@@ -64,15 +64,125 @@ module.exports = function (server, BASEPATH) {
     server.get({
         path: BASEPATH + '/project/static'
     }, _getProjectStatic);
+
+    /**
+     * 添加一个项目成员
+     */
+    server.post({
+        path: BASEPATH + '/project/addmember/:projectid'
+    }, _addMemberToProject);
+
+    /**
+     * 移除一个项目成员
+     */
+    server.post({
+        path: BASEPATH + '/project/rmmember/:projectid'
+    }, _rmMemberToProject);
+
+
 };
 
+function _rmMemberToProject(req, res, next) {
+    var projectID = req.params.projectid;
+    var member = req.body;
+
+    ProjectSchema
+        .where({
+            _id: projectID
+        })
+        .update({
+            $pull: {
+                members: {
+                    account: member.account
+                },
+                reviewers: {
+                    account: member.account
+                }
+            }
+        })
+        .exec(function (err) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            } else {
+                res.end();
+            }
+        });
+
+}
+
+function _addMemberToProject(req, res, next) {
+    var projectID = req.params.projectid;
+    var member = req.body;
+
+    ProjectSchema
+        .where({
+            _id: projectID
+        })
+        .update({
+            $addToSet: {
+                members: {
+                    account: member.account,
+                    name: member.name
+                }
+            }
+        })
+        .exec(function (err) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            } else {
+                res.end();
+            }
+        });
+}
 
 function _setMemberAuthority(req, res, next) {
     var projectID = req.params.projectid;
-    var memberAccout = req.params.memberaccount;
-    var authority = req.params.authority;
+    var member = req.body;
+    var authority = member.authority;
 
-    /*ProjectSchema.update({})*/
+    ProjectSchema
+        .find({
+            "_id": projectID,
+            "members.account": member.account
+        })
+        .exec(function (err, doc) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            } else {
+                if (doc.length > 0) {
+
+                    var tmp = ProjectSchema.where({
+                        _id: projectID
+                    });
+
+                    if (authority === "reviewer") {
+                        tmp.update({                            
+                            $addToSet: {
+                                reviewers: {
+                                    account: member.account,
+                                    name: member.name
+                                }
+                            }
+                        });
+                    } else if (authority === "normal") {
+                        tmp.update({
+                            $pull: {
+                                reviewers: {
+                                    account: member.account
+                                }
+                            }
+                        });
+                    }
+                    tmp.exec(function (err) {
+                        if (err) {
+                            return next(new DBOptionError(415, err));
+                        } else {
+                            res.end();
+                        }
+                    });
+                }
+            }
+        });
 }
 
 function getList(req, res, next) {
