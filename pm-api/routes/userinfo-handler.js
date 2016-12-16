@@ -62,7 +62,7 @@ function getEmployee(req, res, next) {
         var employees = [];
 
         if (!docs) {
-            res.end(JSON.stringify(employee))
+            res.end(JSON.stringify(employee));
         } else {
             docs.forEach(function (doc) {
                 employee = {};
