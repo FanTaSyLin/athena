@@ -2,7 +2,6 @@
  * Created by FanTaSyLin on 2016/11/4.
  */
 
-
 (function () {
 
     'use strict';
@@ -24,6 +23,7 @@
         var dateSelectArea = angular.element(document.getElementById('dateSelectArea'));
         var editProjectInfo = angular.element(document.getElementById('edit-project-info'));
         var memberStatusModal = angular.element(document.getElementById('member-status-modal'));
+        var memberAddModal = angular.element(document.getElementById('member-add-modal'));
 
         self.isStarred = false;
         self.thisProject = {};
@@ -39,6 +39,8 @@
         self.showedMember = {};
         self.descriptionForRmBtn = '从项目组移除';
         self.iamManager = false;
+        self.searchCondition = '';
+        self.foundMembers = [];
 
         self.init = _init;
         self.starred = _starred;
@@ -57,6 +59,9 @@
         self.showMemberStatus = _showMemberStatus;
         self.setShowedMemberAuthority = _setShowedMemberAuthority;
         self.rmShowedMember = _rmShowedMember;
+        self.openAddMemberModal = _openAddMemberModal;
+        self.searchMembers = _searchMembers;
+        self.addMemberToProject = _addMemberToProject;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
@@ -65,10 +70,56 @@
 
 
         /**
+         * 添加一个项目成员
+         * @param {Object} member 成员
+         */
+        function _addMemberToProject(member) {
+            ProjectInfoServices.addMemberToProject(projectID, member, function (res) {
+                //成功后 添加到成员列表
+                self.thisProject.members.push(member);
+                //关闭 模态框
+                memberAddModal.modal('hide');
+            }, function (res) {
+                //失败 最好能有原因提示
+                alert(res);
+            });
+        }
+
+        /**
+         * 查询成员
+         * @private 
+         */
+        function _searchMembers($event, condition) {
+            if ($event.keyCode !== 13) {
+                return;
+            }
+            ProjectInfoServices.searchMembers(condition, function (res) {
+                self.foundMembers.splice(0, self.foundMembers.length);
+                res.forEach(function (member) {
+                    self.foundMembers.push(member);
+                });
+            }, function (res) {
+
+            });
+        }
+
+        /**
+         * 打开添加项目成员的模态框
+         * @private
+         */
+        function _openAddMemberModal() {
+            //清除上一次的操作痕迹
+            self.searchCondition = "";
+            self.foundMembers.splice(0, self.foundMembers.length);
+
+            memberAddModal.modal({ backdrop: 'static', keyboard: false });
+        }
+
+        /**
          * 移除显示在模态框中的项目成员
          * @private
          */
-        function _rmShowedMember() {
+        function _rmShowedMember(member) {
             rmShowedMemberClickCount++;
             if (rmShowedMemberClickCount % 2 === 0) {
                 self.descriptionForRmBtn = '再次点击确认移除';
@@ -76,26 +127,40 @@
                 self.descriptionForRmBtn = '从项目组移除';
             }
 
-            
+            if (rmShowedMemberClickCount % 2 === 1) {
+                ProjectInfoServices.rmMemberToProject(projectID, member, function (res) {
+                    //成功了需要从 成员列表中移除
+                    var index = self.thisProject.members.indexOf(member);
+                    self.thisProject.members.splice(index, 1);
+                    //关闭 模态框
+                    memberStatusModal.modal('hide');
+                }, function (res) {
+                    //失败了 最好有个提示
+                    alert('Faild');
+                });
+            }
         }
 
         /**
          * 设置显示在模态框中的项目成员的权限
-         * @param isReviewer
+         * @param {Object} member 成员
+         * @param {String} member.account 
+         * @param {String} member.name 
+         * @param {String} authority 权限 "reviewer" or "normal"
          * @private
          */
-        function _setShowedMemberAuthority(isReviewer) {
-            if (isReviewer === true) {
-                ProjectInfoServices.setProjectMemberAuthority({
-                    projectID: self.thisProjectInfo._id,
-                    member: self.showedMember,
-                    isReviewer: isReviewer
-                }, function (res) {
-                    self.showedMember.isReviewer = isReviewer;
-                }, function (res) {
+        function _setShowedMemberAuthority(authority, member) {
+            ProjectInfoServices.setProjectMemberAuthority(projectID, authority, member, function (res) {
+                if (authority === 'reviewer') {
+                    self.showedMember.isReviewer = true;
+                } else if (authority === 'normal') {
+                    self.showedMember.isReviewer = false;
+                }
+                //关闭 模态框
+                memberStatusModal.modal('hide');
+            }, function (res) {
 
-                });
-            }
+            });
         }
 
         /**

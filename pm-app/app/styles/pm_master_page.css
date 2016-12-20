@@ -1087,3 +1087,52 @@ a:hover, a:focus, a:active {
 .alert:hover {
     color: #ec474e;
 }
+
+.member-add-header-title {
+    width: 40px;
+    margin: 5px auto 5px auto;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #8c8c8c;
+}
+
+.member-add-header-close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.member-add-dialog-subtext {
+    clear: both;
+    color: #8c8c8c;
+    display: block;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 20px;
+    margin-top: 10px;
+}
+
+.found-member {
+    position: relative;
+    padding-bottom: 8px; 
+    margin: 0 auto; 
+    width: 300px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.found-member:hover {
+    background-color: #4c9ed9;
+    color: #ffffff;
+}
+
+.found-member:hover .add-member-flg {
+    color: #ffffff;
+}
+
+.found-member .add-member-flg {
+    position: absolute;
+    right: 5px;
+    top:10px;
+    color: rgba(0, 0, 0, 0);
+} 

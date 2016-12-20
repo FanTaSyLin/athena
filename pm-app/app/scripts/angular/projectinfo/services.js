@@ -18,20 +18,83 @@
         var service = {
             getProjectBaseInfo: _getProjectBaseInfo,
             getProjectStaticInfo: _getProjectStaticInfo,
-            setProjectMemberAuthority: _setProjectMemberAuthority
+            setProjectMemberAuthority: _setProjectMemberAuthority,
+            searchMembers: _searchMembers,
+            addMemberToProject: _addMemberToProject,
+            rmMemberToProject: _rmMemberToProject
         };
 
         return service;
 
         /**
-         * 设置项目组成员的权限
-         * @param {Object} opt opt.projectID, opt.member, opt.isReviewer
-         * @param successFn
-         * @param errorFn
-         * @private
+         * 移除一个项目成员
+         * @param {String} projectID 项目ID
+         * @param {Object} member 成员
+         * @param {String} member.account 成员账号
+         * @param {String} member.name 成员姓名
+         * @param {Function} successFn 
+         * @param {Function} errorFn
+         * @private 
          */
-        function _setProjectMemberAuthority(opt, successFn, errorFn) {
-            $http.post(BASEPATH + '/project', projectModule).success(successFn).error(errorFn);
+        function _rmMemberToProject(projectID, member, successFn, errorFn) {
+            $http
+                .post(BASEPATH + '/project/rmmember/' + projectID, member)
+                .success(successFn)
+                .error(errorFn);
+        }
+
+        /**
+         * 添加一个项目成员
+         * @param {String} projectID 项目ID
+         * @param {Object} member 成员
+         * @param {String} member.account 成员账号
+         * @param {String} member.name 成员姓名
+         * @param {Function} successFn 
+         * @param {Function} errorFn
+         * @private 
+         */
+        function _addMemberToProject(projectID, member, successFn, errorFn) {
+            $http
+                .post(BASEPATH + '/project/addmember/' + projectID, member)
+                .success(successFn)
+                .error(errorFn);            
+        }
+
+        /**
+         * 查询成员
+         * @param {String} condition 查询条件
+         * @param {Function} successFn 
+         * @param {Function} errorFn
+         * @private 
+         */
+        function _searchMembers(condition, successFn, errorFn) {
+            var encodeStr = encodeURIComponent(condition);
+            $http({
+                url: BASEPATH + '/employee?account=' + condition + '&name=' + encodeStr,
+                method: 'GET'
+            }).success(successFn).error(errorFn);
+        }
+
+        /**
+         * 设置项目组成员的权限
+         * @param {String} projectID 项目ID
+         * @param {String} authority 成员权限
+         * @param {Object} member 成员
+         * @param {String} member.account 成员账号
+         * @param {String} member.name 成员姓名
+         * @param {Function} successFn 
+         * @param {Function} errorFn
+         * @private 
+         */
+        function _setProjectMemberAuthority(projectID, authority, member, successFn, errorFn) {
+            var o = {};
+            o.account = member.account;
+            o.name = member.name;
+            o.authority = authority;
+            $http
+                .post(BASEPATH + '/project/setauthority/' + projectID, o)
+                .success(successFn)
+                .error(errorFn);
         }
 
         /**

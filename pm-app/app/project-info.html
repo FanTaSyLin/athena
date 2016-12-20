@@ -102,7 +102,7 @@
                 </li>
             </ul>
         </div>
-        <a class="project-info-main-menu-addmember">
+        <a class="project-info-main-menu-addmember" ng-click="MainCtrl.openAddMemberModal()">
             <span class="glyphicon glyphicon-user"></span>
             &nbsp添加成员...
         </a>
@@ -198,7 +198,7 @@
         </div>
         <!-- 标题 end-->
         <!--内容-->
-        <div class="modal-body dialog-body">
+        <div class="modal-body dialog-body" style="border-radius: 5px 5px 5px 5px; box-shadow: 3px 1px 2px 0px #666">
             <div style="height: 200px;">
                 <p class="project-info-main-menu-active" style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;">
                     <span class="glyphicon glyphicon-list"></span>
@@ -206,7 +206,7 @@
                 </p>
                 <ul class="member-status-modal-authority-item-list">
                     <li>
-                        <a ng-click="MainCtrl.setShowedMemberAuthority(true)">
+                        <a ng-click="MainCtrl.setShowedMemberAuthority('reviewer', MainCtrl.showedMember)">
                             管理员
                             <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.showedMember.isReviewer === true"></span>
                             <p class="sub-name">
@@ -215,7 +215,7 @@
                         </a>
                     </li>
                     <li>
-                        <a ng-click="MainCtrl.setShowedMemberAuthority(false)">
+                        <a ng-click="MainCtrl.setShowedMemberAuthority('normal', MainCtrl.showedMember)">
                             正常
                             <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.showedMember.isReviewer !== true"></span>
                             <p class="sub-name">
@@ -226,7 +226,7 @@
                 </ul>
             </div>
             <a class="project-info-main-menu-editbtn" style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;"
-            ng-click="MainCtrl.rmShowedMember()" ng-class="{'normal': MainCtrl.descriptionForRmBtn === '从项目组移除', 'alert': MainCtrl.descriptionForRmBtn !== '从项目组移除'}">
+                ng-click="MainCtrl.rmShowedMember(MainCtrl.showedMember)" ng-class="{'normal': MainCtrl.descriptionForRmBtn === '从项目组移除', 'alert': MainCtrl.descriptionForRmBtn !== '从项目组移除'}">
                 <span class="glyphicon glyphicon-ban-circle"></span>
                 &nbsp{{MainCtrl.descriptionForRmBtn}}
             </a>
@@ -234,6 +234,38 @@
     </div>
 </div>
 <!--成员状态模态框 end-->
+
+<!--添加成员模态框 start-->
+<div class="modal fade" id="member-add-modal">
+    <div class="modal-dialog member-status-dialog">        
+        <!--内容 start-->
+        <div class="modal-body dialog-body member-add-body" style="padding-top: 10px;padding-bottom: 10px;">
+            <p class="member-add-header-title" style="margin-top: 0px;margin-bottom: 0px;">成员</p>
+            <button type="button" class="close member-add-header-close" data-dismiss="modal" aria-hidden="true">×</button>
+            <hr class="project-info-main-menu-header-divider" style="color: #393d40;"/>
+            <div class="form-field">
+                <input class="form-control" required="" type="text" placeholder="请输入成员姓名，确认按回车" ng-model="MainCtrl.searchCondition"
+                ng-keydown="MainCtrl.searchMembers($event, MainCtrl.searchCondition)"/>
+                <p class="member-add-dialog-subtext" ng-show="MainCtrl.foundMembers.length===0">在PMSoft中通过搜寻姓名、账号来寻找其他人，或者键入一个电子邮箱地址来邀请新用户。</p>
+                <div ng-show="MainCtrl.foundMembers.length>0">
+                   <p style="margin-top: 10px;margin-left: 5px; margin-bottom: 0px; font-size: 1.1em">点击添加</p>
+                   <hr class="project-info-main-menu-header-divider" style="color: #393d40; margin-top: 3px"/>
+                   <div ng-show="true" class="form-field"
+                        style="max-height: 200px; overflow: auto;">
+                        <div ng-repeat="member in MainCtrl.foundMembers" class="found-member" ng-click="MainCtrl.addMemberToProject(member)">
+                            <img style="width: 25px;height: 25px; border-radius: 5px; margin-left: 5px;"
+                                src="/public/12312312.jpg"/>
+                            <label style="font-family: 'Microsoft Yahei'; font-size: 1em; font-weight: 500; margin-top: 7px">{{member.name}}</label>
+                            <label style="font-family: 'Microsoft Yahei'; font-size: 1em; font-weight: 500; margin-top: 7px">@{{member.account}}</label> 
+                            <span class="glyphicon glyphicon-arrow-right add-member-flg"></span> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--内容 end-->
+</div>
+<!--添加成员模态框 end-->
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
