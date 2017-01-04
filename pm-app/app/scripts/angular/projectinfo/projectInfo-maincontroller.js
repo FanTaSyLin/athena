@@ -308,6 +308,10 @@
                         self.iamManager = true;
                     }
 
+                    /**
+                     * 修改页标题 = 项目中文名
+                     */
+                    document.title = self.thisProject.cnName;
                 }
             }, function (err) {
 
