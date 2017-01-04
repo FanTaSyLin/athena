@@ -71,6 +71,10 @@ require('./routes/projects-handler.js')(server, BASEPATH);
  */
 require('./routes/jobrecode-handler.js')(server, BASEPATH);
 
+/**
+ * 统计相关API
+ */
+require('./routes/static-handler.js')(server, BASEPATH);
 
 server.listen(HTTP_PORT, function () {
     debug('%s listening at %s ', server.name, server.url);
