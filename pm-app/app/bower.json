@@ -13,7 +13,8 @@
     "summernote": "^0.8.2",
     "seiyria-bootstrap-slider": "^9.2.0",
     "chart.js": "^2.3.0",
-    "fullcalendar": "^3.1.0"
+    "fullcalendar": "^3.1.0",
+    "percircle": "^1.0.17"
   },
   "devDependencies": {},
   "homepage": "https://github.com/FanTaSyLin/athena",

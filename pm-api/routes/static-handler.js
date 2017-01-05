@@ -22,7 +22,6 @@ function _personalRealWorkDoneStatic(req, res, next) {
     var account = req.params.account;
     var idList = projectIDs.split(' ');
     var conditions = {};
-    conditions["staticByMember.account"] = account;
     if (idList.length > 0) {
         conditions.projectID = {
             $in: idList
@@ -40,23 +39,40 @@ function _personalRealWorkDoneStatic(req, res, next) {
                 return next(err);
             }
             var list = [];
-            var staticObj = {
-                projectID: '',
-                totalWorkDone: 0,
-                myWorkDone: 0
-            };
             doc.forEach(function (item) {
+                var isExist = false;
                 var staticByMemberList = item.staticByMember;
-                staticObj.projectID = item.projectID;
-                for (var i = 0; i < staticByMemberList.length; i++) {
-                    if (staticByMemberList[i].account === account) {
-                        staticObj.myWorkDone += staticByMemberList[i].duration_Real;
-                        staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
-                    } else {
-                        staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
+                for (var k = 0; k < list.length; k++) {
+                    if (item.projectID === list[k].projectID) {
+                        for (var i = 0; i < staticByMemberList.length; i++) {
+                            if (staticByMemberList[i].account === account) {
+                                list[k].myWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
+                                list[k].totalWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
+                            } else {
+                                list[k].totalWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
+                            }
+                        }
+                        isExist = true;
+                        break;
                     }
                 }
-                list.push(staticObj);
+                if (!isExist) {
+                    var staticObj = {
+                        projectID: '',
+                        totalWorkDone: 0,
+                        myWorkDone: 0
+                    };
+                    staticObj.projectID = item.projectID;
+                    for (var i = 0; i < staticByMemberList.length; i++) {
+                        if (staticByMemberList[i].account === account) {
+                            staticObj.myWorkDone += staticByMemberList[i].duration_Real;
+                            staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
+                        } else {
+                            staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
+                        }
+                    }
+                    list.push(staticObj);
+                }
             });
             data.status = 'success';
             data.doc = list;
