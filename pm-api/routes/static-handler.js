@@ -46,10 +46,10 @@ function _personalRealWorkDoneStatic(req, res, next) {
                     if (item.projectID === list[k].projectID) {
                         for (var i = 0; i < staticByMemberList.length; i++) {
                             if (staticByMemberList[i].account === account) {
-                                list[k].myWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
-                                list[k].totalWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
+                                list[k].myWorkDone += Number(staticByMemberList[i].duration_Real);
+                                list[k].totalWorkDone += Number(staticByMemberList[i].duration_Real);
                             } else {
-                                list[k].totalWorkDone += staticByMemberList[i].duration_Real.toFixed(1);
+                                list[k].totalWorkDone += Number(staticByMemberList[i].duration_Real);
                             }
                         }
                         isExist = true;
@@ -65,10 +65,10 @@ function _personalRealWorkDoneStatic(req, res, next) {
                     staticObj.projectID = item.projectID;
                     for (var i = 0; i < staticByMemberList.length; i++) {
                         if (staticByMemberList[i].account === account) {
-                            staticObj.myWorkDone += staticByMemberList[i].duration_Real;
-                            staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
+                            staticObj.myWorkDone += Number(staticByMemberList[i].duration_Real);
+                            staticObj.totalWorkDone += Number(staticByMemberList[i].duration_Real);
                         } else {
-                            staticObj.totalWorkDone += staticByMemberList[i].duration_Real;
+                            staticObj.totalWorkDone += Number(staticByMemberList[i].duration_Real);
                         }
                     }
                     list.push(staticObj);
