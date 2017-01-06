@@ -28,33 +28,37 @@
         self.init = _init;
 
         function _init() {
-            var TIMESPAN = 30;
-            var condition = {};
-            var endDateStr = moment.utc().format('YYYY-MM-DD');
-            var startDateStr = moment.utc().add(-TIMESPAN, "d").format('YYYY-MM-DD');
-            condition.username = self.account;
-            condition.startDate = startDateStr;
-            condition.endDate = endDateStr;
 
-            //$http 存在一个BUG 就是当返回值为{}时 不触发success的函数。
-            //因此，为了保证图表的正常显示，在获取数据前就要生成图表。
-            //var myLine = _lineInit(startDateStr, 30);
+            if (window.location.hash === '#/project' || window.location.hash === "#/") {
 
-            //获取近期工作记录
-            PMSoftServices.getJobList(condition, function (data) {
+                var TIMESPAN = 30;
+                var condition = {};
+                var endDateStr = moment.utc().format('YYYY-MM-DD');
+                var startDateStr = moment.utc().add(-TIMESPAN, "d").format('YYYY-MM-DD');
+                condition.username = self.account;
+                condition.startDate = startDateStr;
+                condition.endDate = endDateStr;
 
-                //TODO: 对获取到的数据进行处理
-                //TODO: 生成图表数据
-                var myLine = _lineInit(startDateStr, TIMESPAN, data.doc);
-                var myPie = _pieInit(data.doc)
-            }, function (data) {
+                //$http 存在一个BUG 就是当返回值为{}时 不触发success的函数。
+                //因此，为了保证图表的正常显示，在获取数据前就要生成图表。
+                //var myLine = _lineInit(startDateStr, 30);
 
-            });
+                //获取近期工作记录
+                PMSoftServices.getJobList(condition, function (data) {
 
-            /**
-             * 获取项目统计信息（包含：个人工作量在全项目中的占比，以及个人在项目中的总工作量）
-             */
-            _getProjectStatic(self.account);
+                    //TODO: 对获取到的数据进行处理
+                    //TODO: 生成图表数据
+                    var myLine = _lineInit(startDateStr, TIMESPAN, data.doc);
+                    var myPie = _pieInit(data.doc)
+                }, function (data) {
+
+                });
+
+                /**
+                 * 获取项目统计信息（包含：个人工作量在全项目中的占比，以及个人在项目中的总工作量）
+                 */
+                _getProjectStatic(self.account);
+            }
 
         }
 
