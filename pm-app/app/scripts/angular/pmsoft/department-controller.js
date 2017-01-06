@@ -19,6 +19,9 @@
 
         function _initData() {
             if (window.location.hash === '#/department') {
+                /**
+                 * @todo 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
+                 */
 
             }
         }
