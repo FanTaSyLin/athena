@@ -325,7 +325,7 @@
 
             PMSoftServices.getJobList(condition, function (data, status, headers, config) {
 
-                var result = data;
+                var result = data.doc;
 
                 self.recodedJobs = [];
                 try {
