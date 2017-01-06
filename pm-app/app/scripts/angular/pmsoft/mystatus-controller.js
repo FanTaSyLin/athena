@@ -15,7 +15,7 @@
 
         var self = this;
         var ctxByDay = angular.element(document.getElementById('Chart-ByDay'));
-        /*var ctxByPj = angular.element(document.getElementById('Chart-ByPj'));*/
+        var ctxByPj = angular.element(document.getElementById('Chart-ByPj'));
 
         self.account = $cookies.get('account');
 
@@ -46,6 +46,7 @@
                 //TODO: 对获取到的数据进行处理
                 //TODO: 生成图表数据
                 var myLine = _lineInit(startDateStr, TIMESPAN, data.doc);
+                var myPie = _pieInit(data.doc)
             }, function (data) {
 
             });
@@ -131,7 +132,7 @@
          *
          * @param {string} startDate
          * @param {Number} Num
-         * @param {Number[]} datas
+         * @param {Object[]} datas
          * @returns {{}}
          * @private
          */
@@ -186,6 +187,53 @@
                 }
             }
             return new Chart(ctxByDay, config);
+        }
+
+        /**
+         * @param {Object[]} datas
+         * @returns {{}}
+         * @private
+         */
+        function _pieInit(datas) {
+            var datalist = [];
+            var labelList = [];
+            var total = 0;
+            if (datas === undefined || datas.length < 1) {
+                labelList.push('近期无工作记录');
+                datalist.push(100);
+            } else {
+                for (var i = 0; i < datas.length; i++) {
+                    total += datas[i].duration;
+                    labelList.push(datas[i].projectCName);
+                    datalist.push(datas[i].duration);
+                }
+
+                for (var i = 0; i < datalist.length; i++) {
+                    datalist[i] = Number((datalist[i] / total) * 100).toFixed(0);
+                }
+            }
+
+            var conifg = {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: datalist,
+                        backgroundColor: [
+                            "#F7464A",
+                            "#46BFBD",
+                            "#FDB45C",
+                            "#949FB1",
+                            "#4D5360",
+                        ],
+                    }],
+                    labels: labelList
+                },
+                options: {
+                    responsive: true,
+
+                }
+            };
+            return new Chart(ctxByPj, conifg);
         }
 
     }
