@@ -196,11 +196,12 @@
                 return next(new DBOptionError(415, err));
             }
 
-            if (doc.length < 1) {
-                res.end(JSON.stringify([new JobLogSchema()]));
-            }
+            var data = {};
+            data.status = "error";
+            data.error = null;
+            data.doc = doc;
 
-            res.end(JSON.stringify(doc));
+            res.end(JSON.stringify(data));
 
         });
 
