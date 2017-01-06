@@ -29,7 +29,7 @@
 
         function _init() {
 
-            if (window.location.hash === '#/project' || window.location.hash === "#/") {
+            if (window.location.hash === '#/mystatus') {
 
                 var TIMESPAN = 30;
                 var condition = {};
