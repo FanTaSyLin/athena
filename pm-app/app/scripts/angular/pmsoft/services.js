@@ -28,6 +28,7 @@
             cleanUnauditedJobList_Total: _cleanUnauditedJobList_Total, /*清空unauditedJobList_Total*/
             recodeCheck: _recodeCheck, /*审核工作记录*/
             recodeTurnBack: _recodeTurnBack, /*退回工作记录*/
+            getProjectStaticByAccount: _getProjectStaticByAccount,
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
             recodedJobLogList: [], /*已提交工作记录列表*/
@@ -76,7 +77,7 @@
         function _getJobList(condition, successFn, errorFn) {
             var conditionStr = '';
             if (condition.username) {
-                conditionStr += ('username=' + condition.username + '&');
+                conditionStr += ('memberid=' + condition.username + '&');
             }
             if (condition.projectID) {
                 conditionStr += ('projectid=' + condition.projectID + '&');
@@ -153,6 +154,23 @@
             }
             item.content = '';
             $http.post(BASEPATH + '/jobrecode/turnback', item).success(successFn).error(errorFn);
+        }
+
+        /**
+         * @description 获取该账户参加的所有项目的工作量统计结果 （包括：该项目的总工时，该账户在此项目中的总工时）
+         * @param {string} account
+         * @param {string[]} projectIDs
+         * @param {Function} successFn
+         * @param {Function} errorFn
+         * @private
+         */
+        function _getProjectStaticByAccount(account, projectIDs, successFn, errorFn) {
+            var projectIDsStr = " ";
+            projectIDs.forEach(function (item) {
+                projectIDsStr += item + " ";
+            });
+            var urlStr = BASEPATH + "/static/psoneral/realworkdone/" + account + "/" + projectIDsStr;
+            $http.get(urlStr).success(successFn).error(errorFn);
         }
     }
 

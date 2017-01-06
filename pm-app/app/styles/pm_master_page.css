@@ -590,9 +590,18 @@ a:hover, a:focus, a:active {
     width: 25%;
 }
 
+.boards-page-board-section-list-item.large-item {
+    width: 50%;
+    margin: 10px 0px;
+}
+
 .board-tile-details.is-badged {
     min-height: 60px;
     padding-bottom: 20px;
+}
+
+.board-tile-details.is-badged-large {
+    padding: 0 0 0 90px;
 }
 
 .board-tile-details {
@@ -616,8 +625,20 @@ a:hover, a:focus, a:active {
     cursor: pointer;
 }
 
+.board-tile.large {
+    background-color: white;
+    border-radius: 30px 3px 3px 30px;
+    color: #21abc7;
+    padding: 20px 0;
+    box-shadow: 2px 1px 1px 0px #d6d6d6;
+}
+
 .board-tile:hover, .board-tile:focus, .board-tile:active{
     color: #fff;
+}
+
+.board-tile.large:hover, .board-tile.large:focus, .board-tile.large:active{
+    color: #167385;
 }
 
 .board-tile-details-name {
@@ -1136,3 +1157,9 @@ a:hover, a:focus, a:active {
     top:10px;
     color: rgba(0, 0, 0, 0);
 } 
+
+.work-done-percent {
+    position: absolute;
+    left: -5px;
+    top: -5px;
+}
