@@ -5,10 +5,11 @@
         <input name="account" class="form-control email" required="" type="text" placeholder="账号" ng-model="SignCtrl.auth.username"/>
     </div>
     <div class="form-field">
-        <input name="password" class="form-control password" required="" type="text" placeholder="密码" ng-model="SignCtrl.auth.password"/>
+        <input name="password" class="form-control password" required="" type="password" placeholder="密码" ng-model="SignCtrl.auth.password"/>
     </div>
     <div class="form-field">
-        <input name="password" class="form-control password" required="" type="text" placeholder="确认密码" ng-model="SignCtrl.auth.password2"/>
+        <input name="password" class="form-control password" required="" type="password" placeholder="确认密码" ng-model="SignCtrl.auth.password2"
+               ng-keypress="SignCtrl.signInByKey($event, SignCtrl.auth)"/>
     </div>
     <button class="btn btn-primary anim-blue-all" type="button" ng-click="SignCtrl.signIn(SignCtrl.auth)">
         注册
