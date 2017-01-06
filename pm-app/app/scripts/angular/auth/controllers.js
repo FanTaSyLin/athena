@@ -18,9 +18,16 @@
             password2: ''
         };
 
-        self.signIn = signIn;
+        self.signIn = _signIn;
+        self.signInByKey = _signInByKey;
 
-        function signIn(auth) {
+        function _signInByKey($event, auth) {
+            if ($event.keyCode === 13) {
+                _signIn(auth);
+            }
+        }
+
+        function _signIn(auth) {
 
             if (auth.password !== auth.password2) {
                 //TODO: 提醒
@@ -34,7 +41,7 @@
                         expireTime.setDate(expireTime.getDate() + 7);
                         $cookies.put('account', data.username, {'expires': expireTime});
                         $cookies.put('token', data.token, {'expires': expireTime});
-                        window.location.href = 'http://localhost:4002/signin?username=' + data.username;
+                        window.location.href = 'signin?username=' + data.username;
 
                     }, function (data, status, headers, config) {
                         alert('err');
@@ -84,33 +91,3 @@
 
 })();
 
-
-/*
- var app = angular.module('Auth');
-
- app.controller('LoginCtrl', ['$cookies', '$scope', 'AuthService', function ($cookies, $scope, AuthService) {
-
- $scope.credentials = {
- username: '',
- password: ''
- };
-
- $scope.login = function (credentials) {
-
- AuthService.login(credentials, function (data, status, headers, config) {
-
- $cookies.put('username', data.username);
- $cookies.put('token', data.token);
-
-
- window.location.href = 'http://localhost:4002/pm-soft';
-
-
-
- }, function (data, status, headers, config) {
- alert('err');
- })
- }
-
- }]);
- */

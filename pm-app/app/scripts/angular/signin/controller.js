@@ -34,7 +34,7 @@
 
         function signIn(userInfo) {
             SignInService.userInfoSignIn(userInfo, function (data, status, header, config) {
-                window.location.href = 'http://localhost:4002/pm-soft';
+                window.location.href = 'pm-soft';
             }, function (data, status, header, config) {
                 
             });
