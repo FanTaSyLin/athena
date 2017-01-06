@@ -33,8 +33,8 @@
             //controller: 'ProjectCtrl'
         });
 
-        $routeProvider.when('/maintenance', {
-            templateUrl: 'partials/maintenance.html'
+        $routeProvider.when('/department', {
+            templateUrl: 'partials/department.html'
             //controller: 'MaintenanceCtrl'
         });
 
