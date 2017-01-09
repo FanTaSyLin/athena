@@ -21,6 +21,11 @@ module.exports = function (server, BASEPATH) {
         version: '0.0.1'
     }, getEmployee);
 
+    server.get({
+        path: BASEPATH + '/department/members',
+        version: '0.0.1'
+    }, _getDepartmentMembers)
+
 };
 
 function createUser(req, res, next) {
@@ -79,4 +84,24 @@ function getEmployee(req, res, next) {
             res.end(JSON.stringify(employees));
         }
     });
+}
+
+function _getDepartmentMembers(req, res, next) {
+    var departmentNum = req.params.departmentnum;
+    EmployeeSchema
+        .find({
+            "department": departmentNum.toString()
+        })
+        .exec(function (err, doc) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+
+            var data = {};
+            data.status = "success";
+            data.doc = doc;
+
+            res.end(JSON.stringify(data));
+            return next();
+        });
 }
