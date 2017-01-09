@@ -29,6 +29,8 @@
             recodeCheck: _recodeCheck, /*审核工作记录*/
             recodeTurnBack: _recodeTurnBack, /*退回工作记录*/
             getProjectStaticByAccount: _getProjectStaticByAccount,
+            getDepartmentMembers: _getDepartmentMembers,
+
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
             recodedJobLogList: [], /*已提交工作记录列表*/
@@ -99,7 +101,7 @@
                 var _id = '';
                 for (var i = 0; i < condition.projectList.length; i++) {
                     _id = condition.projectList[i]._id;
-                    if (i === condition.projectList.length -1) {
+                    if (i === condition.projectList.length - 1) {
                         condition_Project += _id;
                     } else {
                         condition_Project += (_id + '%20');
@@ -115,31 +117,31 @@
         }
 
         function _changeCurrentUnauditedJob(module) {
-             for (var p in module) {
-                 self.currentUnauditedJob[p] = module[p];
-             }
-             if (self.unauditedJobList_Filter.length) {
-                 for (var i = 0; i < self.unauditedJobList_Filter.length; i++) {
-                     if (self.unauditedJobList_Filter._id == module._id) {
+            for (var p in module) {
+                self.currentUnauditedJob[p] = module[p];
+            }
+            if (self.unauditedJobList_Filter.length) {
+                for (var i = 0; i < self.unauditedJobList_Filter.length; i++) {
+                    if (self.unauditedJobList_Filter._id == module._id) {
 
-                         self.currentUnauditedJobIndex = i;
-                     }
-                 }
-             }
+                        self.currentUnauditedJobIndex = i;
+                    }
+                }
+            }
         }
 
         /**
          *清空 unauditedJobList_Total 原有数据
          */
         function _cleanUnauditedJobList_Total() {
-            self.unauditedJobList_Total.splice(0,self.unauditedJobList_Total.length);
+            self.unauditedJobList_Total.splice(0, self.unauditedJobList_Total.length);
             self.currentUnauditedJobIndex = 0;
         }
 
         function _recodeCheck(body, successFn, errorFn) {
             //为了减少传输数据的大小 body中除了有用的信息外其他信息需清除
             var item = {};
-            for(var pro in body){
+            for (var pro in body) {
                 item[pro] = body[pro];
             }
             item.content = '';
@@ -149,7 +151,7 @@
         function _recodeTurnBack(body, successFn, errorFn) {
             //为了减少传输数据的大小 body中除了有用的信息外其他信息需清除
             var item = {};
-            for(var pro in body){
+            for (var pro in body) {
                 item[pro] = body[pro];
             }
             item.content = '';
@@ -170,6 +172,18 @@
                 projectIDsStr += item + " ";
             });
             var urlStr = BASEPATH + "/static/psoneral/realworkdone/" + account + "/" + projectIDsStr;
+            $http.get(urlStr).success(successFn).error(errorFn);
+        }
+
+        /**
+         * @description 根据部门编号获取部门成员信息
+         * @param departmentNum 部门编号
+         * @callback successFn
+         * @callback errorFn
+         * @private
+         */
+        function _getDepartmentMembers(departmentNum, successFn, errorFn) {
+            var urlStr = BASEPATH + "/department/members?departmentnum=" + departmentNum;
             $http.get(urlStr).success(successFn).error(errorFn);
         }
     }
