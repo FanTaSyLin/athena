@@ -39,9 +39,6 @@
                 condition.startDate = startDateStr;
                 condition.endDate = endDateStr;
 
-                //$http 存在一个BUG 就是当返回值为{}时 不触发success的函数。
-                //因此，为了保证图表的正常显示，在获取数据前就要生成图表。
-                //var myLine = _lineInit(startDateStr, 30);
 
                 //获取近期工作记录
                 PMSoftServices.getJobList(condition, function (data) {
