@@ -197,7 +197,7 @@
             }
 
             var data = {};
-            data.status = "error";
+            data.status = "success";
             data.error = null;
             data.doc = doc;
 
