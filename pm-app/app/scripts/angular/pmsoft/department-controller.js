@@ -18,8 +18,12 @@
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
 
         self.members = [];
+        self.profileNavCurrentItem = "Active";
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
+        self.profileNavIsSeleced = _profileNavIsSeleced;
+        self.selectProfileNavItem = _selectProfileNavItem;
+        self.isShowArea = _isShowArea;
 
         function _initData() {
             if (window.location.hash !== '#/department') {
@@ -196,7 +200,7 @@
                 for (var j = 0; j < datas.length; j++) {
                     var data = datas[j];
                     if (member.account === data.authorID) {
-                        if (member.activeList.indexOf(data.projectCName) < 0) {
+                        if (member.activeList.indexOf(data.projectCName) < 0 && member.activeList.length < 4) {
                             member.activeList.push(data.projectCName);
                         }
                     }
@@ -212,6 +216,18 @@
         function _openThisMemberInfo(member) {
             var url = 'pm-soft/memberstatus?account=' + member.account;
             window.open(url);
+        }
+
+        function _profileNavIsSeleced(item) {
+            return (self.profileNavCurrentItem === item);
+        }
+
+        function _selectProfileNavItem(item) {
+            self.profileNavCurrentItem = item;
+        }
+
+        function _isShowArea(item) {
+            return self.profileNavCurrentItem === item;
         }
     }
 

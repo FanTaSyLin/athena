@@ -642,7 +642,7 @@ a:hover, a:focus, a:active {
     background-color: transparent;
     border-radius: 0px 3px 3px 0px;
     padding: 20px 0;
-    height: 180px;
+    height: 150px;
     box-shadow: 2px 1px 1px 0px #d6d6d6;
 }
 
@@ -1008,7 +1008,7 @@ a:hover, a:focus, a:active {
 }
 
 .department-member-active-items > li {
-    padding-bottom: 5px;
+    padding-bottom: 2px;
 }
 
 .text-overflow {
@@ -1237,6 +1237,250 @@ a:hover, a:focus, a:active {
     left: -5px;
     top: -5px;
 }
+
+/********************************************github css********************************************/
+/*media all*/
+.user-profile-nav {
+    border-bottom: solid 1px #ddd;
+    left: 686px;
+    top: 0px;
+    position: static;
+}
+
+/*media all*/
+.top-0 {
+    top: 0px !important;
+}
+
+/*media all*/
+.underline-nav {
+    display: table;
+    height: 62px;
+}
+
+.underline-nav > a {
+    cursor: pointer;
+}
+
+/*media all*/
+.underline-nav-item.selected {
+    color: #333;
+    border-bottom-color: #c9510c;
+}
+
+/*media all*/
+.underline-nav-item {
+    display: table-cell;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 16px;
+    color: #646464;
+    vertical-align: middle;
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
+
+/*media all*/
+.mt-4 {
+    margin-top: 24px !important;
+}
+
+.mt-8 {
+    margin-top: 48px !important;
+}
+
+/*media all*/
+.mb-2 {
+    margin-bottom: 8px !important;
+}
+
+/*@media all and (min-width:768px)*/
+.f4 {
+    font-size: 16px !important;
+}
+
+/*media all*/
+.text-normal {
+    font-weight: normal !important;
+}
+
+/*media all*/
+.mb-2 {
+    margin-bottom: 8px !important;
+}
+
+.mb-4 {
+    margin-bottom: 24px !important;
+}
+
+/*media all*/
+.profile-timeline.discussion-timeline::before {
+    left: 15px;
+    background-color: #f5f5f5;
+}
+
+/*media all*/
+.profile-timeline.discussion-timeline {
+    float: none;
+}
+
+/*media all*/
+.discussion-timeline::before {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 79px;
+    z-index: -1;
+    display: block;
+    width: 2px;
+    content: "";
+    background-color: #f3f3f3;
+}
+
+/*media all*/
+.discussion-timeline {
+    position: relative;
+    float: left;
+    width: 760px;
+}
+
+/*media all*/
+.pb-4 {
+    padding-bottom: 24px !important;
+}
+
+/*media all*/
+.width-full {
+    width: 100% !important;
+}
+
+/*media all*/
+.profile-timeline.discussion-timeline .profile-timeline-month-heading::after {
+    position: absolute;
+    top: 12px;
+    z-index: -1;
+    width: 100%;
+    height: 1px;
+    content: "";
+}
+
+/*media all*/
+.d-inline-block {
+    display: inline-block !important;
+}
+
+h3 {
+    font-weight: 600!important;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/*media all*/
+.pr-2 {
+    padding-right: 8px !important;
+}
+
+/*media all*/
+.py-1 {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+
+/*media all*/
+.col-10 {
+    width: 83.33%;
+}
+
+/*media all*/
+.float-left {
+    float: left !important;
+}
+
+/*media all*/
+.py-4 {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+}
+
+/*media all*/
+.pl-4 {
+    padding-left: 24px !important;
+}
+
+/*media all*/
+.ml-3 {
+    margin-left: 16px !important;
+}
+
+/*media all*/
+.discussion-item-icon {
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-top: -7px;
+    margin-left: -40px;
+    line-height: 28px;
+    color: #767676;
+    text-align: center;
+    background-color: #cdcdcd;
+    border: 2px solid #f0f0f0;
+    border-radius: 50%;
+}
+
+/*media all*/
+.btn-link {
+    display: inline-block;
+    padding: 0;
+    font-size: inherit;
+    color: #767676 !important;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/*media all*/
+.f4 {
+    font-size: 16px !important;
+}
+
+/*media all*/
+.muted-link {
+    color: #767676 !important;
+}
+
+/*media all*/
+.lh-condensed {
+    line-height: 1.25 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

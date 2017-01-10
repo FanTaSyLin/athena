@@ -1,35 +1,88 @@
-<div class="main-area-item" ng-animate="'animate'" ng-controller="DepartmentController as DptCtrl" data-ng-init="DptCtrl.initData()">
+<div ng-animate="'animate'" ng-controller="DepartmentController as DptCtrl" data-ng-init="DptCtrl.initData()">
+    <div class="user-profile-nav top-0">
+        <nav class="underline-nav" role="navigation">
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Active')}"
+               ng-click="DptCtrl.selectProfileNavItem('Active')">近期活动</a>
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Wiki')}"
+               ng-click="DptCtrl.selectProfileNavItem('Wiki')">Wiki</a>
+            <a class="underline-nav-item" role="tab"
+               ng-class="{'selected': DptCtrl.profileNavIsSeleced('Repositories')}"
+               ng-click="DptCtrl.selectProfileNavItem('Repositories')">资产</a>
+        </nav>
+    </div>
+    <div class="main-area-item">
+        <!--近期工作 start-->
+        <div ng-show="DptCtrl.isShowArea('Active')">
+            <!--工作量统计图表区域 start-->
+            <h2 class="f4 mb-2 text-normal mt-4">
+                <span class="glyphicon glyphicon-stats" style="color: #646464;">  近30天工作量统计</span>
+            </h2>
+            <div class="col-lg-12 mt-4 mb-4" style="height: auto;">
+                <canvas id="department-Chart-ByDay" height="2" width="16"></canvas>
+            </div>
+            <!--工作量统计图表区域 end-->
 
-    <div>
-        <h3>近期工作</h3>
-        <!--工作量统计图表区域 start-->
-        <div class="col-lg-12" style="height: 250px;">
-            <canvas id="department-Chart-ByDay" height="3" width="16"></canvas>
-        </div>
-        <!--工作量统计图表区域 end-->
+            <!--成员列表 start-->
+            <h2 class="f4 mb-2 text-normal mt-8">
+                <span class="glyphicon glyphicon-user" style="color: #646464;">  成员列表</span>
+            </h2>
+            <div class="col-lg-12 mt-4">
+                <ul class="boards-page-board-section-list" style="list-style: none; padding-left: 0px;">
+                    <li class="boards-page-board-section-list-item middle-item" ng-repeat="member in DptCtrl.members"
+                        style="margin-bottom: 0px;">
+                        <a class="board-tile middle" ng-click="DptCtrl.openThisMemberInfo(member)">
+                            <span class="department-member-icon" title="{{member.name}}@{{member.account}}"></span>
+                            <span class="department-member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
+                            <span class="department-member-active-title">近期活动 ... </span>
+                            <ul class="department-member-active-items">
+                                <li style="font-size: 12px" ng-repeat="activeItem in member.activeList" title="{{activeItem}}">
+                                    <div class="text-overflow">{{activeItem}}</div>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!--成员列表 end-->
 
-        <!--成员列表 start-->
-        <div class="col-lg-12">
-            <ul class="boards-page-board-section-list" style="list-style: none;">
-                <li class="boards-page-board-section-list-item middle-item" ng-repeat="member in DptCtrl.members" style="margin-bottom: 0px;">
-                    <a class="board-tile middle" ng-click="DptCtrl.openThisMemberInfo(member)">
-                        <span class="department-member-icon" title="{{member.name}}@{{member.account}}"></span>
-                        <span class="department-member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
-                        <span class="department-member-active-title">近期活动 ... </span>
-                        <ul class="department-member-active-items">
-                            <li ng-repeat="activeItem in member.activeList" title="{{activeItem}}">
-                                <div class="text-overflow">{{activeItem}}</div>
-                            </li>
-                        </ul>
-                    </a>
-                </li>
-            </ul>
+            <!--活动 start-->
+            <h2 class="f4 mb-2 text-normal">
+                <span class="glyphicon glyphicon-align-left" style="color: #646464;">  成员动态</span>
+            </h2>
+            <div class="activity-listing contribution-activity" style="min-height: 378px;">
+                <div class="contribution-activity-listing col-10 float-left">
+                    <div class="profile-timeline discussion-timeline width-full pd-4">
+                        <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1">
+                            全体成员
+                        </h3>
+                        <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open">
+                            <span class="discussion-item-icon"></span>
+                            <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target" type="button">
+                                <span class="float-left">
+                                    Created 57
+                                        commits in 2 repositories
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--活动 end-->
+
         </div>
-        <!--成员列表 end-->
+        <!--近期工作 end-->
+
+        <!--WIKI start-->
+        <div ng-show="DptCtrl.isShowArea('Wiki')">
+
+        </div>
+        <!--WIKI end-->
+
+        <!--部门资产 start-->
+        <div ng-show="DptCtrl.isShowArea('Repositories')">
+
+        </div>
+        <!--部门资产 end-->
 
     </div>
-    <div>
-        <h3>部门资产</h3>
-    </div>
-
 </div>
