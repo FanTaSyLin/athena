@@ -595,6 +595,11 @@ a:hover, a:focus, a:active {
     margin: 10px 0px;
 }
 
+.boards-page-board-section-list-item.middle-item {
+    width: 12.5%;
+    margin: 10px 10px;
+}
+
 .board-tile-details.is-badged {
     min-height: 60px;
     padding-bottom: 20px;
@@ -633,6 +638,14 @@ a:hover, a:focus, a:active {
     box-shadow: 2px 1px 1px 0px #d6d6d6;
 }
 
+.board-tile.middle {
+    background-color: transparent;
+    border-radius: 0px 3px 3px 0px;
+    padding: 20px 0;
+    height: 200px;
+    box-shadow: 2px 1px 1px 0px #d6d6d6;
+}
+
 .board-tile:hover, .board-tile:focus, .board-tile:active{
     color: #fff;
 }
@@ -648,6 +661,13 @@ a:hover, a:focus, a:active {
     overflow: hidden;
     max-height: 40px;
     max-width: 250px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+.department-member-details {
+    display: inline-block;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
 }
@@ -929,6 +949,16 @@ a:hover, a:focus, a:active {
     cursor: pointer;
 }
 
+.department-member-icon {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    background-color: rgba(102, 153, 255, 1);
+    position: absolute;
+    left: -15px;
+    top: -15px;
+}
+
 .project-info-main-menu-members .member-initials {
     display: block;
     font-size: 1.2em;
@@ -941,6 +971,50 @@ a:hover, a:focus, a:active {
     text-align: center;
     top: 0px;
     width: 100%;
+}
+
+.department-member-initials {
+    display: block;
+    font-size: 1pc;
+    font-weight: 700;
+    height: 40px;
+    left: -23px;
+    line-height: 40px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: -12px;
+    color: #fff;
+    width: 60px;
+}
+
+
+.department-member-active-title {
+    position:absolute;
+    left: 35px;
+    top: 5px;
+    color: rgb(51, 51, 51);
+    font-weight: 500;
+}
+
+.department-member-active-items {
+    position:absolute;
+    left: 5px;
+    top: 42px;
+    color: rgb(51, 51, 51);
+    font-weight: 400;
+    padding-left: 0px;
+    width: 85%;
+}
+
+.department-member-active-items > li {
+    padding-bottom: 5px;
+}
+
+.text-overflow {
+    overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+    text-overflow:ellipsis;;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+    white-space:nowrap;/* 不换行 */
 }
 
 .project-info-main-menu-members .member-reviewer-flg {

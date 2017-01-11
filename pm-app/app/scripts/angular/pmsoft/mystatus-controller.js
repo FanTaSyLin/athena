@@ -14,8 +14,8 @@
     function MyStatusController(PMSoftServices, $cookies) {
 
         var self = this;
-        var ctxByDay = angular.element(document.getElementById('Chart-ByDay'));
-        var ctxByPj = angular.element(document.getElementById('Chart-ByPj'));
+        var ctxByDay = angular.element(document.getElementById('myStatus-Chart-ByDay'));
+        var ctxByPj = angular.element(document.getElementById('myStatus-Chart-ByPj'));
 
         self.account = $cookies.get('account');
 

@@ -4,13 +4,13 @@
         <h3>近期工作</h3>
         <!--工作量统计图表区域 start-->
         <div class="col-lg-8" style="height: 250px;">
-            <canvas id="Chart-ByDay" height="5" width="16"></canvas>
+            <canvas id="myStatus-Chart-ByDay" height="5" width="16"></canvas>
         </div>
         <!--工作量统计图表区域 end-->
 
         <!--按项目统计区域 start-->
         <div class="col-lg-4" style="height: 100px">
-            <canvas id="Chart-ByPj" height="50" width="80"></canvas>
+            <canvas id="myStatus-Chart-ByPj" height="50" width="80"></canvas>
         </div>
         <!--按项目统计区域 end-->
     </div>
@@ -19,8 +19,7 @@
     <div class="row col-md-12" style="margin-top: 20px; margin-bottom: 20px;">
         <h3>项目贡献</h3>
         <ul class="boards-page-board-section-list" style="list-style: none;">
-            <li class="boards-page-board-section-list-item large-item" ng-repeat="project in Ctrl.projectList"
-                on-finish-render-filters>
+            <li class="boards-page-board-section-list-item large-item" ng-repeat="project in Ctrl.projectList">
                 <a class="board-tile large" style="background-color: white">
                     <span></span>
 
