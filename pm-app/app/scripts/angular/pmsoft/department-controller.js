@@ -27,7 +27,7 @@
 
                 dptNum = $cookies.get('department');
                 /**
-                 * @todo 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
+                 * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
                 PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
@@ -52,7 +52,7 @@
                         var doc = res.doc;
 
                         /**
-                         * @todo 处理这些数据 并显示
+                         * @description 处理这些数据 并显示
                          */
                         _lineInit(startDateStr, timeSpan, doc);
 
