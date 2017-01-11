@@ -19,6 +19,7 @@
 
         self.members = [];
         self.initData = _initData;
+        self.openThisMemberInfo = _openThisMemberInfo;
 
         function _initData() {
             if (window.location.hash !== '#/department') {
@@ -201,6 +202,16 @@
                     }
                 }
             }
+        }
+
+        /**
+         *
+         * @param member
+         * @private
+         */
+        function _openThisMemberInfo(member) {
+            var url = 'pm-soft/memberstatus?account=' + member.account;
+            window.open(url);
         }
     }
 

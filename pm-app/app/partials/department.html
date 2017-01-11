@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <ul class="boards-page-board-section-list" style="list-style: none;">
                 <li class="boards-page-board-section-list-item middle-item" ng-repeat="member in DptCtrl.members" style="margin-bottom: 0px;">
-                    <a class="board-tile middle">
+                    <a class="board-tile middle" ng-click="DptCtrl.openThisMemberInfo(member)">
                         <span class="department-member-icon" title="{{member.name}}@{{member.account}}"></span>
                         <span class="department-member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
                         <span class="department-member-active-title">近期活动 ... </span>

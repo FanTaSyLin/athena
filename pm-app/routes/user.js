@@ -20,6 +20,8 @@ module.exports = function () {
 
     router.route('/pm-soft/projectinfo').get(projectInfo);
 
+    router.route('/pm-soft/memberstatus').get(memberstatus);
+
     router.unless = require('express-unless');
 
     return router;
@@ -49,4 +51,8 @@ function myJobList(req, res, next) {
 
 function projectInfo(req, res, next) {
     res.sendfile('app/project-info.html');
+}
+
+function memberstatus(req, res, next) {
+    res.sendfile('app/member-status.html');
 }
