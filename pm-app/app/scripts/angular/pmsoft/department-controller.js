@@ -14,22 +14,37 @@
     function DepartmentControllerFn(PMSoftServices, $cookies) {
 
         var self = this;
+        var MAXNUMPREPAGE = 30;
         var dptNum = 0;
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+        var memberNav = angular.element(document.getElementById('memberNav'));
 
         self.members = [];
         self.profileNavCurrentItem = "Active";
+        self.selectedMemberAccount = "all";
         self.departmentLogs = [];
+        self.displayLogs = [];
+        self.pageNum = 1;
+        self.isShowShowMoreAcitivtyBtn = true;
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
         self.selectProfileNavItem = _selectProfileNavItem;
+        self.memberItemIsSelected = _memberItemIsSelected;
+        self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
+        self.showMoreActivity = _showMoreActivity;
 
         function _initData() {
             if (window.location.hash !== '#/department') {
                 return;
             } else {
+
+                memberNav.affix({
+                    offset: {
+                        top: 800
+                    }
+                });
 
                 dptNum = $cookies.get('department');
                 /**
@@ -60,6 +75,9 @@
                         doc.forEach(function (item) {
                             item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
                             self.departmentLogs.push(item);
+                            if (self.displayLogs.length < MAXNUMPREPAGE) {
+                                self.displayLogs.push(item);
+                            }
                         })
                         /**
                          * @description 处理这些数据 并显示
@@ -233,6 +251,52 @@
 
         function _isShowArea(item) {
             return self.profileNavCurrentItem === item;
+        }
+
+        function _memberItemIsSelected(memberAccount) {
+            return memberAccount === self.selectedMemberAccount;
+        }
+
+        function _selectMemberItem(memberAccount) {
+            var org = self.selectedMemberAccount;
+            self.selectedMemberAccount = memberAccount;
+            if (org === memberAccount) {
+                return;
+            } else {
+                self.pageNum = 0;
+                self.displayLogs.splice(0, self.displayLogs.length);
+                _showMoreActivity(self.selectedMemberAccount, self.pageNum);
+            }
+        }
+
+        function _showMoreActivity(memberAccount, pageNum) {
+            var count = 0;
+            var start = pageNum * MAXNUMPREPAGE;
+            var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
+            if (memberAccount === "all") {
+                for (var i = 0; i < self.departmentLogs.length; i++)  {
+                    if (count >= start && count <= end) {
+                        self.displayLogs.push(self.departmentLogs[i]);
+                    }
+                    count ++;
+                }
+                if (count < end) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                }
+            } else {
+                for (var i = 0; i < self.departmentLogs.length; i++) {
+                    if (memberAccount === self.departmentLogs[i].authorID) {
+                        if (count >= start && count <= end) {
+                            self.displayLogs.push(self.departmentLogs[i]);
+                        }
+                        count ++;
+                    }
+                }
+                if (count < end) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                }
+            }
+            self.pageNum++;
         }
     }
 

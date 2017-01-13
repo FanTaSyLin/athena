@@ -1476,6 +1476,81 @@ h3 {
     fill: currentColor;
 }
 
+#memberNav.member-list {
+    position: static;
+    width: 100px;
+    min-height: 200px;
+    background-color: #0C1021;
+}
+
+#memberNav.affix {
+    top: 30px;
+}
+
+/*media all*/
+.ajax-pagination-btn {
+    width: 100%;
+    padding: 6px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #4078c0;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+}
+
+/*media all*/
+.f6 {
+    font-size: 12px !important;
+}
+
+/*media all*/
+.py-2 {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/*media all*/
+.mt-0 {
+    margin-top: 0px !important;
+}
+
+/*media all*/
+.border-gray-dark {
+    border-color: #ddd !important;
+}
+
+/*media all*/
+.site-footer {
+    position: relative;
+    padding-top: 40px;
+    width: 85%;
+    padding-bottom: 200px;
+    margin-top: 40px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #767676;
+    border-top: 1px solid #eee;
+}
+
+/*media all*/
+.site-footer::before {
+    display: table;
+    content: "";
+}
+
+/*media all*/
+.site-footer::after {
+    display: table;
+    clear: both;
+    content: "";
+}
+
+
+
+
+
+
 
 
 
