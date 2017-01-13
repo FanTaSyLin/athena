@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #fff">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PMSoft</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/pm_member_status.css">
+    <link rel="stylesheet" href="/styles/buttons.css">
+    <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
-<body>
+<body ng-app="MemberStatus" ng-controller="MemberStatusController as MemberCtrl" data-ng-init="MemberCtrl.initData()">
 
+<!--页头 start-->
+<header class="header project-info-header" role="banner">
+    <div class="project-info-logo">
+        <a href="/">
+            <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" height="30px"/>
+        </a>
+    </div>
+</header>
+<!--页头 end-->
+
+<div role="main">
+    <div class="container-lg px-3 mt-4">
+        <div class="col-3 float-left pr-3">
+            <a class="d-block position-relative">
+                <img width="230" height="230" class="avatar width-full rounded-2" src="/public/56520.jpg"/>
+            </a>
+            <div class="vcard-names-container">
+                <h1 class="vcard-names pb-3">
+                    <span class="vcard-fullname d-block">{{MemberCtrl.name}}</span>
+                    <span class="vcard-username d-block">{{MemberCtrl.account}}</span>
+                </h1>
+                <ul class="vcard-details border-top border-gray-light py-3">
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.department}}" ng-show="MemberCtrl.member.department !== ' '">
+                        <span class="glyphicon glyphicon-home">  {{MemberCtrl.member.department}}</span>
+                    </li>
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.mobile}}" ng-show="MemberCtrl.member.mobile !== ' '">
+                        <span class="glyphicon glyphicon-earphone">  {{MemberCtrl.member.mobile}}</span>
+                    </li>
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.officeTel}}" ng-show="MemberCtrl.member.officeTel !== ' '">
+                        <span class="glyphicon glyphicon-phone-alt">  {{MemberCtrl.member.officeTel}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-9 float-left pl-2">
+            <div class="user-profile-nav top-0">
+                <nav class="underline-nav" role="navigation">
+                    <a class="underline-nav-item" role="tab" ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Active')}" ng-click="MemberCtrl.selectProfileNavItem('Active')">近期活动</a>
+                    <a class="underline-nav-item" role="tab"  ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Repositories')}" ng-click="MemberCtrl.selectProfileNavItem('Repositories')">Repositories</a>
+                </nav>
+            </div>
+            <div style="position: relative !important;">
+                <div class="mt-4">
+                    <div>
+                        <h2 class="f4 mb-2 text-normal">参与的项目</h2>
+                        <ol>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+
+<script type="text/javascript" src="/scripts/angular/memberstatus/module.js"></script>
+<script type="text/javascript" src="/scripts/angular/memberstatus/config.js"></script>
+<script type="text/javascript" src="/scripts/angular/memberstatus/services.js"></script>
+<script type="text/javascript" src="/scripts/angular/memberstatus/controller.js"></script>
 </body>
 </html>
