@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/7/25.
  */
 
-const MONGOOSE_URI = process.env.MONGOOSE_URI || "127.0.0.1/authentication";
+const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/authentication";
 //const MONGOOSE_URI = process.env.MONGOOSE_URI || "192.168.226.138/pm-db";
 const HTTPS_PORT = process.env.HTTPS_PORT || 4401;
 

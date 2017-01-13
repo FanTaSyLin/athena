@@ -3,7 +3,7 @@
  */
 
 const HTTP_PORT = process.env.HTTP_PORT || 4003;
-const MONGOOSE_URI = process.env.MONGOOSE_URI || "127.0.0.1/pmsoft";
+const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
 
 var debug = require('debug')('pm-soft-api');
 var morgan = require('morgan');
