@@ -71,10 +71,10 @@
                 projectList2.push(item);
             });
 
-            // //统计当月工作量
-            //_projectStaticByMonthMember(projectList1, month1);
-            // //统计上月工作量
-            //_projectStaticByMonthMember(projectList2, month2);
+            //统计当月工作量
+            _projectStaticByMonthMember(projectList1, month1);
+            //统计上月工作量
+            _projectStaticByMonthMember(projectList2, month2);
 
         });
 
@@ -82,7 +82,7 @@
 
     /* 临时补全用
     */
-    _getProjectList(function (err, data) {
+    /*_getProjectList(function (err, data) {
         if (err) {
             console.error(err.stack);
         }
@@ -98,6 +98,7 @@
         var projectList10 = [];
         var projectList11 = [];
         var projectList12 = [];
+        var projectList13 = [];
 
         data.forEach(function (item) {
             projectList1.push(item);
@@ -112,6 +113,7 @@
             projectList10.push(item);
             projectList11.push(item);
             projectList12.push(item);
+            projectList13.push(item);
         });
 
         _projectStaticByMonthMember(projectList1, '201601');
@@ -123,10 +125,11 @@
         _projectStaticByMonthMember(projectList7, '201607');
         _projectStaticByMonthMember(projectList8, '201608');
         _projectStaticByMonthMember(projectList9, '201609');
-        _projectStaticByMonthMember(projectList10, '2016010');
-        _projectStaticByMonthMember(projectList11, '2016011');
-        _projectStaticByMonthMember(projectList12, '2016012');
-    });
+        _projectStaticByMonthMember(projectList10, '201610');
+        _projectStaticByMonthMember(projectList11, '201611');
+        _projectStaticByMonthMember(projectList12, '201612');
+        _projectStaticByMonthMember(projectList13, '201701');
+    });*/
 
     /**
      * 根据月份 统计项目组成员的工作量 
