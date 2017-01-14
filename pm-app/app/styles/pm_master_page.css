@@ -564,7 +564,9 @@ a:hover, a:focus, a:active {
 
 #myNav a {
     width: 230px;
-    font-size: 1.1em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
     font-family: "Microsoft YaHei";
     font-weight: 500;
 }
@@ -1485,6 +1487,12 @@ h3 {
 
 #memberNav.affix {
     top: 30px;
+}
+
+#memberNav a {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 /*media all*/
