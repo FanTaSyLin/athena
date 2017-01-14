@@ -19,6 +19,7 @@
 
         self.members = [];
         self.profileNavCurrentItem = "Active";
+        self.departmentLogs = [];
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
@@ -37,7 +38,7 @@
                 PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
                     var doc = res.doc;
-                    var timeSpan = 30;
+                    var timeSpan = 45;
                     var memberIDs = "";
                     var endDateStr = moment.utc().format('YYYY-MM-DD');
                     var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
@@ -55,7 +56,11 @@
                     PMSoftServices.getJobList(condition, function (res) {
 
                         var doc = res.doc;
-
+                        self.departmentLogs.splice(0, self.departmentLogs.length);
+                        doc.forEach(function (item) {
+                            item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                            self.departmentLogs.push(item);
+                        })
                         /**
                          * @description 处理这些数据 并显示
                          */

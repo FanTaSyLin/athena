@@ -52,17 +52,21 @@
             <div class="activity-listing contribution-activity" style="min-height: 378px;">
                 <div class="contribution-activity-listing col-10 float-left">
                     <div class="profile-timeline discussion-timeline width-full pd-4">
-                        <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1">
+                        <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1" style="margin-top: 0px; background-color: #f6f8f8">
                             全体成员
                         </h3>
-                        <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open">
-                            <span class="discussion-item-icon"></span>
+                        <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open" ng-repeat="log in DptCtrl.departmentLogs">
+                            <span class="discussion-item-icon">
+                                <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1" viewBox="0 0 12 16" width="12" style="margin-top: 1px">
+                                    <path fill-rule="evenodd" d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
+                                </svg>
+                            </span>
                             <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target" type="button">
                                 <span class="float-left">
-                                    Created 57
-                                        commits in 2 repositories
+                                    {{log.authorName}}@{{log.authorID}} added 工作记录 to {{log.projectCName}} <span style="color: #d1d1d1;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                             </button>
+                            <label>{{log.content}}</label>
                         </div>
                     </div>
                 </div>

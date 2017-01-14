@@ -1318,7 +1318,7 @@ a:hover, a:focus, a:active {
 /*media all*/
 .profile-timeline.discussion-timeline::before {
     left: 15px;
-    background-color: #f5f5f5;
+    background-color: #e3e3e3;
 }
 
 /*media all*/
@@ -1336,7 +1336,7 @@ a:hover, a:focus, a:active {
     display: block;
     width: 2px;
     content: "";
-    background-color: #f3f3f3;
+    background-color: #2b2df3;
 }
 
 /*media all*/
@@ -1364,6 +1364,7 @@ a:hover, a:focus, a:active {
     width: 100%;
     height: 1px;
     content: "";
+    background-color: #e3e3e3;
 }
 
 /*media all*/
@@ -1465,7 +1466,15 @@ h3 {
     line-height: 1.25 !important;
 }
 
+.octicon {
+    vertical-align: text-bottom;
+}
 
+.octicon {
+    display: inline-block;
+    vertical-align: text-top;
+    fill: currentColor;
+}
 
 
 
