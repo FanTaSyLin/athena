@@ -50,6 +50,7 @@
                     goForwardJob();
                 } else {
                     PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+                    _resetEditorValues();
                 }
             } else {
                 PMSoftServices.currentUnauditedJobIndex = PMSoftServices.unauditedJobList_Filter.length -1;
@@ -65,6 +66,7 @@
                     goBackwardJob();
                 } else {
                     PMSoftServices.changeCurrentUnauditedJob(tmpItem);
+                    _resetEditorValues();
                 }
             } else {
                 PMSoftServices.currentUnauditedJobIndex = 0;
@@ -127,11 +129,24 @@
              * @description 这里要做的其实不是刷新页面 而是重新筛选数据 把现有数据中的 "已审核的" 以及 "已拒绝的" 过滤掉
              * 其实可以考虑用 filter
              */
+            /**
+             * 关闭页面、提交审核、提交拒绝、打开页面时 应初始化 审核系数
+             */
 
         }
 
         function _formatDateTime(DateTime) {
             return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 重设 slider 的值
+         * @private
+         */
+        function _resetEditorValues() {
+            difficultyEditor.slider('setValue', 1);
+            efficiencyEditor.slider('setValue', 1);
+            qualityEditor.slider('setValue', 1);
         }
 
     }
