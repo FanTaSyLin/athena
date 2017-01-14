@@ -313,7 +313,7 @@
 
         JobLogSchema
             .find(condition)
-            .limit(100)
+            .limit(200)
             .sort({'data': -1, 'starTime': -1})
             .exec(function (err, doc) {
                 if (err) {
