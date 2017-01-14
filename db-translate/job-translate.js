@@ -122,9 +122,13 @@
             },
             body: JSON.stringify(recodeSchema)
         }, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                _submit();
+            if (!error && response.statusCode == 200) {console.log("导入了一条工作记录：" + recodeSchema.authorName + " " + recodeSchema.projectCName);
+            } else {
+                console.log(error);
             }
+            setTimeout(function () {
+                _submit();
+            }, 300);
         });
     }
 
