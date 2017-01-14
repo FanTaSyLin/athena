@@ -6,7 +6,7 @@
                     全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Total.length}}</span>
                 </a>
             </li>
-            <li ng-repeat="project in UnauditedsCtrl.projects"
+            <li ng-repeat="project in UnauditedsCtrl.projects | rm_project_unaudited_count0"
                 ng-class="{active: UnauditedsCtrl.isSelectedProject(project.enName)}">
                 <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)"
                    data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
