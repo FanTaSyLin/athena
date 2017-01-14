@@ -122,7 +122,12 @@
         }
 
         function _disMissModal() {
-            location.reload();
+            //location.reload();
+            /**
+             * @description 这里要做的其实不是刷新页面 而是重新筛选数据 把现有数据中的 "已审核的" 以及 "已拒绝的" 过滤掉
+             * 其实可以考虑用 filter
+             */
+
         }
 
         function _formatDateTime(DateTime) {

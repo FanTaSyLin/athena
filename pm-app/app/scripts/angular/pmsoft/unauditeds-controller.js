@@ -31,6 +31,7 @@
         self.projectSelect = projectSelect;
         self.isSelectedMember = isSelectedMember;
         self.memberSelect = memberSelect;
+        self.pageSelect = _pageSelect;
         self.init = init;
         self.showJobInfo = showJobInfo;
         self.timeFormat = _timeFormat;
@@ -319,6 +320,15 @@
 
         function _subStr(str, count) {
             return str.substring(0, count);
+        }
+
+        /**
+         * 点击页码时 过滤显示用数据
+         * @param pageItem
+         * @private
+         */
+        function _pageSelect(pageItem) {
+            _viewUnauditedJobs(pageItem.num, self.pageSize);
         }
     }
 
