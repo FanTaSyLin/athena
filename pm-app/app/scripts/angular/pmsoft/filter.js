@@ -21,7 +21,12 @@
     /**
      * 审核页面  过滤掉已审核以及已拒绝的工作记录
      */
-    app.filter('filter_pass_turnback_logs', filter_pass_turnback_logs)
+    app.filter('filter_pass_turnback_logs', filter_pass_turnback_logs);
+
+    /**
+     * 截断字符串
+     */
+    app.filter('substring_str', substring_str);
 
     toTrusted.$inject = ['$sce'];
 
@@ -65,5 +70,13 @@
         }
     }
 
-
+    function substring_str() {
+        return function (str, subNum) {
+            if (str.length > subNum) {
+                return str.substring(0, subNum) + "...";
+            } else {
+                return str;
+            }
+        }
+    }
 })();
