@@ -21,7 +21,7 @@
     /**
      * 审核页面  过滤掉已审核以及已拒绝的工作记录
      */
-    app.filter('filter_audited_decline_logs', filter_audited_decline_logs)
+    app.filter('filter_pass_turnback_logs', filter_pass_turnback_logs)
 
     toTrusted.$inject = ['$sce'];
 
@@ -53,7 +53,7 @@
         }
     }
 
-    function filter_audited_decline_logs () {
+    function filter_pass_turnback_logs () {
         return function (items) {
             var array = [];
             for (var i = 0; i < items.length; i++) {
