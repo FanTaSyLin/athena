@@ -13,6 +13,11 @@
      */
     app.filter('rm_project_unaudited_count0', rmProjectByCount0);
 
+    /**
+     * 当未审核记录数量大于100时 显示100+
+     */
+    app.filter('add_plus_count_lsg100', add_plus_count_lsg100);
+
     toTrusted.$inject = ['$sce'];
 
     function toTrusted($sce) {
@@ -30,6 +35,16 @@
                 }
             }
             return array;
+        }
+    }
+
+    function add_plus_count_lsg100() {
+        return function (item) {
+            if (item > 100) {
+                return "100" + "+";
+            } else {
+                return item.toString();
+            }
         }
     }
 
