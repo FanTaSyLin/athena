@@ -44,7 +44,7 @@ var JobLogSchema = new Schema({
     efficiency: {type: Number}, /*效率系数*/
     quality: {type: Number}, /*质量系数*/
     factor: {type: Number}, /*总体评定系数 通过 难度系数、效率系数、质量系数相乘得到*/
-    status: {type: String}, /*该记录的当前状态 分为 Submit-提交 Decline-拒绝 Pass-审核通过*/
+    status: {type: String}, /*该记录的当前状态 分为 Submit-提交 TurnBack-拒绝 Pass-审核通过*/
     logs: [{
         type: {type: String}, /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
         logTime: {type: Date}, /*日志时间戳*/
