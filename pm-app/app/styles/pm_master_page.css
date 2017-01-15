@@ -762,7 +762,7 @@ a:hover, a:focus, a:active {
 
 .project-info-top {
     display: flex;
-    margin: 15px 5px 10px 80px;
+    margin: 15px 5px 10px 10px;
 }
 
 .project-info-top-title {
@@ -806,7 +806,7 @@ a:hover, a:focus, a:active {
     left: 25px;
     top: 2px;*/
     display: flex;
-    width: 20%;
+    width: 30%;
     align-items: center;
     margin: auto;
 }
@@ -816,7 +816,7 @@ a:hover, a:focus, a:active {
     font-weight: 500;
     font-family: "Microsoft YaHei";
     color: #1398fd;
-    width: 24%;
+    width: 35%;
     align-items: center;
     margin: 20px auto;
 }
@@ -1554,8 +1554,22 @@ h3 {
     content: "";
 }
 
+.container-project {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+/*media all*/
+.px-3 {
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+}
 
+/*media all*/
+.mt-4 {
+    margin-top: 24px !important;
+}
 
 
 
