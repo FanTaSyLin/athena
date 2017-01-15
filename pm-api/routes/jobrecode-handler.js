@@ -40,20 +40,34 @@
             version: '0.0.1'
         }, _getRecodes); //获取工作记录
 
+        /**
+         * @description 获取一定数量的工作记录, 适用于 “加载更多” 场景
+         * 参数1：account - string[] 如果 undefined 则此条件无效
+         * 参数2：project -string[] 如果 undefined 则此条件无效
+         * 参数3：skip - Number 跳过的记录条数 如果 undefined skip = 0;
+         * 参数4: limit - Number 指定读取的记录条数 如果 undefined limit = 50;
+         * 参数5: detail -Boolean 指定获取内容的信息量 如果 undefined detail = true;
+         * detail 这个参数 如果为 false 则代表获取的信息不包括 JobLogSchema.content 中的内容;
+         */
+        server.get({
+            path: BASEPATH + '/jobrecode/joblist/fixnum',
+            version: '0.0.1'
+        }, _getfixNumRecodes);
+
         server.get({
             path: BASEPATH + '/jobrecode/joblist/count',
             version: '0.0.1'
-        }, _getRecodesCount); //获取工作记录的分页信息
+        }, _getRecodesCount); //获取工作记录的分页信息 个人-工作记录专用
 
         server.get({
             path: BASEPATH + '/jobrecode/joblist/pagination',
             version: '0.0.1'
-        }, _getRecodesPagination); //获取工作记录,分页查询
+        }, _getRecodesPagination); //获取工作记录,分页查询 个人-工作记录专用
 
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist',
             version: '0.0.1'
-        }, _getUnauditedList);//获取未审核工作记录
+        }, _getUnauditedList);//获取未审核工作记录 审核页面专用
 
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist-count',
@@ -69,6 +83,67 @@
             version: '0.0.1'}, _turnBackJob);//退回已提交的工作记录
 
     };
+
+    function _getfixNumRecodes(req, res, next) {
+
+        var accounts = req.params.account;
+        var projectIDs = req.params.projectid;
+        var skipNum = req.params.skip;
+        var limitNum = req.params.limit;
+
+        var condition = {};
+
+        if (!_.isUndefined(accounts)) {
+            accounts = accounts.split(' ');
+            if(accounts.length > 1) {
+                condition.authorID = {
+                    $in: accounts
+                };
+            } else {
+                condition.authorID = accounts
+            }
+        }
+
+        if (!_.isUndefined(projectIDs)) {
+            projectIDs = projectIDs.split(' ');
+            if (projectIDs.length > 1) {
+                condition.projectID = {
+                    $in: projectIDs
+                };
+            } else {
+                condition.projectID = projectIDs;
+            }
+        }
+
+        if (_.isUndefined(skipNum)) {
+            skipNum = 0;
+        } else {
+            skipNum = Number(skipNum);
+        }
+
+        if (_.isUndefined(limitNum)) {
+            limitNum = 50;
+        } else {
+            limitNum = Number(limitNum);
+        }
+
+        JobLogSchema
+            .find(condition)
+            .sort({'data': 1, 'starTime': 1})
+            .skip(skipNum)
+            .limit(limitNum)
+            .exec(function (err, doc) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
+                var data = {
+                    status: "success",
+                    doc: doc
+                }
+                res.end(JSON.stringify(data));
+                next();
+            });
+    }
 
     function _getDateList(req, res, next) {
         var now = new Date();
