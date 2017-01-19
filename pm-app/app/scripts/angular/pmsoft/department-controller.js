@@ -237,7 +237,7 @@
          * @private
          */
         function _openThisMemberInfo(member) {
-            var url = 'pm-soft/memberstatus?account=' + member.account;
+            var url = 'pm-soft/memberstatus?memberid=' + member.account;
             window.open(url);
         }
 
