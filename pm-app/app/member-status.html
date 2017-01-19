@@ -29,8 +29,8 @@
             </a>
             <div class="vcard-names-container">
                 <h1 class="vcard-names pb-3">
-                    <span class="vcard-fullname d-block">{{MemberCtrl.name}}</span>
-                    <span class="vcard-username d-block">{{MemberCtrl.account}}</span>
+                    <span class="vcard-fullname d-block">{{MemberCtrl.member.name}}</span>
+                    <span class="vcard-username d-block">{{MemberCtrl.member.account}}</span>
                 </h1>
                 <ul class="vcard-details border-top border-gray-light py-3">
                     <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.department}}" ng-show="MemberCtrl.member.department !== ' '">
@@ -53,14 +53,96 @@
                 </nav>
             </div>
             <div style="position: relative !important;">
-                <div class="mt-4">
-                    <div>
-                        <h2 class="f4 mb-2 text-normal">参与的项目</h2>
-                        <ol>
 
+                <!--近期活动 start-->
+                <div class="mt-4" ng-show="MemberCtrl.profileNavIsSeleced('Active')">
+                    <div>
+                        <h2 class="f4 mb-2 text-normal">
+                            <span class="glyphicon glyphicon-stats" style="color: #646464;">  参与的项目</span>
+                        </h2>
+                        <ol class="pinned-repos-list mb-4">
+                            <li class="pinned-repo-item p-3 mb-3 border border-gray-dark rounded-1" ng-repeat="project in MemberCtrl.projectList">
+                                <div class="pinned-repo-item-content">
+                                    <span class="d-block">
+                                        <a class="text-bold" href ng-click="MemberCtrl.openThisProject(project._id)">
+                                            <span title="project.cnName">{{project.cnName}}</span>
+                                            <!--/
+                                            <span title="project.cnName">{{project.enName}}</span>-->
+                                        </a>
+                                    </span>
+                                    <p class="pinned-repo-desc text-gray text-small d-block mt-2 mb-3" style="cursor: pointer" title="{{project.about}}">
+                                        {{project.about | substring_str: 25}}
+                                    </p>
+                                    <p class="mb-0 f6 text-gray">
+                                        <span class="repo-language-color pinned-repo-meta" ng-class="{'background-green': project.type === '工程', 'background-blue': project.type === '自研'}"></span>
+                                        {{project.type}}
+                                        <a class="pinned-repo-meta muted-link">{{project.myWorkDone.toFixed(0)}} 小时</a>
+                                        <a class="pinned-repo-meta muted-link">项目占比：{{project.percent}}%</a>
+                                    </p>
+                                </div>
+                            </li>
                         </ol>
+
+                        <h2 class="f4 mb-2 text-normal">
+                            <span class="glyphicon glyphicon-align-left" style="color: #646464;">  近期动态</span>
+                        </h2>
+                        <div>
+                            <div class="col-md-9 activity-listing contribution-activity" style="min-height: 378px;">
+                                <div class="contribution-activity-listing col-10 float-left">
+                                    <div class="profile-timeline discussion-timeline width-full pd-4">
+                                        <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1"
+                                            style="margin-top: 0px; background-color: #f6f8f8">
+                                            工作动态
+                                        </h3>
+                                        <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3"
+                                             ng-repeat="log in MemberCtrl.jobLogs">
+                                            <span class="discussion-item-icon">
+                                                <svg aria-hidden="true" class="octicon" height="16" version="1.1"
+                                                    viewBox="0 0 12 16" width="12" style="margin-top: 1px">
+                                                    <path fill-rule="evenodd" d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
+                                                </svg>
+                                            </span>
+                                            <button class="btn-link f4 muted-link lh-condensed width-full"
+                                                    type="button">
+                                            <span class="float-left">
+                                                added 工作记录 to {{log.projectCName|substring_str: 15}} <span style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
+                                             </span>
+                                            </button>
+                                            <label>{{log.content}}</label>
+                                        </div>
+                                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="MemberCtrl.showMoreActivity()"
+                                                ng-show="MemberCtrl.isShowShowMoreAcitivtyBtn">
+                                            加载更多活动
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 member-list">
+                                <ul class="nav nav-pills nav-stacked" id="memberNav">
+                                    <li ng-class="{active: MemberCtrl.projectItemIsSelected('all')}">
+                                        <a href ng-click="MemberCtrl.selectProjectItem('all')">
+                                            全部
+                                        </a>
+                                    </li>
+                                    <li ng-repeat="project in MemberCtrl.projectList"
+                                        ng-class="{active: MemberCtrl.projectItemIsSelected(project._id)}">
+                                        <a href ng-click="MemberCtrl.selectProjectItem(project._id)" title="{{project.cnName}}">
+                                            {{project.cnName|substring_str: 8}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--近期活动 end-->
+
+                <!--Repositories start-->
+                <div class="mt-4" style="height: 1200px" ng-show="MemberCtrl.profileNavIsSeleced('Repositories')">
+
+                </div>
+                <!--Repositories end-->
+
             </div>
         </div>
     </div>
@@ -78,5 +160,6 @@
 <script type="text/javascript" src="/scripts/angular/memberstatus/config.js"></script>
 <script type="text/javascript" src="/scripts/angular/memberstatus/services.js"></script>
 <script type="text/javascript" src="/scripts/angular/memberstatus/controller.js"></script>
+<script type="text/javascript" src="/scripts/angular/memberstatus/filter.js"></script>
 </body>
 </html>
