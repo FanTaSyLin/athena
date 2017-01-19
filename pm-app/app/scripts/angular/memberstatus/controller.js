@@ -18,6 +18,7 @@
         var cookiesAccount = $cookies.get("account");
         var sysconfig = $cookies.getObject("Sysconfig");
         var account = "";
+        var projectNav = angular.element(document.getElementById('projectNav'));
 
         self.isIam = false;
         self.member = {};
@@ -39,6 +40,12 @@
         function _initData() {
 
             account = _getQueryString("memberid");
+
+            projectNav.affix({
+                offset: {
+                    top: 600
+                }
+            });
 
             if (account === cookiesAccount) {
                 self.isIam = true;

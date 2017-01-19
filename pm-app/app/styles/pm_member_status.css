@@ -607,3 +607,13 @@ a:hover, a:focus, a:active {
     padding-top: 8px !important;
     padding-bottom: 8px !important;
 }
+
+#projectNav.affix {
+    top: 30px;
+}
+
+#projectNav a {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
