@@ -41,11 +41,11 @@
         </nav>
     </div>
     <!--活动 start-->
-    <div>
+    <div ng-show="MainCtrl.profileNavIsSeleced('Active')">
         <h2 class="f4 mb-2 text-normal mt-4">
             <span class="glyphicon glyphicon-stats" style="color: #646464;">  工作量统计</span>
         </h2>
-        <div class="panel-group" id="accordion" role="tab" ng-show="MainCtrl.iamManager===true">
+        <div class="panel-group" id="accordion" role="tab">
             <div class="chart-title">
                 <a class="button button-glow button-border button-rounded button-primary collapsed"
                    data-toggle="collapse"
@@ -104,7 +104,7 @@
                             全体成员
                         </h3>
                         <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
-                             ng-repeat="log in MainCtrl.displayLogs">
+                             ng-repeat="log in MainCtrl.jobLogs">
                                 <span class="discussion-item-icon">
                                 <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
                                      viewBox="0 0 12 16" width="12" style="margin-top: 1px">
@@ -115,13 +115,12 @@
                             <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
                                     type="button">
                                 <span class="float-left">
-                                    {{log.authorName}}@{{log.authorID}} added 工作记录 to {{log.projectCName}} <span
-                                        style="color: #d1d1d1;font-size: 12px;">{{log.showTime}}</span>
+                                    {{log.authorName}}@{{log.authorID}} added 工作记录 <span style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                             </button>
                             <label>{{log.content}}</label>
                         </div>
-                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="DptCtrl.showMoreActivity(DptCtrl.selectedMemberAccount, DptCtrl.pageNum)"
+                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="MainCtrl.showMoreActivity()"
                                 ng-show="MainCtrl.isShowShowMoreAcitivtyBtn">
                             加载更多活动
                         </button>
@@ -149,13 +148,13 @@
     <!--活动 end-->
 
     <!--Wiki start-->
-    <div>
+    <div ng-show="MainCtrl.profileNavIsSeleced('Wiki')">
 
     </div>
     <!--Wiki end-->
 
     <!--资产 start-->
-    <div>
+    <div ng-show="MainCtrl.profileNavIsSeleced('Repositories')">
 
     </div>
     <!--资产 end-->
@@ -366,6 +365,7 @@
     <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
     <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
 
     <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
