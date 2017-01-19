@@ -129,7 +129,7 @@
 
         JobLogSchema
             .find(condition)
-            .sort({'data': 1, 'starTime': 1})
+            .sort({"reportTime": -1})
             .skip(skipNum)
             .limit(limitNum)
             .exec(function (err, doc) {
