@@ -343,7 +343,7 @@
             //显示详情窗体
             jobDetail.modal();
 
-            /* 通过ID重新获取详情
+            /*  todo 通过详情
              PMSoftServices.getJobDetailByID(m_logID,
              function (res) {
              self.currentJob =  res.doc[0];
