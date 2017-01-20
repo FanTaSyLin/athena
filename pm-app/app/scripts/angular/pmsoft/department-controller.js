@@ -18,8 +18,11 @@
         var dptNum = 0;
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
+        /*详情弹窗*/
+        var jobDetail = angular.element(document.getElementById('jobDetail'));
 
-
+        /*是否为当前部门经理 初始化时候配置 用于判断显示*/
+        var is_dptManager = false;
         self.currentJob = {};
         /*当前显示的工作记录*/
 
@@ -45,7 +48,7 @@
         /*取消审核模态框*/
 
         function _initData() {
-          //  difficultyEditor.slider('setValue', 1);
+            //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
                 return;
             } else {
@@ -88,7 +91,7 @@
                             if (self.displayLogs.length < MAXNUMPREPAGE) {
                                 self.displayLogs.push(item);
                             }
-                        })
+                        });
                         /**
                          * @description 处理这些数据 并显示
                          */
@@ -103,6 +106,26 @@
                 }, function (res) {
 
                 });
+
+                //默认为非项目经理
+                is_dptManager = false;
+                //获取当前account
+                var m_Account = $cookies.get('account');
+                //部门整体配置
+                var m_Sysconfig = $cookies.getObject('Sysconfig');
+                //系统配置中获取部门配置
+                var m_departments = m_Sysconfig[0].departments;
+                //判断是否为当前显示部门的部门经理
+                for (var i = 0; i < m_departments.length; i++) {
+                    var this_Dptgroup = m_departments[i].id;
+                    var this_manager = m_departments[i].manager.account;
+                    //string 强等于
+                    if (this_Dptgroup.toString() === dptNum.toString()
+                        && this_manager.toString() === m_Account.toString()) {
+                        is_dptManager = true;
+                    }
+                }
+
             }
         }
 
@@ -131,7 +154,7 @@
              * 根据日期账号 先合并数据
              */
             for (var i = 0; i < datas.length; i++) {
-                var isExist = false
+                var isExist = false;
                 for (var j = 0; j < baseDataList.length; j++) {
                     if (baseDataList[j].account === datas[i].authorID && baseDataList[j].date === datas[i].date) {
                         baseDataList[j].duration_Real += datas[i].duration;
@@ -216,7 +239,7 @@
                         }]
                     }
                 }
-            }
+            };
             return new Chart(ctxByDay, config);
 
         }
@@ -313,37 +336,20 @@
         //点击显示选择信息详情
         function _showActivityDetial(logDetial) {
 
-            var m_Account = $cookies.get('account');
-            var m_logID = logDetial._id;
-            var m_proID = logDetial.projectID;
+            //初始化设置，为false
             self.currentJob = logDetial;
-            self.currentJob.isReviewer = false;
-            var jobDetail = angular.element(document.getElementById('jobDetail'));
-            //根据项目ID获取是否为权限项目
-            PMSoftServices.getProjectDetailByID(m_proID, function (res) {
-                var m_ProjectDetail = res.data[0];
-                if (m_ProjectDetail.reviewers) {
+            //是否显示系数与是否显示部门经理一致
+            self.currentJob.isReviewer = is_dptManager;
+            //显示详情窗体
+            jobDetail.modal();
 
-                    //遍历查找是否为可以审核者
-                    for (var i = 0; i < m_ProjectDetail.reviewers.length; i++) {
-                        if (m_ProjectDetail.reviewers[i].account === m_Account) {
-
-                            self.currentJob.isReviewer = true;
-                            break;
-                        }
-                    }
-                    jobDetail.modal();
-                }
-
-            }, function (err) {
-            });
-            //获取相应
-
-            /*   单独获取？是否需要2层嵌套？
+            /*  todo 通过详情
              PMSoftServices.getJobDetailByID(m_logID,
              function (res) {
-             self.currentJob = res.doc[0];
-             jobAudited.modal({backdrop: 'static', keyboard: false});
+             self.currentJob =  res.doc[0];
+             //是否显示系数与是否显示部门经理一致
+             self.currentJob.isReviewer = is_dptManager;
+             jobDetail.modal( );
              }, function (err) {
              });*/
 
@@ -414,7 +420,7 @@
             borderColor: "rgba(102, 102, 102, 0.7)",
             backgroundColor: "rgba(102, 102, 102, 0.2)"
         }
-    ]
+    ];
 
     /**
      * 基础数据 根据账号、日期合并后的数据

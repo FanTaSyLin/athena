@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/fullcalendar/dist/fullcalendar.min.css">
     <link rel="stylesheet" href="/styles/pm_member_status.css">
     <link rel="stylesheet" href="/styles/buttons.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
@@ -48,7 +49,7 @@
         <div class="col-9 float-left pl-2">
             <div class="user-profile-nav top-0">
                 <nav class="underline-nav" role="navigation">
-                    <a class="underline-nav-item" role="tab" ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Active')}" ng-click="MemberCtrl.selectProfileNavItem('Active')">近期活动</a>
+                    <a class="underline-nav-item" role="tab" ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Active')}" ng-click="MemberCtrl.selectProfileNavItem('Active')">活动</a>
                     <a class="underline-nav-item" role="tab"  ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Repositories')}" ng-click="MemberCtrl.selectProfileNavItem('Repositories')">Repositories</a>
                 </nav>
             </div>
@@ -61,7 +62,7 @@
                             <span class="glyphicon glyphicon-stats" style="color: #646464;">  参与的项目</span>
                         </h2>
                         <ol class="pinned-repos-list mb-4">
-                            <li class="pinned-repo-item p-3 mb-3 border border-gray-dark rounded-1" ng-repeat="project in MemberCtrl.projectList">
+                            <li class="pinned-repo-item p-3 mb-3 border border-gray-dark rounded-1" ng-repeat="project in MemberCtrl.projectList | sort_NotZero">
                                 <div class="pinned-repo-item-content">
                                     <span class="d-block">
                                         <a class="text-bold" href ng-click="MemberCtrl.openThisProject(project._id)">
@@ -82,6 +83,11 @@
                                 </div>
                             </li>
                         </ol>
+
+                        <h2 class="f4 mb-2 text-normal">
+                            <span class="glyphicon glyphicon-align-left" style="color: #646464;">  日历</span>
+                        </h2>
+                        <div id="memberCalendar"></div>
 
                         <h2 class="f4 mb-2 text-normal">
                             <span class="glyphicon glyphicon-align-left" style="color: #646464;">  近期动态</span>
@@ -155,6 +161,7 @@
 <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
 <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 
 <script type="text/javascript" src="/scripts/angular/memberstatus/module.js"></script>
 <script type="text/javascript" src="/scripts/angular/memberstatus/config.js"></script>
