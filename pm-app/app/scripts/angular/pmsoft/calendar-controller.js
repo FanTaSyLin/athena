@@ -24,7 +24,7 @@
                 return;
             }
             myCalendar.fullCalendar({
-
+//
             });
         }
 
