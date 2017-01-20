@@ -36,6 +36,12 @@
         }, _updateRecode); //更改工作记录
 
         server.get({
+            path: BASEPATH + '/jobrecode/joblistone',
+            version: '0.0.1'
+        }, _getRecodeone); //获取工作记录 详情 one
+
+
+        server.get({
             path: BASEPATH + '/jobrecode/joblist',
             version: '0.0.1'
         }, _getRecodes); //获取工作记录
@@ -79,8 +85,10 @@
             version: '0.0.1'
         }, _checkJob);//审核工作记录
 
-        server.post({path: BASEPATH + '/jobrecode/turnback',
-            version: '0.0.1'}, _turnBackJob);//退回已提交的工作记录
+        server.post({
+            path: BASEPATH + '/jobrecode/turnback',
+            version: '0.0.1'
+        }, _turnBackJob);//退回已提交的工作记录
 
     };
 
@@ -139,7 +147,7 @@
                 var data = {
                     status: "success",
                     doc: doc
-                }
+                };
                 res.end(JSON.stringify(data));
                 next();
             });
@@ -283,6 +291,54 @@
     }
 
     /**
+     * 获取单一工作记录详情
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     * @private
+     */
+    function _getRecodeone(req, res, next) {
+
+        if (_.isUndefined(req.params)) {
+
+            //由于数据量过大 所以应该禁止无条件查询
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+
+        }
+
+        var condition = {};
+        var jobligid = req.params._id;
+
+
+        if (!_.isUndefined(jobligid)) {
+            //添加查询条件： ==username
+            condition._id=jobligid;
+
+        }
+
+
+
+        JobLogSchema.find(condition).sort({'data': 1, 'starTime': 1}).exec(function (err, doc) {
+
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+
+            var data = {};
+            data.status = "success";
+            data.error = null;
+            data.doc = doc;
+
+            res.end(JSON.stringify(data));
+
+        });
+
+    }
+
+    /**
      * 分页查询工作记录
      * @param req
      * @param res
@@ -334,23 +390,23 @@
 
         JobLogSchema
             .find(condition)
-            .skip(startNum-1)
+            .skip(startNum - 1)
             .limit(pageSize)
             .sort({'data': -1, 'starTime': -1})
             .exec(function (err, doc) {
 
-            if (err) {
-                return next(new DBOptionError(415, err));
-            }
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
 
-            var data = {
-                count: doc.length,
-                doc: doc
-            };
+                var data = {
+                    count: doc.length,
+                    doc: doc
+                };
 
-            res.end(JSON.stringify(data));
+                res.end(JSON.stringify(data));
 
-        });
+            });
     }
 
     /**
@@ -433,7 +489,7 @@
                         status: 'Pass'
                     },
                     $push: {
-                        logs:{
+                        logs: {
                             type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
                             logTime: new Date(), /*日志时间戳*/
                             msg: '审核了本条记录。', /*日志内容*/
@@ -523,7 +579,7 @@
                     status: 'TurnBack'
                 },
                 $push: {
-                    logs:{
+                    logs: {
                         type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
                         logTime: new Date(), /*日志时间戳*/
                         msg: '退回了本条记录。原因：' + body.turnBackReason + '。', /*日志内容*/
@@ -639,7 +695,7 @@
                         status: 'Submit'
                     },
                     $push: {
-                        logs:{
+                        logs: {
                             type: 'Edit', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
                             logTime: new Date(), /*日志时间戳*/
                             msg: '修改了本条记录。', /*日志内容*/
