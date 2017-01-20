@@ -10,6 +10,11 @@
     var app = angular.module("MemberStatus");
 
     /**
+     * 添加安全性配置
+     */
+    app.filter('to_trusted', toTrusted);
+
+    /**
      * 截断字符串
      */
     app.filter("substring_str", substring_str);
@@ -48,4 +53,14 @@
         }
     }
 
+
+    toTrusted.$inject = ['$sce'];
+    /**
+     * toTrusted html转换
+     */
+    function toTrusted($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        };
+    }
 })();
