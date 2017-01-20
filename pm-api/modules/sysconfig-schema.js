@@ -12,6 +12,12 @@ var SysConfigSchema = new Schema({
     departmentGroups: [{
         id: {type: Number, unique: true}, /*编号*/
         name: {type: String}, /*名称*/
+        manager: [
+            {
+                account: {type: String},
+                name: {type: String}
+            }
+        ]
     }],
     /*部门*/
     departments: [{
