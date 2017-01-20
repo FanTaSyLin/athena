@@ -19,6 +19,7 @@
         var sysconfig = $cookies.getObject("Sysconfig");
         var account = "";
         var projectNav = angular.element(document.getElementById('projectNav'));
+        var memberCalendar = angular.element(document.getElementById("memberCalendar"));
 
         self.isIam = false;
         self.member = {};
@@ -41,9 +42,13 @@
 
             account = _getQueryString("memberid");
 
+            memberCalendar.fullCalendar({
+
+            });
+
             projectNav.affix({
                 offset: {
-                    top: 600
+                    top: 1200
                 }
             });
 
