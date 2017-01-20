@@ -9,11 +9,12 @@
     angular.module('PMSoft')
         .factory('PMSoftServices', Services);
 
-    Services.$inject = ['$http']
+    Services.$inject = ['$http'];
 
     function Services($http) {
 
-        var BASEPATH = 'http://123.56.135.196:4003/api';
+         var BASEPATH = 'http://123.56.135.196:4003/api';
+        //var BASEPATH = 'http://10.24.4.121:4003/api';
 
         var self = {
             getEmployeeByName: _getEmployeeByName,
@@ -31,6 +32,8 @@
             getProjectStaticByAccount: _getProjectStaticByAccount,
             getDepartmentMembers: _getDepartmentMembers,
             getSysConfig: _getSysConfig,
+            getJobDetailByID: _getJobDetailByID,/*根据ID获取工作记录详情*/
+            getProjectDetailByID: _getProjectDetailByID,/*根据ID获取项目详情*/
 
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
@@ -39,8 +42,10 @@
             unauditedJobList_Total: [], /*未审核工作列表-总体 为ReviewCtrl 传递参数*/
             unauditedJobList_Filter: [], /*未审核工作列表-筛选后保留 为ReviewCtrl 传递参数*/
             unauditedJobList_View: [], /*未审核工作列表-分页后显示用 为ReviewCtrl 传递参数*/
-            currentUnauditedJobIndex: 0 /*一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0*/
-        }
+            currentUnauditedJobIndex: 0, /*一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0*/
+
+            currentDetailJob: {} /*当前用于显示详情的工作记录 department 页面详情显示使用*/
+        };
 
         return self;
 
@@ -191,6 +196,36 @@
         function _getSysConfig(successFn, errorFn) {
             var urlStr = BASEPATH + "/sysconfig";
             $http.get(urlStr).success(successFn).error(errorFn);
+        }
+
+        /**
+         * 根据ID获取工作详情
+         * @param condition _id详情
+         * @param successFn
+         * @param errorFn
+         * @private
+         */
+        function _getJobDetailByID(condition, successFn, errorFn) {
+            var conditionStr = '';
+            if (condition) {
+                conditionStr = '_id=' + condition;
+                $http.get(BASEPATH + '/jobrecode/joblistone?' + conditionStr).success(successFn).error(errorFn);
+            }
+        }
+
+        /**
+         * 根据ID获取项目详情
+         * @param condition id详情 urltest http://10.24.4.121:4003/api/project?id=5850f4dd7acb5e73655feac4
+         * @param successFn
+         * @param errorFn
+         * @private
+         */
+        function _getProjectDetailByID(condition, successFn, errorFn) {
+            var conditionStr = '';
+            if (condition) {
+                conditionStr = 'id=' + condition;
+                $http.get(BASEPATH + '/project?' + conditionStr).success(successFn).error(errorFn);
+            }
         }
     }
 

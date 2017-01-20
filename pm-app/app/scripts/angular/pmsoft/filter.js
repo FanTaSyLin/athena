@@ -35,7 +35,7 @@
             return $sce.trustAsHtml(text);
         };
     }
-    
+
     function rmProjectByCount0() {
         return function (items) {
             var array = [];
@@ -58,7 +58,7 @@
         }
     }
 
-    function filter_pass_turnback_logs () {
+    function filter_pass_turnback_logs() {
         return function (items) {
             var array = [];
             for (var i = 0; i < items.length; i++) {
@@ -72,9 +72,13 @@
 
     function substring_str() {
         return function (str, subNum) {
-            if (str.length > subNum) {
-                return str.substring(0, subNum) + "...";
-            } else {
+            try {
+                if (str.length > subNum) {
+                    return str.substring(0, subNum) + "...";
+                } else {
+                    return str;
+                }
+            } catch (err) {
                 return str;
             }
         }

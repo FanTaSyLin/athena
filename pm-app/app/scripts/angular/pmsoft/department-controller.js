@@ -19,6 +19,10 @@
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
 
+
+        self.currentJob = {};
+        /*当前显示的工作记录*/
+
         self.members = [];
         self.profileNavCurrentItem = "Active";
         self.selectedMemberAccount = "all";
@@ -34,8 +38,14 @@
         self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
         self.showMoreActivity = _showMoreActivity;
+        self.showActivityDetial = _showActivityDetial;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        self.disMissModal = _disMissModal;
+        /*取消审核模态框*/
 
         function _initData() {
+          //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
                 return;
             } else {
@@ -63,7 +73,7 @@
                         self.members.push(doc[i]);
                     }
 
-                    var condition = {}
+                    var condition = {};
                     condition.username = memberIDs;
                     condition.startDate = startDateStr;
                     condition.endDate = endDateStr;
@@ -171,8 +181,8 @@
                         dataSetItem.data.push(0);
                     }
                 }
-                dataSetItem.borderColor = ColourSystem[i%10].borderColor;
-                dataSetItem.backgroundColor = ColourSystem[i%10].backgroundColor;
+                dataSetItem.borderColor = ColourSystem[i % 10].borderColor;
+                dataSetItem.backgroundColor = ColourSystem[i % 10].backgroundColor;
                 dataSetItem.pointBorderColor = "rgba(255, 255, 255 , 1)";
                 dataSetItem.pointBackgroundColor = "rgba(141, 68, 173 , 0.7)";
                 dataSetItem.pointBorderWidth = 2;
@@ -269,16 +279,17 @@
             }
         }
 
+        //点击显示更多信息
         function _showMoreActivity(memberAccount, pageNum) {
             var count = 0;
             var start = pageNum * MAXNUMPREPAGE;
             var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
             if (memberAccount === "all") {
-                for (var i = 0; i < self.departmentLogs.length; i++)  {
+                for (var i = 0; i < self.departmentLogs.length; i++) {
                     if (count >= start && count <= end) {
                         self.displayLogs.push(self.departmentLogs[i]);
                     }
-                    count ++;
+                    count++;
                 }
                 if (count < end) {
                     self.isShowShowMoreAcitivtyBtn = false;
@@ -289,7 +300,7 @@
                         if (count >= start && count <= end) {
                             self.displayLogs.push(self.departmentLogs[i]);
                         }
-                        count ++;
+                        count++;
                     }
                 }
                 if (count < end) {
@@ -297,6 +308,68 @@
                 }
             }
             self.pageNum++;
+        }
+
+        //点击显示选择信息详情
+        function _showActivityDetial(logDetial) {
+
+            var m_Account = $cookies.get('account');
+            var m_logID = logDetial._id;
+            var m_proID = logDetial.projectID;
+            self.currentJob = logDetial;
+            self.currentJob.isReviewer = false;
+            var jobDetail = angular.element(document.getElementById('jobDetail'));
+            //根据项目ID获取是否为权限项目
+            PMSoftServices.getProjectDetailByID(m_proID, function (res) {
+                var m_ProjectDetail = res.data[0];
+                if (m_ProjectDetail.reviewers) {
+
+                    //遍历查找是否为可以审核者
+                    for (var i = 0; i < m_ProjectDetail.reviewers.length; i++) {
+                        if (m_ProjectDetail.reviewers[i].account === m_Account) {
+
+                            self.currentJob.isReviewer = true;
+                            break;
+                        }
+                    }
+                    jobDetail.modal();
+                }
+
+            }, function (err) {
+            });
+            //获取相应
+
+            /*   单独获取？是否需要2层嵌套？
+             PMSoftServices.getJobDetailByID(m_logID,
+             function (res) {
+             self.currentJob = res.doc[0];
+             jobAudited.modal({backdrop: 'static', keyboard: false});
+             }, function (err) {
+             });*/
+
+
+        }
+
+        function _disMissModal() {
+            //location.reload();
+            /**
+             * @description 这里要做的其实不是刷新页面 而是重新筛选数据 把现有数据中的 "已审核的" 以及 "已拒绝的" 过滤掉
+             * 其实可以考虑用 filter
+             */
+            /**
+             * 关闭页面、提交审核、提交拒绝、打开页面时 应初始化 审核系数
+             */
+
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
         }
     }
 
@@ -342,7 +415,7 @@
             backgroundColor: "rgba(102, 102, 102, 0.2)"
         }
     ]
-    
+
     /**
      * 基础数据 根据账号、日期合并后的数据
      * @typedef {Object} baseData
@@ -364,4 +437,5 @@
      * @property {Number} pointBorderWidth
      */
 
-})();
+})
+();
