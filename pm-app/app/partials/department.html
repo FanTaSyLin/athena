@@ -59,7 +59,7 @@
                                 全体成员
                             </h3>
                             <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
-                                 ng-repeat="log in DptCtrl.displayLogs">
+                                 ng-repeat="log in DptCtrl.displayLogs" ng-click="DptCtrl.showActivityDetial(log)">
                                 <span class="discussion-item-icon">
                                 <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
                                      viewBox="0 0 12 16" width="12" style="margin-top: 1px">
@@ -76,7 +76,8 @@
                                 </button>
                                 <label>{{log.content}}</label>
                             </div>
-                            <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="DptCtrl.showMoreActivity(DptCtrl.selectedMemberAccount, DptCtrl.pageNum)"
+                            <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
+                                    ng-click="DptCtrl.showMoreActivity(DptCtrl.selectedMemberAccount, DptCtrl.pageNum)"
                                     ng-show="DptCtrl.isShowShowMoreAcitivtyBtn">
                                 加载更多活动
                             </button>
@@ -101,6 +102,177 @@
             </div>
             <!--活动 end-->
 
+            <!--工作记录详情对话框 start-->
+            <div class="modal fade" id="jobDetail">
+                <div class="modal-dialog size-jobsheet">
+                    <div class="modal-content">
+                        <!--标题-->
+                        <div class="modal-header dialog-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title title-h4">
+                                工作记录详情
+                            </h4>
+                        </div>
+                        <!--内容-->
+                        <div class="modal-body dialog-body">
+                            <form>
+                                <!-- 状态显示区 -->
+                                <div class="row">
+                                    <div class="function-select-area item-border">
+                                        <!--项目显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">项目</p>
+                                            <div class="function-select-area-projects">
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                                <a class="title-h7 dropdown-toggle"
+                                                   style="font-size: 14px; font-weight: 600"
+                                                   title="{{DptCtrl.currentJob.projectCName}}" href>
+                                                    {{DptCtrl.currentJob.projectCName }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--日期显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">日期</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.date.substring(0, 10)}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--时间显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">所用时间</p>
+                                            <div class="function-select-area-type">
+                                                <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.duration}}小时
+                                                </a>
+                                            </div>
+                                            <!--
+                                            <div class="row function-select-area-time">
+                                                <div class="col-xs-4 ">
+                                                    <a class="title-h7 dropdown-toggle" href>
+                                                        {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
+                                                    </a>
+                                                </div>
+                                                <i class="col-xs-1">
+                                                    -
+                                                </i>
+                                                <div class="col-xs-4">
+                                                    <a class="title-h7 dropdown-toggle" href>
+                                                        {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--系数显示区-->
+                                <div class="row" style="padding-top: 5px" ng-if="DptCtrl.currentJob.isReviewer">
+                                    <div class="function-select-area item-border" style="height: 4em;">
+                                        <!--工作难度-->
+                                        <div class="col-md-4" style="margin-top: 10px">
+                                            <p class="title-h8">效率系数:{{DptCtrl.currentJob.efficiency}}</p>
+
+                                            <input id="efficiency11" type="text" style="display: none;"
+                                                   data-provide="slider"
+                                                   data-slider-ticks="[0, 0.5, 1, 1.5, 2]"
+                                                   data-slider-min="0"
+                                                   data-slider-max="2"
+                                                   data-slider-step="0.5"
+                                                   data-slider-value="1"
+                                            />
+                                        </div>
+                                        <!--时间系数-->
+                                        <div class="col-md-4   item-border" style="height: 4em;">
+                                            <p class="title-h8">效率系数:{{DptCtrl.currentJob.efficiency}}</p>
+                                        </div>
+                                        <!--完成质量-->
+                                        <div class="col-md-4  item-border" style="height: 4em;">
+                                            <p class="title-h8">质量系数： {{DptCtrl.currentJob.quality}}</p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--提交状态显示区-->
+                                <div class="row" style="padding-top: 5px;">
+                                    <div class="function-select-area item-border">
+                                        <!--提交人-->
+                                        <div class="col-md-4 function-select-item item-border" style="margin-top: 0px">
+                                            <p class="title-h8">提交人</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon glyphicon-user"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.authorName }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--类型显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">类型</p>
+                                            <div class="function-select-area-type">
+                                                <span class="glyphicon glyphicon-tag"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.type}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--记录状态-->
+                                        <div class="col-md-4 function-select-item item-border" style="margin-top: 0px">
+                                            <p class="title-h8">审核状态</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon glyphicon-info-sign"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.status}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- 内容显示区 -->
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="function-recode-area item-border"
+                                         style="overflow: auto; min-height: 390px; max-height: 390px">
+                                        <div ng-bind-html="DptCtrl.currentJob.content  | to_trusted">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 日志显示区 -->
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="function-recode-area item-border"
+                                         style="overflow: auto; min-height: 200px; max-height: 200px">
+                                        <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                            <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                                        </p>
+                                        <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500"
+                                           ng-repeat="log in DptCtrl.currentJob.logs">
+                                            <b>{{log.authorName}}</b>: {{log.msg}}
+                                            {{DptCtrl.formatDateTime(log.logTime)}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--页脚-->
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="DptCtrl.disMissModal()">关闭
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--工作记录详情对话框 end-->
+
+
         </div>
         <!--近期工作 end-->
 
@@ -115,6 +287,7 @@
 
         </div>
         <!--部门资产 end-->
+
 
     </div>
 </div>
