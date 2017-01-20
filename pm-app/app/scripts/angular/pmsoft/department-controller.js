@@ -18,6 +18,13 @@
         var dptNum = 0;
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
+        /*详情弹窗*/
+        var jobDetail = angular.element(document.getElementById('jobDetail'));
+
+        /*是否为当前部门经理 初始化时候配置 用于判断显示*/
+        var is_dptManager = false;
+        self.currentJob = {};
+        /*当前显示的工作记录*/
 
         self.members = [];
         self.profileNavCurrentItem = "Active";
@@ -34,8 +41,14 @@
         self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
         self.showMoreActivity = _showMoreActivity;
+        self.showActivityDetial = _showActivityDetial;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        self.disMissModal = _disMissModal;
+        /*取消审核模态框*/
 
         function _initData() {
+            //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
                 return;
             } else {
@@ -63,7 +76,7 @@
                         self.members.push(doc[i]);
                     }
 
-                    var condition = {}
+                    var condition = {};
                     condition.username = memberIDs;
                     condition.startDate = startDateStr;
                     condition.endDate = endDateStr;
@@ -78,7 +91,7 @@
                             if (self.displayLogs.length < MAXNUMPREPAGE) {
                                 self.displayLogs.push(item);
                             }
-                        })
+                        });
                         /**
                          * @description 处理这些数据 并显示
                          */
@@ -93,6 +106,26 @@
                 }, function (res) {
 
                 });
+
+                //默认为非项目经理
+                is_dptManager = false;
+                //获取当前account
+                var m_Account = $cookies.get('account');
+                //部门整体配置
+                var m_Sysconfig = $cookies.getObject('Sysconfig');
+                //系统配置中获取部门配置
+                var m_departments = m_Sysconfig[0].departments;
+                //判断是否为当前显示部门的部门经理
+                for (var i = 0; i < m_departments.length; i++) {
+                    var this_Dptgroup = m_departments[i].id;
+                    var this_manager = m_departments[i].manager.account;
+                    //string 强等于
+                    if (this_Dptgroup.toString() === dptNum.toString()
+                        && this_manager.toString() === m_Account.toString()) {
+                        is_dptManager = true;
+                    }
+                }
+
             }
         }
 
@@ -121,7 +154,7 @@
              * 根据日期账号 先合并数据
              */
             for (var i = 0; i < datas.length; i++) {
-                var isExist = false
+                var isExist = false;
                 for (var j = 0; j < baseDataList.length; j++) {
                     if (baseDataList[j].account === datas[i].authorID && baseDataList[j].date === datas[i].date) {
                         baseDataList[j].duration_Real += datas[i].duration;
@@ -171,8 +204,8 @@
                         dataSetItem.data.push(0);
                     }
                 }
-                dataSetItem.borderColor = ColourSystem[i%10].borderColor;
-                dataSetItem.backgroundColor = ColourSystem[i%10].backgroundColor;
+                dataSetItem.borderColor = ColourSystem[i % 10].borderColor;
+                dataSetItem.backgroundColor = ColourSystem[i % 10].backgroundColor;
                 dataSetItem.pointBorderColor = "rgba(255, 255, 255 , 1)";
                 dataSetItem.pointBackgroundColor = "rgba(141, 68, 173 , 0.7)";
                 dataSetItem.pointBorderWidth = 2;
@@ -206,7 +239,7 @@
                         }]
                     }
                 }
-            }
+            };
             return new Chart(ctxByDay, config);
 
         }
@@ -269,16 +302,17 @@
             }
         }
 
+        //点击显示更多信息
         function _showMoreActivity(memberAccount, pageNum) {
             var count = 0;
             var start = pageNum * MAXNUMPREPAGE;
             var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
             if (memberAccount === "all") {
-                for (var i = 0; i < self.departmentLogs.length; i++)  {
+                for (var i = 0; i < self.departmentLogs.length; i++) {
                     if (count >= start && count <= end) {
                         self.displayLogs.push(self.departmentLogs[i]);
                     }
-                    count ++;
+                    count++;
                 }
                 if (count < end) {
                     self.isShowShowMoreAcitivtyBtn = false;
@@ -289,7 +323,7 @@
                         if (count >= start && count <= end) {
                             self.displayLogs.push(self.departmentLogs[i]);
                         }
-                        count ++;
+                        count++;
                     }
                 }
                 if (count < end) {
@@ -297,6 +331,51 @@
                 }
             }
             self.pageNum++;
+        }
+
+        //点击显示选择信息详情
+        function _showActivityDetial(logDetial) {
+
+            //初始化设置，为false
+            self.currentJob = logDetial;
+            //是否显示系数与是否显示部门经理一致
+            self.currentJob.isReviewer = is_dptManager;
+            //显示详情窗体
+            jobDetail.modal();
+
+            /* 通过ID重新获取详情
+             PMSoftServices.getJobDetailByID(m_logID,
+             function (res) {
+             self.currentJob =  res.doc[0];
+             //是否显示系数与是否显示部门经理一致
+             self.currentJob.isReviewer = is_dptManager;
+             jobDetail.modal( );
+             }, function (err) {
+             });*/
+
+
+        }
+
+        function _disMissModal() {
+            //location.reload();
+            /**
+             * @description 这里要做的其实不是刷新页面 而是重新筛选数据 把现有数据中的 "已审核的" 以及 "已拒绝的" 过滤掉
+             * 其实可以考虑用 filter
+             */
+            /**
+             * 关闭页面、提交审核、提交拒绝、打开页面时 应初始化 审核系数
+             */
+
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
         }
     }
 
@@ -341,8 +420,8 @@
             borderColor: "rgba(102, 102, 102, 0.7)",
             backgroundColor: "rgba(102, 102, 102, 0.2)"
         }
-    ]
-    
+    ];
+
     /**
      * 基础数据 根据账号、日期合并后的数据
      * @typedef {Object} baseData
@@ -364,4 +443,5 @@
      * @property {Number} pointBorderWidth
      */
 
-})();
+})
+();
