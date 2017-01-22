@@ -26,9 +26,9 @@
 
         /*是否为当前部门经理 初始化时候配置 用于判断显示*/
         var is_dptManager = false;
-        self.currentJob = {};
-        /*当前显示的工作记录*/
 
+        /*当前显示的工作记录*/
+        self.currentJob = {};
         self.members = [];
         self.myBar = undefined;
         self.profileNavCurrentItem = "Active";
@@ -53,8 +53,8 @@
         self.isSelectedDepartment =_isSelectedDepartment;
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
-        self.disMissModal = _disMissModal;
         /*取消审核模态框*/
+        self.disMissModal = _disMissModal;
 
         function _isSelectedDepartment(department) {
             return department.id === self.selectedDepartment.id;

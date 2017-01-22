@@ -21,6 +21,7 @@
     </div>
 </header>
 <!--页头 end-->
+
 <div role="main" class="container-project px-3 mt-4">
     <div class="project-info-top">
         <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
@@ -104,7 +105,7 @@
                             全体成员
                         </h3>
                         <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
-                             ng-repeat="log in MainCtrl.jobLogs">
+                             ng-repeat="log in MainCtrl.jobLogs" ng-click="MainCtrl.showActivityDetial(log)">
                                 <span class="discussion-item-icon">
                                 <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
                                      viewBox="0 0 12 16" width="12" style="margin-top: 1px">
@@ -115,12 +116,14 @@
                             <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
                                     type="button">
                                 <span class="float-left">
-                                    {{log.authorName}}@{{log.authorID}} added 工作记录 <span style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
+                                    {{log.authorName}}@{{log.authorID}} added 工作记录 <span
+                                        style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                             </button>
                             <label>{{log.content}}</label>
                         </div>
-                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="MainCtrl.showMoreActivity()"
+                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
+                                ng-click="MainCtrl.showMoreActivity()"
                                 ng-show="MainCtrl.isShowShowMoreAcitivtyBtn">
                             加载更多活动
                         </button>
@@ -267,6 +270,7 @@
     </div>
     <!--项目组成员列表 end-->
 </div>
+
 <!--成员状态模态框 start-->
 <div class="modal fade" id="member-status-modal">
     <div class="modal-dialog member-status-dialog">
@@ -357,22 +361,184 @@
         </div>
         <!--内容 end-->
     </div>
-    <!--添加成员模态框 end-->
+</div>
+<!--添加成员模态框 end-->
 
-    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
-    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
-    <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+<!--工作记录详情对话框 start-->
+<div class="modal fade" id="jobDetail">
+    <div class="modal-dialog size-jobsheet">
+        <div class="modal-content">
+            <!--标题-->
+            <div class="modal-header dialog-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title title-h4">
+                    工作记录详情
+                </h4>
+            </div>
+            <!--内容-->
+            <div class="modal-body dialog-body">
+                <form>
+                    <!-- 状态显示区 -->
+                    <div class="row">
+                        <div class="function-select-area item-border">
+                            <!--项目显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">项目</p>
+                                <div class="function-select-area-projects">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                    <a class="title-h7 dropdown-toggle"
+                                       style="font-size: 14px; font-weight: 600"
+                                       title="{{MainCtrl.currentJob.projectCName}}" href>
+                                        {{MainCtrl.currentJob.projectCName | substring_str: 10}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--日期显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">日期</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MainCtrl.currentJob.date.substring(0, 10)}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--时间显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">所用时间(实际)</p>
+                                <div class="function-select-area-type">
+                                    <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MainCtrl.currentJob.duration}}小时
+                                    </a>
+                                </div>
+                                <!--
+                                <div class="row function-select-area-time">
+                                    <div class="col-xs-4 ">
+                                        <a class="title-h7 dropdown-toggle" href>
+                                            {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
+                                        </a>
+                                    </div>
+                                    <i class="col-xs-1">
+                                        -
+                                    </i>
+                                    <div class="col-xs-4">
+                                        <a class="title-h7 dropdown-toggle" href>
+                                            {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
+                                        </a>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
 
-    <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
-    <script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
+                        </div>
+                    </div>
+                    <!--系数显示区-->
+                    <div class="row" style="padding-top: 5px" ng-if="MainCtrl.currentJob.isReviewer">
+                        <div class="function-select-area item-border" style="height: 4em;">
+                            <!--工作难度-->
+                            <div class="col-md-4 item-border" style="height: 4em;">
+                                <p class="title-h8">难度系数:{{MainCtrl.currentJob.difficulty}}</p>
+                            </div>
+                            <!--时间系数-->
+                            <div class="col-md-4 item-border" style="height: 4em;">
+                                <p class="title-h8">效率系数:{{MainCtrl.currentJob.efficiency}}</p>
+                            </div>
+                            <!--完成质量-->
+                            <div class="col-md-4  item-border" style="height: 4em;">
+                                <p class="title-h8">质量系数：{{MainCtrl.currentJob.quality}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--提交状态显示区-->
+                    <div class="row" style="padding-top: 5px;">
+                        <div class="function-select-area item-border">
+                            <!--提交人-->
+                            <div class="col-md-4 function-select-item item-border"   >
+                                <p class="title-h8">提交人</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon glyphicon-user"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MainCtrl.currentJob.authorName }}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--类型显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">类型</p>
+                                <div class="function-select-area-type">
+                                    <span class="glyphicon glyphicon-tag"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MainCtrl.currentJob.type}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--记录状态-->
+                            <div class="col-md-4 function-select-item item-border"  >
+                                <p class="title-h8">审核状态</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon glyphicon-info-sign"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MainCtrl.currentJob.status}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 内容显示区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 290px; max-height: 290px">
+                            <div ng-bind-html="MainCtrl.currentJob.content  | to_trusted">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 日志显示区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 200px; max-height: 200px">
+                            <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                            </p>
+                            <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500"
+                               ng-repeat="log in MainCtrl.currentJob.logs">
+                                <b>{{log.authorName}}</b>: {{log.msg}}
+                                {{MainCtrl.formatDateTime(log.logTime)}}
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--页脚-->
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        ng-click="MainCtrl.disMissModal()">关闭
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--工作记录详情对话框 end-->
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+
+<script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/filter.js"></script>
 </body>
 
 </html>

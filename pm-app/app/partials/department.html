@@ -157,7 +157,7 @@
                                         </div>
                                         <!--时间显示-->
                                         <div class="col-md-4 function-select-item item-border">
-                                            <p class="title-h8">所用时间</p>
+                                            <p class="title-h8">所用时间(实际)</p>
                                             <div class="function-select-area-type">
                                                 <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
                                                 <a class="title-h7 dropdown-toggle" href>
@@ -191,15 +191,6 @@
                                         <!--工作难度-->
                                         <div class="col-md-4   item-border" style="height: 4em;">
                                             <p class="title-h8">难度系数:{{DptCtrl.currentJob.difficulty}}</p>
-
-                                            <input id="efficiency11" type="text" style="display: none;"
-                                                   data-provide="slider"
-                                                   data-slider-ticks="[0, 0.5, 1, 1.5, 2]"
-                                                   data-slider-min="0"
-                                                   data-slider-max="2"
-                                                   data-slider-step="0.5"
-                                                   data-slider-value="1"
-                                            />
                                         </div>
                                         <!--时间系数-->
                                         <div class="col-md-4   item-border" style="height: 4em;">
@@ -252,7 +243,7 @@
                                 <!-- 内容显示区 -->
                                 <div class="row" style="padding-top: 5px">
                                     <div class="function-recode-area item-border"
-                                         style="overflow: auto; min-height: 390px; max-height: 390px">
+                                         style="overflow: auto; min-height: 290px; max-height: 290px">
                                         <div ng-bind-html="DptCtrl.currentJob.content  | to_trusted">
                                         </div>
                                     </div>

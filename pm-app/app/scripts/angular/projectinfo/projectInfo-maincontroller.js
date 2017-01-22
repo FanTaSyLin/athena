@@ -20,6 +20,8 @@
         var projectID = '';
         var account = '';
         var rmShowedMemberClickCount = 1; //用来记录移除成员时的点击次数
+        /*是否为当前部门经理 初始化时候配置 用于判断显示*/
+        var is_dptManager = false;
         var ctxByMember_Bar = angular.element(document.getElementById('Chart-ByMember-bar'));
         var ctxByMember_Pie = angular.element(document.getElementById('Chart-ByMember-pie'));
         var dateSelectArea = angular.element(document.getElementById('dateSelectArea'));
@@ -27,7 +29,12 @@
         var memberStatusModal = angular.element(document.getElementById('member-status-modal'));
         var memberAddModal = angular.element(document.getElementById('member-add-modal'));
         var memberNav = angular.element(document.getElementById('memberNav'));
+        /*详情弹窗*/
+        var jobDetail = angular.element(document.getElementById('jobDetail'));
 
+
+        /*当前显示的工作记录*/
+        self.currentJob = {};
         self.isStarred = false;
         self.thisProject = {};
         self.thisProjectInfo = {};
@@ -51,6 +58,7 @@
         self.isShowShowMoreAcitivtyBtn = true;
         self.jobLogs = [];
         self.pageNum = 0;
+
 
         self.init = _init;
         self.starred = _starred;
@@ -78,6 +86,10 @@
         self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
         self.showMoreActivity = _showMoreActivity;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        /*显示工作记录详情模态框*/
+        self.showActivityDetial = _showActivityDetial;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
@@ -325,10 +337,12 @@
                     /**
                      * 判断是否为项目经理 (创建者为项目经理) 
                      * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建
+                     * 并且 中心负责人 默认为任何项目的项目经理
                      */
-                    if (account === self.thisProject.authorID) {
+                    self.iamManager = _getIsManager(self.thisProject.authorID);
+                    /*if (account === self.thisProject.authorID) {
                         self.iamManager = true;
-                    }
+                    } */
 
                     /**
                      * 修改页标题 = 项目中文名
@@ -708,6 +722,64 @@
 
         function _isShowArea(item) {
             return self.profileNavCurrentItem === item;
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 判断是否为项目经理 (创建者为项目经理)
+         * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建 并且 中心负责人 默认为任何项目的项目经理
+         * @param {string} authorID
+         * @private
+         */
+        function _getIsManager(authorID) {
+            var isManager = false;
+            var sysconfig = $cookies.getObject('Sysconfig');
+            sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+                for (var i = 0; i < departmentGroup.manager.length; i++) {
+                    var manager = departmentGroup.manager[i];
+                    if (manager.account === account) {
+                        isManager = true;
+                        break;
+                    }
+                }
+            });
+            return isManager || (account === authorID);
+        }
+
+        /**
+         * 查看活动详情
+         * @param logDetial log 内容
+         * @private
+         */
+        function _showActivityDetial(logDetial) {
+
+            //初始化设置 设置当前显示工作内容
+            self.currentJob = logDetial;
+            //是否显示系数与是否显示部门经理一致
+            self.currentJob.isReviewer = self.iamManager;
+            //显示详情窗体
+            jobDetail.modal();
+
+            /*  todo 通过详情
+             PMSoftServices.getJobDetailByID(m_logID,
+             function (res) {
+             self.currentJob =  res.doc[0];
+             //是否显示系数与是否显示部门经理一致
+             self.currentJob.isReviewer = is_dptManager;
+             jobDetail.modal( );
+             }, function (err) {
+             });*/
+
+
         }
     }
 
