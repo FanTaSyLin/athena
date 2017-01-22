@@ -37,7 +37,7 @@
 
         function _init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
-            accountID = $cookies.get('account');;
+            accountID = $cookies.get('account');
             accountName = $cookies.get('name');
             accountAvatar = $cookies.get('avatar');
         }
