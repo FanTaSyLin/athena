@@ -66,7 +66,11 @@
         }
 
         function _getPastProjects(account, successFn, errorFn) {
-            $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
+            if (account === 'all') {
+                $http.get(BASEPATH + '/project/projectlist').success(successFn).error(errorFn);
+            } else {
+                $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
+            }
         }
 
         function _getDateList(successFn, errorFn) {

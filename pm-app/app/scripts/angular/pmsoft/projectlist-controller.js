@@ -14,6 +14,7 @@
     function ProjectListController($rootScope, $cookies, PMSoftServices) {
         var self = this;
         var myStar = {};
+        var sysconfig = {};
 
         self.account = '';
         self.projectList = [];
@@ -32,6 +33,25 @@
 
                 self.account = $cookies.get('account');
                 myStar = $cookies.getObject('mystar-project');
+                sysconfig = $cookies.getObject('Sysconfig');
+                var isManager = false;
+                sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+                    for (var i = 0; i < departmentGroup.manager.length; i++) {
+                        var manager = departmentGroup.manager[i];
+                        if (manager.account === self.account) {
+                            isManager = true;
+                            break;
+                        }
+                    }
+                });
+
+                var account = undefined;
+                if (isManager) {
+                    account = "all";
+                } else {
+                    account = self.account;
+                }
+
                 if (!myStar) {
                     myStar = [];
                 }
@@ -42,7 +62,7 @@
                  myStar = [];
                  }*/
 
-                PMSoftServices.getPastProjects(self.account, function (data) {
+                PMSoftServices.getPastProjects(account, function (data) {
                     //TODO: 目前只添加了需要的字段，后续如果不够吃再加
                     self.projects = [];
                     data.forEach(function (item) {
