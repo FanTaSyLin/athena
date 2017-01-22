@@ -3,14 +3,14 @@
         <ul class="nav nav-pills nav-stacked" id="myNav">
             <li class="active" ng-class="{active: UnauditedsCtrl.isSelectedProject('all')}">
                 <a href ng-click="UnauditedsCtrl.projectSelect('all')">
-                    全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Total.length}}</span>
+                    全部项目 <span class="badge">{{UnauditedsCtrl.unauditedJobs_Total.length | add_plus_count_lsg100}}</span>
                 </a>
             </li>
-            <li ng-repeat="project in UnauditedsCtrl.projects"
+            <li ng-repeat="project in UnauditedsCtrl.projects | rm_project_unaudited_count0"
                 ng-class="{active: UnauditedsCtrl.isSelectedProject(project.enName)}">
                 <a href ng-click="UnauditedsCtrl.projectSelect(project.enName)"
                    data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
-                    {{UnauditedsCtrl.subStr(project.cnName, 10)}} <span class="badge">{{project.count}}</span>
+                    {{UnauditedsCtrl.subStr(project.cnName, 10)}} <span class="badge">{{project.count  | add_plus_count_lsg100}}</span>
                 </a>
             </li>
             <hr style="margin-right: 90px">
@@ -49,14 +49,14 @@
     <div class="col-xs-9" id="jobList">
         <nav style="margin-top: -30px" ng-show="UnauditedsCtrl.isShowPagination">
             <ul class="pagination pagination-sm">
-                <li><a href>&laquo;</a></li>
-                <li ng-repeat="pagination in UnauditedsCtrl.paginations"><a href>{{pagination.num}}</a></li>
-                <li><a href>&raquo;</a></li>
+                <!--<li><a href>&laquo;</a></li>-->
+                <li ng-repeat="pagination in UnauditedsCtrl.paginations"><a href ng-click="UnauditedsCtrl.pageSelect(pagination)">{{pagination.num}}</a></li>
+                <!--<li><a href>&raquo;</a></li>-->
             </ul>
         </nav>
 
         <div style="width: 100%; margin-bottom: 5px"
-             ng-repeat="unauditedJob in UnauditedsCtrl.unauditedJobs_View">
+             ng-repeat="unauditedJob in UnauditedsCtrl.unauditedJobs_View | filter_pass_turnback_logs">
             <div class="row">
                 <div class="col-xs-9">
                     <h4><a href ng-click="UnauditedsCtrl.showJobInfo(unauditedJob)">{{unauditedJob.projectCName}}({{unauditedJob.projectEName}})</a> <b style="font-size: 0.85em;font-weight: 400; color: #6e6e6e"> by {{unauditedJob.authorName}}</b></h4>

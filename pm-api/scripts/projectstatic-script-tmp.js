@@ -71,10 +71,10 @@
                 projectList2.push(item);
             });
 
-            //统计当月工作量
-            _projectStaticByMonthMember(projectList1, month1);
-            //统计上月工作量
-            _projectStaticByMonthMember(projectList2, month2);
+            // //统计当月工作量
+            //_projectStaticByMonthMember(projectList1, month1);
+            // //统计上月工作量
+            //_projectStaticByMonthMember(projectList2, month2);
 
         });
 
@@ -82,7 +82,7 @@
 
     /* 临时补全用
     */
-    /*_getProjectList(function (err, data) {
+    _getProjectList(function (err, data) {
         if (err) {
             console.error(err.stack);
         }
@@ -129,7 +129,7 @@
         _projectStaticByMonthMember(projectList11, '201611');
         _projectStaticByMonthMember(projectList12, '201612');
         _projectStaticByMonthMember(projectList13, '201701');
-    });*/
+    });
 
     /**
      * 根据月份 统计项目组成员的工作量 

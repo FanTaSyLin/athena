@@ -30,6 +30,7 @@
             recodeTurnBack: _recodeTurnBack, /*退回工作记录*/
             getProjectStaticByAccount: _getProjectStaticByAccount,
             getDepartmentMembers: _getDepartmentMembers,
+            getSysConfig: _getSysConfig,
 
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
@@ -65,7 +66,11 @@
         }
 
         function _getPastProjects(account, successFn, errorFn) {
-            $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
+            if (account === 'all') {
+                $http.get(BASEPATH + '/project/projectlist').success(successFn).error(errorFn);
+            } else {
+                $http.get(BASEPATH + '/project/projectlist/' + account).success(successFn).error(errorFn);
+            }
         }
 
         function _getDateList(successFn, errorFn) {
@@ -184,6 +189,11 @@
          */
         function _getDepartmentMembers(departmentNum, successFn, errorFn) {
             var urlStr = BASEPATH + "/department/members?departmentnum=" + departmentNum;
+            $http.get(urlStr).success(successFn).error(errorFn);
+        }
+
+        function _getSysConfig(successFn, errorFn) {
+            var urlStr = BASEPATH + "/sysconfig";
             $http.get(urlStr).success(successFn).error(errorFn);
         }
     }

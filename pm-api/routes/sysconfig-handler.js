@@ -50,6 +50,11 @@ module.exports = function (server, BASEPATH) {
         path: BASEPATH + '/sysconfig/department/update',
         version: '0.0.1'
     }, department_Update);
+
+    server.get({
+        path: BASEPATH + '/sysconfig',
+        version: '0.0.1'
+    }, getSysconfig);
 };
 
 function department_Update(req, res, next) {
@@ -239,4 +244,23 @@ function departmentGroup_Update(req, res, next) {
             return res.end();
         }
     });
+}
+
+function getSysconfig(req, res, next) {
+    SysConfigSchema
+        .find({})
+        .exec(function (err, doc) {
+            if (err) {
+                res.end(JSON.stringify({
+                    status: "error",
+                    errMsg: err.stack
+                }));
+            } else {
+                res.end(JSON.stringify({
+                    status: "success",
+                    doc: doc
+                }));
+            }
+            next();
+        });
 }

@@ -31,6 +31,7 @@
         self.projectSelect = projectSelect;
         self.isSelectedMember = isSelectedMember;
         self.memberSelect = memberSelect;
+        self.pageSelect = _pageSelect;
         self.init = init;
         self.showJobInfo = showJobInfo;
         self.timeFormat = _timeFormat;
@@ -126,8 +127,8 @@
                 doc.forEach(function (item) {
                     item.thumb = _extractImg(item.content);
                     item.cleanContent = _delHtmlTag(item.content);
-                    item.starTime = new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
-                    item.endTime = new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
+                    item.starTime = moment(item.starTime).add(8, "h");
+                    item.endTime = moment(item.endTime).add(8, "h");
                     PMSoftServices.unauditedJobList_Total.push(item);
                 });
                 cb(null, data.count);
@@ -319,6 +320,15 @@
 
         function _subStr(str, count) {
             return str.substring(0, count);
+        }
+
+        /**
+         * 点击页码时 过滤显示用数据
+         * @param pageItem
+         * @private
+         */
+        function _pageSelect(pageItem) {
+            _viewUnauditedJobs(pageItem.num, self.pageSize);
         }
     }
 

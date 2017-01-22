@@ -43,6 +43,19 @@
 
             });
 
+            /**
+             * 读取配置信息 放入cookie中
+             */
+            PMSoftServices.getSysConfig(function (res) {
+                if (res.status === "error") {
+
+                }
+                var doc = res.doc;
+                $cookies.putObject('Sysconfig', doc);
+
+            }, function (res) {
+
+            });
         }
         
         function _gotoMyJobsPage() {

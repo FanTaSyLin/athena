@@ -14,28 +14,114 @@
     function DepartmentControllerFn(PMSoftServices, $cookies) {
 
         var self = this;
+        var MAXNUMPREPAGE = 30;
         var dptNum = 0;
+        var sysconfig = {};
+        var account = "";
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+        var memberNav = angular.element(document.getElementById('memberNav'));
+        var departmentNav = angular.element(document.getElementById('departmentNav'));
+        /*详情弹窗*/
+        var jobDetail = angular.element(document.getElementById('jobDetail'));
 
+        /*是否为当前部门经理 初始化时候配置 用于判断显示*/
+        var is_dptManager = false;
+
+        /*当前显示的工作记录*/
+        self.currentJob = {};
         self.members = [];
+        self.myBar = undefined;
         self.profileNavCurrentItem = "Active";
+        self.selectedMemberAccount = "all";
         self.departmentLogs = [];
+        self.displayLogs = [];
+        self.pageNum = 1;
+        self.isShowShowMoreAcitivtyBtn = true;
+        self.departments = [];
+        self.isShowDptNav = false;
+        self.selectedDepartment = {};
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
         self.selectProfileNavItem = _selectProfileNavItem;
+        self.selectDetartment = _selectDetartment;
+        self.memberItemIsSelected = _memberItemIsSelected;
+        self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
+        self.showMoreActivity = _showMoreActivity;
+        self.showActivityDetial = _showActivityDetial;
+        self.isSelectedDepartment =_isSelectedDepartment;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        /*取消审核模态框*/
+        self.disMissModal = _disMissModal;
+
+        function _isSelectedDepartment(department) {
+            return department.id === self.selectedDepartment.id;
+        }
+
+        function _selectDetartment(department) {
+            self.selectedDepartment = department;
+
+            /**
+             * 刷新页面数据
+             */
+            _refreshData(department);
+        }
+
+        function _refreshData(department) {
+            dptNum = department.id;
+            _getPageData(dptNum);
+        }
 
         function _initData() {
+            //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
                 return;
             } else {
+
+                sysconfig = $cookies.getObject('Sysconfig');
+                account = $cookies.get('account');
+
+                var isManager = false;
+                sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+                    for (var i = 0; i < departmentGroup.manager.length; i++) {
+                        var manager = departmentGroup.manager[i];
+                        if (manager.account === account) {
+                            isManager = true;
+                            break;
+                        }
+                    }
+                });
+
+                self.isShowDptNav = isManager;
+
+                self.departments = sysconfig[0].departments;
+
+                departmentNav.affix({
+                    offset: {
+                        top: 100
+                    }
+                });
+
+                memberNav.affix({
+                    offset: {
+                        top: 800
+                    }
+                });
+
+                /**
+                 * 获取是否为部门经理 软件中心，决定显示系数权限
+                 */
+                is_dptManager = _getIsManager();
 
                 dptNum = $cookies.get('department');
                 /**
                  * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
-                PMSoftServices.getDepartmentMembers(dptNum, function (res) {
+                _getPageData(dptNum);
+
+                /*PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
                     var doc = res.doc;
                     var timeSpan = 45;
@@ -48,7 +134,7 @@
                         self.members.push(doc[i]);
                     }
 
-                    var condition = {}
+                    var condition = {};
                     condition.username = memberIDs;
                     condition.startDate = startDateStr;
                     condition.endDate = endDateStr;
@@ -60,10 +146,13 @@
                         doc.forEach(function (item) {
                             item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
                             self.departmentLogs.push(item);
-                        })
-                        /**
+                            if (self.displayLogs.length < MAXNUMPREPAGE) {
+                                self.displayLogs.push(item);
+                            }
+                        });
+                        /!**
                          * @description 处理这些数据 并显示
-                         */
+                         *!/
                         _lineInit(startDateStr, timeSpan, doc);
 
                         _memberActiveStatics(doc);
@@ -74,8 +163,59 @@
 
                 }, function (res) {
 
-                });
+                });*/
             }
+        }
+
+        /**
+         * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图 以及活动列表
+         * @param dptNum
+         * @private
+         */
+        function _getPageData(dptNum) {
+            PMSoftServices.getDepartmentMembers(dptNum, function (res) {
+
+                var doc = res.doc;
+                var timeSpan = 45;
+                var memberIDs = "";
+                var endDateStr = moment.utc().format('YYYY-MM-DD');
+                var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
+                self.members.splice(0, self.members.length);
+                for (var i = 0; i < doc.length; i++) {
+                    memberIDs += doc[i].account + " ";
+                    self.members.push(doc[i]);
+                }
+
+                var condition = {};
+                condition.username = memberIDs;
+                condition.startDate = startDateStr;
+                condition.endDate = endDateStr;
+
+                PMSoftServices.getJobList(condition, function (res) {
+
+                    var doc = res.doc;
+                    self.departmentLogs.splice(0, self.departmentLogs.length);
+                    doc.forEach(function (item) {
+                        item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                        self.departmentLogs.push(item);
+                        if (self.displayLogs.length < MAXNUMPREPAGE) {
+                            self.displayLogs.push(item);
+                        }
+                    });
+                    /**
+                     * @description 处理这些数据 并显示
+                     */
+                    _lineInit(startDateStr, timeSpan, doc);
+
+                    _memberActiveStatics(doc);
+
+                }, function (res) {
+
+                });
+
+            }, function (res) {
+
+            });
         }
 
         /**
@@ -103,7 +243,7 @@
              * 根据日期账号 先合并数据
              */
             for (var i = 0; i < datas.length; i++) {
-                var isExist = false
+                var isExist = false;
                 for (var j = 0; j < baseDataList.length; j++) {
                     if (baseDataList[j].account === datas[i].authorID && baseDataList[j].date === datas[i].date) {
                         baseDataList[j].duration_Real += datas[i].duration;
@@ -153,8 +293,8 @@
                         dataSetItem.data.push(0);
                     }
                 }
-                dataSetItem.borderColor = ColourSystem[i%10].borderColor;
-                dataSetItem.backgroundColor = ColourSystem[i%10].backgroundColor;
+                dataSetItem.borderColor = ColourSystem[i % 10].borderColor;
+                dataSetItem.backgroundColor = ColourSystem[i % 10].backgroundColor;
                 dataSetItem.pointBorderColor = "rgba(255, 255, 255 , 1)";
                 dataSetItem.pointBackgroundColor = "rgba(141, 68, 173 , 0.7)";
                 dataSetItem.pointBorderWidth = 2;
@@ -188,8 +328,15 @@
                         }]
                     }
                 }
+            };
+
+            if (self.myBar === undefined) {
+                self.myBar = new Chart(ctxByDay, config);
+            } else {
+                self.myBar.destroy();
+                self.myBar = new Chart(ctxByDay, config);
             }
-            return new Chart(ctxByDay, config);
+            //return new Chart(ctxByDay, config);
 
         }
 
@@ -219,7 +366,7 @@
          * @private
          */
         function _openThisMemberInfo(member) {
-            var url = 'pm-soft/memberstatus?account=' + member.account;
+            var url = 'pm-soft/memberstatus?memberid=' + member.account;
             window.open(url);
         }
 
@@ -233,6 +380,148 @@
 
         function _isShowArea(item) {
             return self.profileNavCurrentItem === item;
+        }
+
+        function _memberItemIsSelected(memberAccount) {
+            return memberAccount === self.selectedMemberAccount;
+        }
+
+        function _selectMemberItem(memberAccount) {
+            var org = self.selectedMemberAccount;
+            self.selectedMemberAccount = memberAccount;
+            if (org === memberAccount) {
+                return;
+            } else {
+                self.pageNum = 0;
+                self.displayLogs.splice(0, self.displayLogs.length);
+                _showMoreActivity(self.selectedMemberAccount, self.pageNum);
+            }
+        }
+
+        //点击显示更多信息
+        function _showMoreActivity(memberAccount, pageNum) {
+            var count = 0;
+            var start = pageNum * MAXNUMPREPAGE;
+            var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
+            if (memberAccount === "all") {
+                for (var i = 0; i < self.departmentLogs.length; i++) {
+                    if (count >= start && count <= end) {
+                        self.displayLogs.push(self.departmentLogs[i]);
+                    }
+                    count++;
+                }
+                if (count < end) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                }
+            } else {
+                for (var i = 0; i < self.departmentLogs.length; i++) {
+                    if (memberAccount === self.departmentLogs[i].authorID) {
+                        if (count >= start && count <= end) {
+                            self.displayLogs.push(self.departmentLogs[i]);
+                        }
+                        count++;
+                    }
+                }
+                if (count < end) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                }
+            }
+            self.pageNum++;
+        }
+
+        /**
+         * 查看活动详情
+         * @param logDetial log 内容
+         * @private
+         */
+        function _showActivityDetial(logDetial) {
+
+            //初始化设置 设置当前显示工作内容
+            self.currentJob = logDetial;
+            //是否显示系数与是否显示部门经理一致
+            self.currentJob.isReviewer = is_dptManager;
+            //显示详情窗体
+            jobDetail.modal();
+
+            /*  todo 通过详情
+             PMSoftServices.getJobDetailByID(m_logID,
+             function (res) {
+             self.currentJob =  res.doc[0];
+             //是否显示系数与是否显示部门经理一致
+             self.currentJob.isReviewer = is_dptManager;
+             jobDetail.modal( );
+             }, function (err) {
+             });*/
+
+
+        }
+
+        function _disMissModal() {
+            //location.reload();
+            /**
+             * @description 这里要做的其实不是刷新页面 而是重新筛选数据 把现有数据中的 "已审核的" 以及 "已拒绝的" 过滤掉
+             * 其实可以考虑用 filter
+             */
+            /**
+             * 关闭页面、提交审核、提交拒绝、打开页面时 应初始化 审核系数
+             */
+
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 获取是否有权限 查看当前页面内容-部门界面 根据account
+         * @private
+         */
+        function _getIsManager() {
+            //默认为非项目经理
+            var is_Manager = false;
+            //从 cookie中获取account Sysconfig
+            var m_Account = $cookies.get('account');
+            var m_Sysconfig = $cookies.getObject('Sysconfig');
+            //系统配置中获取部门配置及中心配置
+            var m_departments = m_Sysconfig[0].departments;
+            var m_departmentGroups = m_Sysconfig[0].departmentGroups;
+
+            //所有有权限的人的列表
+            var m_accountList = [];
+            //遍历部门
+            m_departments.forEach(function (department) {
+                //加入各个部门的部门经理
+                m_accountList.push(department.manager.account);
+                //若部门序号相同 则使用当前部门确定中心人员
+                if (department.id.toString() === dptNum.toString()) {
+
+                    //循环查找中心分组信息
+                    m_departmentGroups.forEach(function (m_Group) {
+                        //查找ID相同
+                        if (m_Group.id == department.group) {
+                            //遍历加入 中心人员
+                            m_Group.manager.forEach(function (m_GroupmanagerNum) {
+                                m_accountList.push(m_GroupmanagerNum.account);
+                            });
+
+                        }
+                    });
+                }
+
+
+            });
+            //根据account查找 是否有权限
+            if (m_accountList.indexOf(m_Account) != -1) {
+                is_Manager = true;
+            }
+          //返回状态
+            return is_Manager;
         }
     }
 
@@ -277,8 +566,8 @@
             borderColor: "rgba(102, 102, 102, 0.7)",
             backgroundColor: "rgba(102, 102, 102, 0.2)"
         }
-    ]
-    
+    ];
+
     /**
      * 基础数据 根据账号、日期合并后的数据
      * @typedef {Object} baseData
@@ -300,4 +589,5 @@
      * @property {Number} pointBorderWidth
      */
 
-})();
+})
+();

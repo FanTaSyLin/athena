@@ -21,10 +21,36 @@
             setProjectMemberAuthority: _setProjectMemberAuthority,
             searchMembers: _searchMembers,
             addMemberToProject: _addMemberToProject,
-            rmMemberToProject: _rmMemberToProject
+            rmMemberToProject: _rmMemberToProject,
+            getJobLogs: _getJobLogs
         };
 
         return service;
+
+        /**
+         * @description 获取项目相关的工作记录
+         * @param {string[]} accounts
+         * @param {string} projectID
+         * @param {Number} skip
+         * @param {Number} limit
+         * @callback successFn
+         * @callback errorFn
+         * @private
+         */
+        function _getJobLogs(accounts, projectID, skip, limit, successFn, errorFn) {
+            var accountStr = "";
+            accounts.forEach(function (account) {
+                accountStr += account + " ";
+            });
+            var url = BASEPATH + "/jobrecode/joblist/fixnum?";
+            url = url + "projectid=" + projectID;
+            url = url + "&skip=" + skip + "&limit=" + limit;
+            if (accounts.length > 0) {
+                url = url + "&account=" + accountStr;
+            }
+
+            $http.get(url).success(successFn).error(errorFn);
+        }
 
         /**
          * 移除一个项目成员

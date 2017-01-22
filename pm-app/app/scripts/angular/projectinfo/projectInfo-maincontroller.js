@@ -13,18 +13,28 @@
 
 
     function MainControllerFn($location, $cookies, ProjectInfoServices) {
+
+        var MAXNUMPREPAGE = 30;//一次获取的工作记录条目个数
         var self = this;
         var myStar = [];
         var projectID = '';
         var account = '';
         var rmShowedMemberClickCount = 1; //用来记录移除成员时的点击次数
+        /*是否为当前部门经理 初始化时候配置 用于判断显示*/
+        var is_dptManager = false;
         var ctxByMember_Bar = angular.element(document.getElementById('Chart-ByMember-bar'));
         var ctxByMember_Pie = angular.element(document.getElementById('Chart-ByMember-pie'));
         var dateSelectArea = angular.element(document.getElementById('dateSelectArea'));
         var editProjectInfo = angular.element(document.getElementById('edit-project-info'));
         var memberStatusModal = angular.element(document.getElementById('member-status-modal'));
         var memberAddModal = angular.element(document.getElementById('member-add-modal'));
+        var memberNav = angular.element(document.getElementById('memberNav'));
+        /*详情弹窗*/
+        var jobDetail = angular.element(document.getElementById('jobDetail'));
 
+
+        /*当前显示的工作记录*/
+        self.currentJob = {};
         self.isStarred = false;
         self.thisProject = {};
         self.thisProjectInfo = {};
@@ -41,6 +51,14 @@
         self.iamManager = false;
         self.searchCondition = '';
         self.foundMembers = [];
+        self.myBar = undefined;
+        self.myPie = undefined;
+        self.profileNavCurrentItem = "Active";
+        self.selectedMemberAccount = "all";
+        self.isShowShowMoreAcitivtyBtn = true;
+        self.jobLogs = [];
+        self.pageNum = 0;
+
 
         self.init = _init;
         self.starred = _starred;
@@ -62,6 +80,16 @@
         self.openAddMemberModal = _openAddMemberModal;
         self.searchMembers = _searchMembers;
         self.addMemberToProject = _addMemberToProject;
+        self.profileNavIsSeleced = _profileNavIsSeleced;
+        self.selectProfileNavItem = _selectProfileNavItem;
+        self.memberItemIsSelected = _memberItemIsSelected;
+        self.selectMemberItem = _selectMemberItem;
+        self.isShowArea = _isShowArea;
+        self.showMoreActivity = _showMoreActivity;
+        /*格式化时间 + 日期 格式*/
+        self.formatDateTime = _formatDateTime;
+        /*显示工作记录详情模态框*/
+        self.showActivityDetial = _showActivityDetial;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
@@ -269,6 +297,12 @@
          */
         function _init() {
 
+            memberNav.affix({
+                offset: {
+                    top: 500
+                }
+            });
+
             //TODO: 从url中截取 projectid 继而获取整个项目的属性
             projectID = $location.search().projectid;
 
@@ -303,10 +337,12 @@
                     /**
                      * 判断是否为项目经理 (创建者为项目经理) 
                      * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建
+                     * 并且 中心负责人 默认为任何项目的项目经理
                      */
-                    if (account === self.thisProject.authorID) {
+                    self.iamManager = _getIsManager(self.thisProject.authorID);
+                    /*if (account === self.thisProject.authorID) {
                         self.iamManager = true;
-                    }
+                    } */
 
                     /**
                      * 修改页标题 = 项目中文名
@@ -317,8 +353,9 @@
 
             });
 
-            //获取项目的统计信息
-            //默认只查当前月与上个月的统计
+            /**
+             * @description 获取项目的统计信息 默认只查当前月与上个月的统计
+             */
             var now = new Date();
             var y1 = now.getFullYear();
             var m1 = now.getMonth() + 1;
@@ -353,6 +390,46 @@
                 self.monthRange.endYear = y1;
                 self.monthRange.endMonth = m1;
 
+            }, function (res) {
+
+            });
+
+            /**
+             * @description 获取项目组成员的工作记录
+             * 根据条件首次获取定量的条目             *
+             */
+            self.pageNum = 0;
+            var skipNum = self.pageNum * MAXNUMPREPAGE;
+            var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+            _getMemberJobLogs("all", skipNum, limitNum);
+        }
+
+        /**
+         * 获取项目组成员的工作记录
+         * @param memberAccount
+         * @param skipNum
+         * @param limitNum
+         * @private
+         */
+        function _getMemberJobLogs(memberAccount, skipNum, limitNum) {
+            var accounts = [];
+            if (memberAccount !== "all") {
+                accounts.push(memberAccount);
+            }
+            ProjectInfoServices.getJobLogs(accounts, projectID, skipNum, limitNum, function (res) {
+                var doc = res.doc;
+                var count = 0;
+                doc.forEach(function (item) {
+                    item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                    self.jobLogs.push(item);
+                    count++;
+                });
+                if (count !== MAXNUMPREPAGE) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                } else {
+                    self.isShowShowMoreAcitivtyBtn = true;
+                }
+                self.pageNum++;
             }, function (res) {
 
             });
@@ -412,28 +489,43 @@
             }
 
             for (var j = 0; j < data.length; j++) {
-                total += data[j].duration_Checked;
+                if (self.iamManager) {
+                    total += data[j].duration_Checked;
+                } else {
+                    total += data[j].duration_Real;
+                }
             }
             for (var i = 0; i < data.length; i++) {
                 labels.push(data[i].name);
-                duration_Checked_List.push((data[i].duration_Checked / total * 100).toFixed(0));
+                if (self.iamManager) {
+                    duration_Checked_List.push((data[i].duration_Checked / total * 100).toFixed(0));
+                } else {
+                    duration_Checked_List.push((data[i].duration_Real / total * 100).toFixed(0));
+                }
                 bgColorList.push(colors[i % 6]);
             }
+            var myData = {
+                datasets: [{
+                    data: duration_Checked_List,
+                    backgroundColor: bgColorList
+                }],
+                labels: labels
+            };
             var config = {
                 type: 'pie',
-                data: {
-                    datasets: [{
-                        data: duration_Checked_List,
-                        backgroundColor: bgColorList
-                    }],
-                    labels: labels
-                },
+                data: myData,
                 options: {
                     responsive: true,
 
                 }
             };
-            return new Chart(ctxByMember_Pie, config);
+
+            if (self.myPie === undefined) {
+                self.myPie = new Chart(ctxByMember_Pie, config);
+            } else {
+                self.myPie.destroy();
+                self.myPie = new Chart(ctxByMember_Pie, config);
+            }
         }
 
         /**
@@ -462,22 +554,37 @@
 
             }
 
+            var duration_Real_Dataset = {
+                label: "实际",
+                data: duration_Real_List,
+                borderColor: 'rgba(81, 184, 242, 0.7)',
+                backgroundColor: 'rgba(81, 184, 242, 0.5)'
+            };
+
+            var duration_Checked_Dateset = {
+                label: "标准",
+                data: duration_Checked_List,
+                borderColor: 'rgba(52, 201, 169, 0.7)',
+                backgroundColor: 'rgba(52, 201, 169, 0.5)'
+            };
+
+            var datasets = [];
+
+            if (self.iamManager) {
+                datasets.push(duration_Real_Dataset);
+                datasets.push(duration_Checked_Dateset);
+            } else {
+                datasets.push(duration_Real_Dataset);
+            }
+
+            var myData = {
+                labels: x_Labels,
+                datasets: datasets
+            };
+
             config = {
                 type: 'bar',
-                data: {
-                    labels: x_Labels,
-                    datasets: [{
-                        label: "实际",
-                        data: duration_Real_List,
-                        borderColor: 'rgba(81, 184, 242, 0.7)',
-                        backgroundColor: 'rgba(81, 184, 242, 0.5)'
-                    }, {
-                        label: "标准",
-                        data: duration_Checked_List,
-                        borderColor: 'rgba(52, 201, 169, 0.7)',
-                        backgroundColor: 'rgba(52, 201, 169, 0.5)'
-                    }]
-                },
+                data: myData,
                 options: {
                     scales: {
                         xAxes: [{
@@ -497,7 +604,13 @@
                     }
                 }
             };
-            return new Chart(ctxByMember_Bar, config);
+
+            if (self.myBar === undefined) {
+                self.myBar = new Chart(ctxByMember_Bar, config);
+            } else {
+                self.myBar.destroy();
+                self.myBar = new Chart(ctxByMember_Bar, config);
+            }
         }
 
         /**
@@ -573,6 +686,100 @@
             var expireTime = new Date();
             expireTime.setDate(expireTime.getDate() + 7000);
             $cookies.putObject('mystar-project', myStar, { 'expires': expireTime });
+        }
+
+        function _profileNavIsSeleced(item) {
+            return (self.profileNavCurrentItem === item);
+        }
+
+        function _selectProfileNavItem(item) {
+            self.profileNavCurrentItem = item;
+        }
+
+        function _memberItemIsSelected(memberAccount) {
+            return memberAccount === self.selectedMemberAccount;
+        }
+
+        function _selectMemberItem(memberAccount) {
+            var org = self.selectedMemberAccount;
+            self.selectedMemberAccount = memberAccount;
+            if (org === memberAccount) {
+                return;
+            } else {
+                self.jobLogs.splice(0, self.jobLogs.length);
+                self.pageNum = 0;
+                var skipNum = self.pageNum * MAXNUMPREPAGE;
+                var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+                _getMemberJobLogs(self.selectedMemberAccount, skipNum, limitNum);
+            }
+        }
+
+        function _showMoreActivity() {
+            var skipNum = self.pageNum * MAXNUMPREPAGE;
+            var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+            _getMemberJobLogs(self.selectedMemberAccount, skipNum, limitNum);
+        }
+
+        function _isShowArea(item) {
+            return self.profileNavCurrentItem === item;
+        }
+
+        /**
+         * 日期 + 时间 格式化
+         * @param DateTime
+         * @returns {string}
+         * @private
+         */
+        function _formatDateTime(DateTime) {
+            return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 判断是否为项目经理 (创建者为项目经理)
+         * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建 并且 中心负责人 默认为任何项目的项目经理
+         * @param {string} authorID
+         * @private
+         */
+        function _getIsManager(authorID) {
+            var isManager = false;
+            var sysconfig = $cookies.getObject('Sysconfig');
+            sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+                for (var i = 0; i < departmentGroup.manager.length; i++) {
+                    var manager = departmentGroup.manager[i];
+                    if (manager.account === account) {
+                        isManager = true;
+                        break;
+                    }
+                }
+            });
+            return isManager || (account === authorID);
+        }
+
+        /**
+         * 查看活动详情
+         * @param logDetial log 内容
+         * @private
+         */
+        function _showActivityDetial(logDetial) {
+
+            //初始化设置 设置当前显示工作内容
+            self.currentJob = logDetial;
+            //是否显示系数与是否显示部门经理一致
+            self.currentJob.isReviewer = self.iamManager;
+            //显示详情窗体
+            jobDetail.modal();
+
+            /*  todo 通过详情
+             PMSoftServices.getJobDetailByID(m_logID,
+             function (res) {
+             self.currentJob =  res.doc[0];
+             //是否显示系数与是否显示部门经理一致
+             self.currentJob.isReviewer = is_dptManager;
+             jobDetail.modal( );
+             }, function (err) {
+             });*/
+
+
         }
     }
 

@@ -6,8 +6,27 @@
 
     'use strict';
 
-    angular.module('PMSoft')
-        .filter('to_trusted', toTrusted);
+    var app = angular.module('PMSoft');
+    app.filter('to_trusted', toTrusted);
+    /**
+     * 移除掉未审核记录数量为0的项目（审核页面左侧列表）
+     */
+    app.filter('rm_project_unaudited_count0', rmProjectByCount0);
+
+    /**
+     * 当未审核记录数量大于100时 显示100+
+     */
+    app.filter('add_plus_count_lsg100', add_plus_count_lsg100);
+
+    /**
+     * 审核页面  过滤掉已审核以及已拒绝的工作记录
+     */
+    app.filter('filter_pass_turnback_logs', filter_pass_turnback_logs);
+
+    /**
+     * 截断字符串
+     */
+    app.filter('substring_str', substring_str);
 
     toTrusted.$inject = ['$sce'];
 
@@ -17,4 +36,51 @@
         };
     }
 
+    function rmProjectByCount0() {
+        return function (items) {
+            var array = [];
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].count !== 0) {
+                    array.push(items[i]);
+                }
+            }
+            return array;
+        }
+    }
+
+    function add_plus_count_lsg100() {
+        return function (item) {
+            if (item > 100) {
+                return "100" + "+";
+            } else {
+                return item.toString();
+            }
+        }
+    }
+
+    function filter_pass_turnback_logs() {
+        return function (items) {
+            var array = [];
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].status === "Submit") {
+                    array.push(items[i]);
+                }
+            }
+            return array;
+        }
+    }
+
+    function substring_str() {
+
+        return function (str, subNum) {
+            if (str === undefined) {
+                return;
+            }
+            if (str.length > subNum) {
+                return str.substring(0, subNum) + "...";
+            } else {
+                return str;
+            }
+        }
+    }
 })();
