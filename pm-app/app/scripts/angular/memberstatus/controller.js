@@ -391,7 +391,7 @@
          */
         function _returnJson(start, end, callback) {
             var condition = {};
-            condition.username = self.account;
+            condition.username = account;
             condition.startDate = moment(start).format("YYYY-MM-DD");
             condition.endDate = moment(end).format("YYYY-MM-DD");
             //只获取当前的
@@ -400,8 +400,8 @@
                 //删除当前显示
                 var m_event = [];
                 $.each(m_JobList, function (index, term) {
-                    var StartTime = term.starTime;
-                    var endTime = term.endTime;
+                    var StartTime = moment(term.starTime).add(8, "h");
+                    var endTime = moment(term.endTime).add(8, "h");
                     var projectName = term.projectCName;
                     //详情存入detail
                     var m_newevent = {
@@ -410,6 +410,7 @@
                         end: endTime,
                         detail: term
                     };
+                    console.log(JSON.stringify(m_newevent));
                     m_event.push(m_newevent);
                 });
                 memberCalendar.fullCalendar('removeEvents');
