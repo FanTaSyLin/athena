@@ -10,6 +10,20 @@
                ng-click="DptCtrl.selectProfileNavItem('Repositories')">资产</a>
         </nav>
     </div>
+    <div style="position: absolute; left: 10px; top: 100px">
+        <ul class="nav nav-pills nav-stacked" id="departmentNav" ng-show="DptCtrl.isShowDptNav">
+            <li ng-repeat="department in DptCtrl.departments" ng-class="{active: DptCtrl.isSelectedDepartment(department)}">
+                <a href ng-click="DptCtrl.selectDetartment(department)">
+                    {{department.name}}
+                </a>
+            </li>
+            <li>
+                <a href="javascript:scroll(0,0)">
+                    返回顶部
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="main-area-item">
         <!--近期工作 start-->
         <div ng-show="DptCtrl.isShowArea('Active')">

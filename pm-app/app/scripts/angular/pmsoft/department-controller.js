@@ -16,8 +16,11 @@
         var self = this;
         var MAXNUMPREPAGE = 30;
         var dptNum = 0;
+        var sysconfig = {};
+        var account = "";
         var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
+        var departmentNav = angular.element(document.getElementById('departmentNav'));
         /*详情弹窗*/
         var jobDetail = angular.element(document.getElementById('jobDetail'));
 
@@ -27,25 +30,49 @@
         /*当前显示的工作记录*/
 
         self.members = [];
+        self.myBar = undefined;
         self.profileNavCurrentItem = "Active";
         self.selectedMemberAccount = "all";
         self.departmentLogs = [];
         self.displayLogs = [];
         self.pageNum = 1;
         self.isShowShowMoreAcitivtyBtn = true;
+        self.departments = [];
+        self.isShowDptNav = false;
+        self.selectedDepartment = {};
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
         self.selectProfileNavItem = _selectProfileNavItem;
+        self.selectDetartment = _selectDetartment;
         self.memberItemIsSelected = _memberItemIsSelected;
         self.selectMemberItem = _selectMemberItem;
         self.isShowArea = _isShowArea;
         self.showMoreActivity = _showMoreActivity;
         self.showActivityDetial = _showActivityDetial;
+        self.isSelectedDepartment =_isSelectedDepartment;
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
         self.disMissModal = _disMissModal;
         /*取消审核模态框*/
+
+        function _isSelectedDepartment(department) {
+            return department.id === self.selectedDepartment.id;
+        }
+
+        function _selectDetartment(department) {
+            self.selectedDepartment = department;
+
+            /**
+             * 刷新页面数据
+             */
+            _refreshData(department);
+        }
+
+        function _refreshData(department) {
+            dptNum = department.id;
+            _getPageData(dptNum);
+        }
 
         function _initData() {
             //  difficultyEditor.slider('setValue', 1);
@@ -53,17 +80,48 @@
                 return;
             } else {
 
+                sysconfig = $cookies.getObject('Sysconfig');
+                account = $cookies.get('account');
+
+                var isManager = false;
+                sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+                    for (var i = 0; i < departmentGroup.manager.length; i++) {
+                        var manager = departmentGroup.manager[i];
+                        if (manager.account === account) {
+                            isManager = true;
+                            break;
+                        }
+                    }
+                });
+
+                self.isShowDptNav = isManager;
+
+                self.departments = sysconfig[0].departments;
+
+                departmentNav.affix({
+                    offset: {
+                        top: 100
+                    }
+                });
+
                 memberNav.affix({
                     offset: {
                         top: 800
                     }
                 });
 
+                /**
+                 * 获取是否为部门经理 软件中心，决定显示系数权限
+                 */
+                is_dptManager = _getIsManager();
+
                 dptNum = $cookies.get('department');
                 /**
                  * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
-                PMSoftServices.getDepartmentMembers(dptNum, function (res) {
+                _getPageData(dptNum);
+
+                /*PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
                     var doc = res.doc;
                     var timeSpan = 45;
@@ -92,9 +150,9 @@
                                 self.displayLogs.push(item);
                             }
                         });
-                        /**
+                        /!**
                          * @description 处理这些数据 并显示
-                         */
+                         *!/
                         _lineInit(startDateStr, timeSpan, doc);
 
                         _memberActiveStatics(doc);
@@ -105,14 +163,59 @@
 
                 }, function (res) {
 
-                });
-                /**
-                 * 获取是否为部门经理 软件中心，决定显示系数权限
-                 */
-                is_dptManager = _getIsManager();
-
-
+                });*/
             }
+        }
+
+        /**
+         * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图 以及活动列表
+         * @param dptNum
+         * @private
+         */
+        function _getPageData(dptNum) {
+            PMSoftServices.getDepartmentMembers(dptNum, function (res) {
+
+                var doc = res.doc;
+                var timeSpan = 45;
+                var memberIDs = "";
+                var endDateStr = moment.utc().format('YYYY-MM-DD');
+                var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
+                self.members.splice(0, self.members.length);
+                for (var i = 0; i < doc.length; i++) {
+                    memberIDs += doc[i].account + " ";
+                    self.members.push(doc[i]);
+                }
+
+                var condition = {};
+                condition.username = memberIDs;
+                condition.startDate = startDateStr;
+                condition.endDate = endDateStr;
+
+                PMSoftServices.getJobList(condition, function (res) {
+
+                    var doc = res.doc;
+                    self.departmentLogs.splice(0, self.departmentLogs.length);
+                    doc.forEach(function (item) {
+                        item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                        self.departmentLogs.push(item);
+                        if (self.displayLogs.length < MAXNUMPREPAGE) {
+                            self.displayLogs.push(item);
+                        }
+                    });
+                    /**
+                     * @description 处理这些数据 并显示
+                     */
+                    _lineInit(startDateStr, timeSpan, doc);
+
+                    _memberActiveStatics(doc);
+
+                }, function (res) {
+
+                });
+
+            }, function (res) {
+
+            });
         }
 
         /**
@@ -226,7 +329,14 @@
                     }
                 }
             };
-            return new Chart(ctxByDay, config);
+
+            if (self.myBar === undefined) {
+                self.myBar = new Chart(ctxByDay, config);
+            } else {
+                self.myBar.destroy();
+                self.myBar = new Chart(ctxByDay, config);
+            }
+            //return new Chart(ctxByDay, config);
 
         }
 

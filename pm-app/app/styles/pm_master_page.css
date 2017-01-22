@@ -1482,6 +1482,10 @@ h3 {
     top: 30px;
 }
 
+#departmentNav.affix {
+    top: 30px;
+}
+
 #memberNav a {
     font-size: 14px;
     padding-top: 5px;
