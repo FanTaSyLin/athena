@@ -34,13 +34,16 @@
                     <span class="vcard-username d-block">{{MemberCtrl.member.account}}</span>
                 </h1>
                 <ul class="vcard-details border-top border-gray-light py-3">
-                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.department}}" ng-show="MemberCtrl.member.department !== ' '">
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target"
+                        title="{{MemberCtrl.member.department}}" ng-show="MemberCtrl.member.department !== ' '">
                         <span class="glyphicon glyphicon-home">  {{MemberCtrl.member.department}}</span>
                     </li>
-                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.mobile}}" ng-show="MemberCtrl.member.mobile !== ' '">
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.mobile}}"
+                        ng-show="MemberCtrl.member.mobile !== ' '">
                         <span class="glyphicon glyphicon-earphone">  {{MemberCtrl.member.mobile}}</span>
                     </li>
-                    <li class="vcard-detail pt-1 css-truncate css-truncate-target" title="{{MemberCtrl.member.officeTel}}" ng-show="MemberCtrl.member.officeTel !== ' '">
+                    <li class="vcard-detail pt-1 css-truncate css-truncate-target"
+                        title="{{MemberCtrl.member.officeTel}}" ng-show="MemberCtrl.member.officeTel !== ' '">
                         <span class="glyphicon glyphicon-phone-alt">  {{MemberCtrl.member.officeTel}}</span>
                     </li>
                 </ul>
@@ -49,8 +52,12 @@
         <div class="col-9 float-left pl-2">
             <div class="user-profile-nav top-0">
                 <nav class="underline-nav" role="navigation">
-                    <a class="underline-nav-item" role="tab" ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Active')}" ng-click="MemberCtrl.selectProfileNavItem('Active')">活动</a>
-                    <a class="underline-nav-item" role="tab"  ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Repositories')}" ng-click="MemberCtrl.selectProfileNavItem('Repositories')">Repositories</a>
+                    <a class="underline-nav-item" role="tab"
+                       ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Active')}"
+                       ng-click="MemberCtrl.selectProfileNavItem('Active')">活动</a>
+                    <a class="underline-nav-item" role="tab"
+                       ng-class="{'selected': MemberCtrl.profileNavIsSeleced('Repositories')}"
+                       ng-click="MemberCtrl.selectProfileNavItem('Repositories')">Repositories</a>
                 </nav>
             </div>
             <div style="position: relative !important;">
@@ -62,7 +69,8 @@
                             <span class="glyphicon glyphicon-stats" style="color: #646464;">  参与的项目</span>
                         </h2>
                         <ol class="pinned-repos-list mb-4">
-                            <li class="pinned-repo-item p-3 mb-3 border border-gray-dark rounded-1" ng-repeat="project in MemberCtrl.projectList | sort_NotZero">
+                            <li class="pinned-repo-item p-3 mb-3 border border-gray-dark rounded-1"
+                                ng-repeat="project in MemberCtrl.projectList | sort_NotZero">
                                 <div class="pinned-repo-item-content">
                                     <span class="d-block">
                                         <a class="text-bold" href ng-click="MemberCtrl.openThisProject(project._id)">
@@ -71,11 +79,13 @@
                                             <span title="project.cnName">{{project.enName}}</span>-->
                                         </a>
                                     </span>
-                                    <p class="pinned-repo-desc text-gray text-small d-block mt-2 mb-3" style="cursor: pointer" title="{{project.about}}">
+                                    <p class="pinned-repo-desc text-gray text-small d-block mt-2 mb-3"
+                                       style="cursor: pointer" title="{{project.about}}">
                                         {{project.about | substring_str: 25}}
                                     </p>
                                     <p class="mb-0 f6 text-gray">
-                                        <span class="repo-language-color pinned-repo-meta" ng-class="{'background-green': project.type === '工程', 'background-blue': project.type === '自研'}"></span>
+                                        <span class="repo-language-color pinned-repo-meta"
+                                              ng-class="{'background-green': project.type === '工程', 'background-blue': project.type === '自研'}"></span>
                                         {{project.type}}
                                         <a class="pinned-repo-meta muted-link">{{project.myWorkDone.toFixed(0)}} 小时</a>
                                         <a class="pinned-repo-meta muted-link">项目占比：{{project.percent}}%</a>
@@ -101,22 +111,26 @@
                                             工作动态
                                         </h3>
                                         <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3"
-                                             ng-repeat="log in MemberCtrl.jobLogs">
+                                             ng-repeat="log in MemberCtrl.jobLogs"
+                                             ng-click="MemberCtrl.showActivityDetial(log)">>
                                             <span class="discussion-item-icon">
                                                 <svg aria-hidden="true" class="octicon" height="16" version="1.1"
-                                                    viewBox="0 0 12 16" width="12" style="margin-top: 1px">
-                                                    <path fill-rule="evenodd" d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
+                                                     viewBox="0 0 12 16" width="12" style="margin-top: 1px">
+                                                    <path fill-rule="evenodd"
+                                                          d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
                                                 </svg>
                                             </span>
                                             <button class="btn-link f4 muted-link lh-condensed width-full"
                                                     type="button">
                                             <span class="float-left">
-                                                added 工作记录 to {{log.projectCName|substring_str: 15}} <span style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
+                                                added 工作记录 to {{log.projectCName|substring_str: 15}} <span
+                                                    style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                              </span>
                                             </button>
                                             <label>{{log.content}}</label>
                                         </div>
-                                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="MemberCtrl.showMoreActivity()"
+                                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
+                                                ng-click="MemberCtrl.showMoreActivity()"
                                                 ng-show="MemberCtrl.isShowShowMoreAcitivtyBtn">
                                             加载更多活动
                                         </button>
@@ -124,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <ul class="nav nav-pills nav-stacked project-list" id="projectNav" >
+                                <ul class="nav nav-pills nav-stacked project-list" id="projectNav">
                                     <li ng-class="{active: MemberCtrl.projectItemIsSelected('all')}">
                                         <a href ng-click="MemberCtrl.selectProjectItem('all')">
                                             全部
@@ -132,7 +146,8 @@
                                     </li>
                                     <li ng-repeat="project in MemberCtrl.projectList"
                                         ng-class="{active: MemberCtrl.projectItemIsSelected(project._id)}">
-                                        <a href ng-click="MemberCtrl.selectProjectItem(project._id)" title="{{project.cnName}}">
+                                        <a href ng-click="MemberCtrl.selectProjectItem(project._id)"
+                                           title="{{project.cnName}}">
                                             {{project.cnName|substring_str: 8}}
                                         </a>
                                     </li>
@@ -153,6 +168,157 @@
         </div>
     </div>
 </div>
+
+
+<!--工作记录详情对话框 start-->
+<div class="modal fade" id="jobDetail">
+    <div class="modal-dialog size-jobsheet" style="width:     55em;">
+        <div class="modal-content">
+            <!--标题-->
+            <div class="modal-header dialog-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title title-h4">
+                    工作记录详情
+                </h4>
+            </div>
+            <!--内容-->
+            <div class="modal-body dialog-body">
+                <form>
+                    <!-- 状态显示区 -->
+                    <div class="row">
+                        <div class="function-select-area item-border">
+                            <!--项目显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">项目</p>
+                                <div class="function-select-area-projects">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                    <a class="title-h7 dropdown-toggle"
+                                       style="font-size: 14px; font-weight: 600"
+                                       title="{{MemberCtrl.currentJob.projectCName}}" href>
+                                        {{MemberCtrl.currentJob.projectCName }}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--日期显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">日期</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MemberCtrl.currentJob.date.substring(0, 10)}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--时间显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">所用时间</p>
+                                <div class="function-select-area-type">
+                                    <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MemberCtrl.currentJob.duration}}小时
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--系数显示区-->
+                    <div class="row" style="padding-top: 5px" ng-if="MemberCtrl.currentJob.isReviewer">
+                        <div class="function-select-area item-border" style="height: 4em;">
+                            <!--工作难度-->
+                            <div class="col-md-4   item-border" style="height: 4em;">
+                                <p class="title-h8">难度系数:{{MemberCtrl.currentJob.difficulty}}</p>
+                                <input id="efficiency11" type="text" style="display: none;"
+                                       data-provide="slider"
+                                       data-slider-ticks="[0, 0.5, 1, 1.5, 2]"
+                                       data-slider-min="0"
+                                       data-slider-max="2"
+                                       data-slider-step="0.5"
+                                       data-slider-value="1"
+                                />
+                            </div>
+                            <!--时间系数-->
+                            <div class="col-md-4   item-border" style="height: 4em;">
+                                <p class="title-h8">效率系数:{{MemberCtrl.currentJob.efficiency}}</p>
+                            </div>
+                            <!--完成质量-->
+                            <div class="col-md-4  item-border" style="height: 4em;">
+                                <p class="title-h8">质量系数： {{MemberCtrl.currentJob.quality}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--提交状态显示区-->
+                    <div class="row" style="padding-top: 5px;">
+                        <div class="function-select-area item-border">
+                            <!--提交人-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">提交人</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon glyphicon-user"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MemberCtrl.currentJob.authorName }}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--类型显示-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">类型</p>
+                                <div class="function-select-area-type">
+                                    <span class="glyphicon glyphicon-tag"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MemberCtrl.currentJob.type}}
+                                    </a>
+                                </div>
+                            </div>
+                            <!--记录状态-->
+                            <div class="col-md-4 function-select-item item-border">
+                                <p class="title-h8">审核状态</p>
+                                <div class="function-select-area-date">
+                                    <span class="glyphicon glyphicon glyphicon-info-sign"></span>
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{MemberCtrl.currentJob.status}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 内容显示区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 390px; max-height: 390px">
+                            <div ng-bind-html="MemberCtrl.currentJob.content| to_trusted">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 日志显示区 -->
+                    <div class="row" style="padding-top: 5px">
+                        <div class="function-recode-area item-border"
+                             style="overflow: auto; min-height: 200px; max-height: 200px">
+                            <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                            </p>
+                            <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500"
+                               ng-repeat="log in MemberCtrl.currentJob.logs">
+                                <b>{{log.authorName}}</b>: {{log.msg}}
+                                {{MemberCtrl.formatDateTime(log.logTime)}}
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--页脚-->
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        ng-click="DptCtrl.disMissModal()">关闭
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--工作记录详情对话框 end-->
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

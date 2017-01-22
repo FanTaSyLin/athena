@@ -106,25 +106,11 @@
                 }, function (res) {
 
                 });
+                /**
+                 * 获取是否为部门经理 软件中心，决定显示系数权限
+                 */
+                is_dptManager = _getIsManager();
 
-                //默认为非项目经理
-                is_dptManager = false;
-                //获取当前account
-                var m_Account = $cookies.get('account');
-                //部门整体配置
-                var m_Sysconfig = $cookies.getObject('Sysconfig');
-                //系统配置中获取部门配置
-                var m_departments = m_Sysconfig[0].departments;
-                //判断是否为当前显示部门的部门经理
-                for (var i = 0; i < m_departments.length; i++) {
-                    var this_Dptgroup = m_departments[i].id;
-                    var this_manager = m_departments[i].manager.account;
-                    //string 强等于
-                    if (this_Dptgroup.toString() === dptNum.toString()
-                        && this_manager.toString() === m_Account.toString()) {
-                        is_dptManager = true;
-                    }
-                }
 
             }
         }
@@ -333,10 +319,14 @@
             self.pageNum++;
         }
 
-        //点击显示选择信息详情
+        /**
+         * 查看活动详情
+         * @param logDetial log 内容
+         * @private
+         */
         function _showActivityDetial(logDetial) {
 
-            //初始化设置，为false
+            //初始化设置 设置当前显示工作内容
             self.currentJob = logDetial;
             //是否显示系数与是否显示部门经理一致
             self.currentJob.isReviewer = is_dptManager;
@@ -376,6 +366,52 @@
          */
         function _formatDateTime(DateTime) {
             return new Date(DateTime).toLocaleDateString() + ' ' + new Date(DateTime).toLocaleTimeString();
+        }
+
+        /**
+         * 获取是否有权限 查看当前页面内容-部门界面 根据account
+         * @private
+         */
+        function _getIsManager() {
+            //默认为非项目经理
+            var is_Manager = false;
+            //从 cookie中获取account Sysconfig
+            var m_Account = $cookies.get('account');
+            var m_Sysconfig = $cookies.getObject('Sysconfig');
+            //系统配置中获取部门配置及中心配置
+            var m_departments = m_Sysconfig[0].departments;
+            var m_departmentGroups = m_Sysconfig[0].departmentGroups;
+
+            //所有有权限的人的列表
+            var m_accountList = [];
+            //遍历部门
+            m_departments.forEach(function (department) {
+                //加入各个部门的部门经理
+                m_accountList.push(department.manager.account);
+                //若部门序号相同 则使用当前部门确定中心人员
+                if (department.id.toString() === dptNum.toString()) {
+
+                    //循环查找中心分组信息
+                    m_departmentGroups.forEach(function (m_Group) {
+                        //查找ID相同
+                        if (m_Group.id == department.group) {
+                            //遍历加入 中心人员
+                            m_Group.manager.forEach(function (m_GroupmanagerNum) {
+                                m_accountList.push(m_GroupmanagerNum.account);
+                            });
+
+                        }
+                    });
+                }
+
+
+            });
+            //根据account查找 是否有权限
+            if (m_accountList.indexOf(m_Account) != -1) {
+                is_Manager = true;
+            }
+          //返回状态
+            return is_Manager;
         }
     }
 
