@@ -9,7 +9,7 @@
     angular.module("MemberStatus")
         .factory("MemberStatusServices", MemberStatusServicesFn);
 
-    MemberStatusServicesFn.$inject = ["$http"]
+    MemberStatusServicesFn.$inject = ["$http"];
 
     function MemberStatusServicesFn($http) {
 
@@ -34,7 +34,9 @@
             /**
              * @description 获取工作记录
              */
-            getJobLogs: _getJobLogs
+            getJobLogs: _getJobLogs,
+
+            getJobList: _getJobList
 
         };
 
@@ -89,6 +91,23 @@
             }
 
             $http.get(url).success(successFn).error(errorFn);
+        }
+
+        function _getJobList(condition, successFn, errorFn) {
+            var conditionStr = '';
+            if (condition.username) {
+                conditionStr += ('memberid=' + condition.username + '&');
+            }
+            if (condition.projectID) {
+                conditionStr += ('projectid=' + condition.projectID + '&');
+            }
+            if (condition.startDate) {
+                conditionStr += ('startdate=' + condition.startDate + '&');
+            }
+            if (condition.endDate) {
+                conditionStr += ('enddate=' + condition.endDate + '&');
+            }
+            $http.get(BASEPATH + '/jobrecode/joblist?' + conditionStr).success(successFn).error(errorFn);
         }
 
     }
