@@ -48,7 +48,7 @@
                             <span class="department-member-icon" title="{{member.name}}@{{member.account}}"></span>
                             <span class="department-member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
                             <span class="department-member-active-title">近期活动 ... </span>
-                            <ul class="department-member-active-items">
+                            <ul class="department-member-active-items" style="list-style: none">
                                 <li style="font-size: 12px" ng-repeat="activeItem in member.activeList"
                                     title="{{activeItem}}">
                                     <div class="text-overflow">{{activeItem}}</div>
