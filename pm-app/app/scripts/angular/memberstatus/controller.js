@@ -285,6 +285,7 @@
                 var count = 0;
                 doc.forEach(function (item) {
                     item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                    item.cleanContent = _delHtmlTag(item.content);
                     self.jobLogs.push(item);
                     count++;
                 });
@@ -423,7 +424,21 @@
             });
         }
 
-
+        /**
+         * 清除html标签
+         * @param str
+         * @returns {*}
+         * @private
+         */
+        function _delHtmlTag(str) {
+            var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+            tmpStr = tmpStr.replace(/&NBSP;/g, "");
+            tmpStr = tmpStr.replace(/&nbsp;/g, "");
+            if (tmpStr.length > 130) {
+                tmpStr = tmpStr.substring(0, 130) + '...';
+            }
+            return tmpStr;
+        }
     }
 
     /**
