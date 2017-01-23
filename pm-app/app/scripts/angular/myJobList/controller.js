@@ -22,21 +22,37 @@
         self.pageSize = 10;
         self.selectedProject = {enName: 'all'};
 
-        /*参与的项目列表*/
+        /**
+         * 参与的项目列表
+         */
         self.projects = [];
-        /*是否显示分页标签*/
+        /**
+         * 是否显示分页标签
+         */
         self.isShowPagination = false;
-        /*分页标签列表*/
+        /**
+         * 分页标签列表
+         */
         self.paginations = [];
-        /*工作记录列表*/
+        /**
+         * 工作记录列表
+         */
         self.myJobList = [];
-        /*当前页*/
+        /**
+         * 当前页
+         */
         self.currentPage = 1;
-        /*最大页码*/
+        /**
+         * 最大页码
+         */
         self.maxPage = 0;
-        /*最小页码*/
+        /**
+         * 最小页码
+         */
         self.minPage = 0;
-        /*当前模态框中的显示对象*/
+        /**
+         * 当前模态框中的显示对象
+         */
         self.currentJobInfo = {
             selectedProject: {},
             selectedDate: new Date(),
@@ -58,26 +74,46 @@
             logs:[]
         };
 
-        /*页面加载时初始化数据*/
+        /**
+         * 页面加载时初始化数据
+         */
         self.init = _init;
-        /*是否选中项目 判断*/
+        /**
+         * 是否选中项目 判断
+         */
         self.isSelectedProject = _isSelectedProject;
-        /*选中项目 判断*/
+        /**
+         * 选中项目 判断
+         */
         self.projectSelect = _projectSelect;
         self.subStr = _subStr;
-        /*前翻页*/
+        /**
+         * 前翻页
+         */
         self.pageBackward = _pageBackward;
-        /*后翻页*/
+        /**
+         * 后翻页
+         */
         self.pageForward = _pageForward;
-        /*到指定页*/
+        /**
+         * 到指定页
+         */
         self.pageGoTo = _pageGoTo;
-        /*格式化时间*/
+        /**
+         * 格式化时间
+         */
         self.timeFormat = _timeFormat;
-        /*格式化时间 + 日期 格式*/
+        /**
+         * 格式化时间 + 日期 格式
+         */
         self.formatDateTime = _formatDateTime;
-        /*显示工作记录详情*/
+        /**
+         * 显示工作记录详情
+         */
         self.showJobInfo = _showJobInfo;
-        /*模态框选择函数*/
+        /**
+         * 模态框选择函数
+         */
         self.modalSTimeSelect = _modalSTimeSelect;
         self.modalETimeSelect = _modalETimeSelect;
         self.modalTypeSelect = _modalTypeSelect;
@@ -371,24 +407,27 @@
             if (jobModule.status === 'TurnBack') {
                 var condition = {
                     username: account,
-                    startDate: new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
-                    endDate: new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
+                    startDate: monent(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD"),//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
+                    endDate: monent(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD")//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
                 };
                 MyJobsServices.getJobList(condition, function (data) {
-                    var result = data;
+                    var result = data.doc;
                     self.currentJobInfo.recodedJobs.splice(0, self.currentJobInfo.recodedJobs.length);
                     try {
-                        result.forEach(function (item) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
                             if (item._id !== self.currentJobInfo.jobModule._id) {
                                 self.currentJobInfo.recodedJobs.push({
-                                    startTime: new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
-                                    endTime: new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    startTime: moment(item.starTime).add(8, "h"),//new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    endTime: moment(item.endTime).add(8, "h"),//new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
                                     cnName: item.projectCName,
                                     enName: item.projectEName,
-                                    reportTime: new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
+                                    reportTime: moment(item.reportTime).add(8, "h")//new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
                                 });
                             }
-                        });
+                        }
+
                     } catch (err) {
                         alert(err);
                     }

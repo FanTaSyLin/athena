@@ -54,7 +54,7 @@
                 }
             } else {
                 PMSoftServices.currentUnauditedJobIndex = PMSoftServices.unauditedJobList_Filter.length -1;
-                return;
+                return true;
             }
         }
 
