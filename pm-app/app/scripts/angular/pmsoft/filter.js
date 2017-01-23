@@ -50,6 +50,11 @@
 
     function add_plus_count_lsg100() {
         return function (item) {
+
+            if (item === null || item === undefined) {
+                return "";
+            }
+
             if (item > 100) {
                 return "100" + "+";
             } else {

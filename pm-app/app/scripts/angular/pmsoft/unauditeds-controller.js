@@ -312,6 +312,8 @@
          */
         function _timeFormat(time) {
 
+            if (time === undefined || typeof time !== Date) return "";
+
             return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
                 + ':' +
                 ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
