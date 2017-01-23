@@ -96,6 +96,7 @@
 
         var accounts = req.params.account;
         var projectIDs = req.params.projectid;
+        var turnBack = req.params.turnback;
         var skipNum = req.params.skip;
         var limitNum = req.params.limit;
 
@@ -108,8 +109,12 @@
                     $in: accounts
                 };
             } else {
-                condition.authorID = accounts
+                condition.authorID = accounts;
             }
+        }
+
+        if (!_.isUndefined(turnBack) && turnBack === "y") {
+            condition.status = "TurnBack";
         }
 
         if (!_.isUndefined(projectIDs)) {
