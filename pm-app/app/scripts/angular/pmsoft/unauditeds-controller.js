@@ -127,8 +127,8 @@
                 doc.forEach(function (item) {
                     item.thumb = _extractImg(item.content);
                     item.cleanContent = _delHtmlTag(item.content);
-                    item.starTime = moment(item.starTime).add(8, "h");
-                    item.endTime = moment(item.endTime).add(8, "h");
+                    item.starTime = moment(item.starTime);
+                    item.endTime = moment(item.endTime);
                     PMSoftServices.unauditedJobList_Total.push(item);
                 });
                 cb(null, data.count);

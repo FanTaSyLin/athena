@@ -420,7 +420,7 @@
                 var doc = res.doc;
                 var count = 0;
                 doc.forEach(function (item) {
-                    item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                    item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                     self.jobLogs.push(item);
                     count++;
                 });

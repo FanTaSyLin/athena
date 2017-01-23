@@ -284,7 +284,7 @@
                 var doc = res.doc;
                 var count = 0;
                 doc.forEach(function (item) {
-                    item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                    item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                     item.cleanContent = _delHtmlTag(item.content);
                     self.jobLogs.push(item);
                     count++;
@@ -401,8 +401,8 @@
                 //删除当前显示
                 var m_event = [];
                 $.each(m_JobList, function (index, term) {
-                    var StartTime = moment(term.starTime).add(8, "h");
-                    var endTime = moment(term.endTime).add(8, "h");
+                    var StartTime = moment(term.starTime);
+                    var endTime = moment(term.endTime);
                     var projectName = term.projectCName;
                     //详情存入detail
                     var m_newevent = {

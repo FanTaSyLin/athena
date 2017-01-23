@@ -459,8 +459,8 @@
             if (jobModule.status === 'TurnBack') {
                 var condition = {
                     username: account,
-                    startDate: moment(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD"),//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
-                    endDate: moment(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD")//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
+                    startDate: moment(self.currentJobInfo.selectedDate).format("YYYY-MM-DD"),//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
+                    endDate: moment(self.currentJobInfo.selectedDate).format("YYYY-MM-DD")//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
                 };
                 MyJobsServices.getJobList(condition, function (data) {
                     var result = data.doc;
@@ -471,11 +471,11 @@
                             var item = result[i];
                             if (item._id !== self.currentJobInfo.jobModule._id) {
                                 self.currentJobInfo.recodedJobs.push({
-                                    startTime: moment(item.starTime).add(8, "h"),//new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
-                                    endTime: moment(item.endTime).add(8, "h"),//new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    startTime: moment(item.starTime),//new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                                    endTime: moment(item.endTime),//new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
                                     cnName: item.projectCName,
                                     enName: item.projectEName,
-                                    reportTime: moment(item.reportTime).add(8, "h")//new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
+                                    reportTime: moment(item.reportTime)//new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
                                 });
                             }
                         }
