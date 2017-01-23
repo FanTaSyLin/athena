@@ -6,8 +6,12 @@
 
     'use strict';
 
-    angular.module('MyJobs')
-        .filter('to_trusted', toTrusted);
+    var app = angular.module('MyJobs')
+    app.filter('to_trusted', toTrusted);
+    /**
+     * 截断字符串
+     */
+    app.filter("substring_str", substring_str);
 
     toTrusted.$inject = ['$sce'];
 
@@ -15,6 +19,19 @@
         return function (text) {
             return $sce.trustAsHtml(text);
         };
+    }
+
+    function substring_str() {
+        return function (str, subNum) {
+
+            if (str === null || str === undefined) return "";
+
+            if (str.length > subNum) {
+                return str.substring(0, subNum) + "...";
+            } else {
+                return str;
+            }
+        }
     }
 
 })();

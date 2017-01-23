@@ -15,9 +15,16 @@
 
         var self = this;
         var account = '';
+        var MAXNUMPREPAGE = 50;//一次获取的工作记录条目个数
         var myNav = angular.element(document.getElementById('myNav'));
         var JobInfo = angular.element(document.getElementById('JobInfo'));
         var mySummerNote = angular.element(document.getElementById('mySummerNote'));
+
+        self.selectedProjectID = "all";
+        self.isShowShowMoreAcitivtyBtn = true;
+        self.jobLogs = [];
+        self.pageNum = 0;
+
 
         self.pageSize = 10;
         self.selectedProject = {enName: 'all'};
@@ -73,6 +80,11 @@
             /*本条工作记录相关的操作日志*/
             logs:[]
         };
+        /**
+         * 工作记录列表
+         * @type {Array}
+         */
+        self.jobLogs = [];
 
         /**
          * 页面加载时初始化数据
@@ -86,7 +98,6 @@
          * 选中项目 判断
          */
         self.projectSelect = _projectSelect;
-        self.subStr = _subStr;
         /**
          * 前翻页
          */
@@ -112,6 +123,10 @@
          */
         self.showJobInfo = _showJobInfo;
         /**
+         * 获取更多活动
+         */
+        self.showMoreActivity = _showMoreActivity;
+        /**
          * 模态框选择函数
          */
         self.modalSTimeSelect = _modalSTimeSelect;
@@ -121,6 +136,8 @@
         self.modalEditContent = _modalEditContent;
         self.modalSaveContent = _modalSaveContent;
         self.modalUpdateRecode = _modalUpdateRecode;
+
+        self.getDateFormat = _getDateFormat;
 
         function _init() {
 
@@ -143,41 +160,79 @@
                     self.projects.push(item);
                 });
 
-                var condition = {
-                    projectList: self.projects,
-                    account: account
-                };
-                //获取工作记录列表的分页信息
-                _getJobListPagination(condition, function (err, data) {
-                    if (err) {
-                        return;
-                    }
-
-                    //生成分页标签
-                    _getPagination(data);
-                    //获取首页数据
-                    condition.startNum = 1;
-                    condition.pageSize = self.pageSize;
-                    _getJobListByPage(condition, function (err) {
-
-                    });
-
-                });
+                /**
+                 * @description 获取项目组成员的工作记录
+                 * 根据条件首次获取定量的条目             *
+                 */
+                self.pageNum = 0;
+                var skipNum = self.pageNum * MAXNUMPREPAGE;
+                var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+                _getProjectJobLogs("all", skipNum, limitNum);
             }, function (data) {
 
             });
         }
 
-        function _isSelectedProject(project) {
-            return self.selectedProject.enName == project.enName;
+        function _getDateFormat (time) {
+            return moment(time).format("YYYY年MM月DD日");
         }
 
-        function _projectSelect(project) {
-            self.selectedProject = project;
-            _refreshJobListByProject(project, function (err) {
+        /**
+         * 获取项目组成员的工作记录
+         * @param projectID
+         * @param skipNum
+         * @param limitNum
+         * @private
+         */
+        function _getProjectJobLogs(projectID, skipNum, limitNum) {
+            var projectIDs = [];
+            if (projectID !== "all") {
+                projectIDs.push(projectID);
+            }
+            MyJobsServices.getJobLogs(account, projectIDs, skipNum, limitNum, function (res) {
+                var doc = res.doc;
+                var count = 0;
+                doc.forEach(function (item) {
+                    item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                    item.cleanContent = _delHtmlTag(item.content);
+                    item.starTime = moment(item.starTime);
+                    item.endTime = moment(item.endTime);
+                    self.jobLogs.push(item);
+                    count++;
+                });
+                if (count !== MAXNUMPREPAGE) {
+                    self.isShowShowMoreAcitivtyBtn = false;
+                } else {
+                    self.isShowShowMoreAcitivtyBtn = true;
+                }
+                self.pageNum++;
+            }, function (res) {
 
             });
-            return;
+        }
+
+        function _showMoreActivity() {
+            var skipNum = self.pageNum * MAXNUMPREPAGE;
+            var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+            _getProjectJobLogs(self.selectedProjectID, skipNum, limitNum);
+        }
+
+        function _isSelectedProject(projectID) {
+            return self.selectedProjectID === projectID;
+        }
+
+        function _projectSelect(projectID) {
+            var org = self.selectedProjectID;
+            self.selectedProjectID = projectID;
+            if (org === projectID) {
+                return;
+            } else {
+                self.jobLogs.splice(0, self.jobLogs.length);
+                self.pageNum = 0;
+                var skipNum = self.pageNum * MAXNUMPREPAGE;
+                var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+                _getProjectJobLogs(self.selectedProjectID, skipNum, limitNum);
+            }
         }
 
         function _modalSTimeSelect(timeObj) {
@@ -192,14 +247,7 @@
             self.currentJobInfo.selectedJobType = type;
         }
 
-        function _subStr(str, count) {
-            if (str === undefined) {
-                return '';
-            }
-            return (str.length > count) ? str.substring(0, count) + '...' : str.substring(0, count);
-        }
-
-        function _getJobListPagination(condition, cb) {
+        /*function _getJobListPagination(condition, cb) {
             MyJobsServices.getJobListPagination(condition, function (data) {
                 cb(null, data.count);
             }, function (data) {
@@ -207,11 +255,11 @@
             });
         }
 
-        /**
+        /!**
          * 获取页面的分页标签
          * @param count
          * @private
-         */
+         *!/
         function _getPagination(count) {
             var pageCount = Math.ceil(count / self.pageSize);
             self.paginations = [];
@@ -229,12 +277,12 @@
             }
         }
 
-        /**
+        /!**
          * 按分页获取工作记录
          * @param condition
          * @param cb
          * @private
-         */
+         *!/
         function _getJobListByPage(condition, cb) {
             MyJobsServices.getJobListByPage(condition, function (data) {
                 var doc = data.doc;
@@ -250,7 +298,7 @@
             }, function (err) {
                 cb(new Error(err));
             });
-        }
+        }*/
 
         /**
          * 提取字符串中的 Data URL 数据
@@ -357,10 +405,14 @@
          */
         function _timeFormat(time) {
 
-            return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
+            if (time === undefined) return "";
+
+            return moment(time).format("HH:mm");
+
+            /*return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
                 + ':' +
                 ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
-
+            */
         }
 
         /**
@@ -407,8 +459,8 @@
             if (jobModule.status === 'TurnBack') {
                 var condition = {
                     username: account,
-                    startDate: monent(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD"),//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
-                    endDate: monent(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD")//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
+                    startDate: moment(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD"),//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10),
+                    endDate: moment(self.currentJobInfo.selectedDate).add(8, "h").format("YYYY-MM-DD")//new Date(self.currentJobInfo.selectedDate.getTime() + 8 * 60 * 60 * 1000).toISOString().substring(0, 10)
                 };
                 MyJobsServices.getJobList(condition, function (data) {
                     var result = data.doc;
@@ -535,32 +587,6 @@
             });
 
             return !result;
-        }
-
-        /**
-         * 根据所选项目刷新工作记录列表
-         * @private
-         */
-        function _refreshJobListByProject(project, cb) {
-            var condition = {
-                projectList: [project],
-                account: account
-            };
-            //获取工作记录列表的分页信息
-            _getJobListPagination(condition, function (err, data) {
-                if (err) {
-                    return cb(err);
-                }
-
-                //生成分页标签
-                _getPagination(data);
-                //获取首页数据
-                condition.startNum = 1;
-                condition.pageSize = self.pageSize;
-                _getJobListByPage(condition, function (err) {
-                    cb(err);
-                });
-            });
         }
 
     }
