@@ -17,15 +17,56 @@
 
         var self= {};
 
-        self.getPastProjects = _getPastProjects; /*获取参与的项目列表*/
-        self.getJobListPagination = _getJobListPagination; /*获取工作记录列表的分页信息*/
-        self.getJobListByPage = _getJobListByPage; /*按分页获取工作记录*/
-        self.getJobList = _getJobList; /*获取工作记录*/
-        self.recodeUpdate = _recodeUpdate; /*更改工作记录*/
+        /**
+         * 获取参与的项目列表
+         * @type {_getPastProjects}
+         */
+        self.getPastProjects = _getPastProjects;
+        /**
+         * 获取工作记录列表的分页信息
+         * @type {_getJobListPagination}
+         */
+        self.getJobListPagination = _getJobListPagination;
+        /**
+         * 按分页获取工作记录
+         * @type {_getJobListByPage}
+         */
+        self.getJobListByPage = _getJobListByPage;
+        /**
+         * 获取工作记录
+         * @type {_getJobList}
+         */
+        self.getJobList = _getJobList;
+        /**
+         * 更改工作记录
+         * @type {_recodeUpdate}
+         */
+        self.recodeUpdate = _recodeUpdate;
+        /**
+         * 获取被退回的工作记录
+         */
+        self.getJobLogs_TurnBack = _getJobLogs_TurnBack;
         /**
          * @description 获取工作记录
          */
         self.getJobLogs = _getJobLogs;
+
+
+        function _getJobLogs_TurnBack(account, projectIDs, skip, limit, successFn, errorFn) {
+            var projectIDStr = "";
+            projectIDs.forEach(function (id) {
+                projectIDStr += id + " ";
+            });
+            var url = BASEPATH + "/jobrecode/joblist/fixnum?";
+            url = url + "account=" + account;
+            url = url + "&skip=" + skip + "&limit=" + limit;
+            url = url + "&turnback=y";
+            if (projectIDs.length > 0) {
+                url = url + "&projectid=" + projectIDStr;
+            }
+
+            $http.get(url).success(successFn).error(errorFn);
+        }
 
         /**
          * @description 获取项目相关的工作记录

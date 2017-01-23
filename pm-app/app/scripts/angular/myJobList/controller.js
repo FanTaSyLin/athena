@@ -20,7 +20,7 @@
         var JobInfo = angular.element(document.getElementById('JobInfo'));
         var mySummerNote = angular.element(document.getElementById('mySummerNote'));
 
-        self.selectedProjectID = "all";
+        self.selectedProjectID = "turnBack";
         self.isShowShowMoreAcitivtyBtn = true;
         self.jobLogs = [];
         self.pageNum = 0;
@@ -167,7 +167,7 @@
                 self.pageNum = 0;
                 var skipNum = self.pageNum * MAXNUMPREPAGE;
                 var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-                _getProjectJobLogs("all", skipNum, limitNum);
+                _getProjectJobLogs(self.selectedProjectID, skipNum, limitNum);
             }, function (data) {
 
             });
@@ -189,26 +189,49 @@
             if (projectID !== "all") {
                 projectIDs.push(projectID);
             }
-            MyJobsServices.getJobLogs(account, projectIDs, skipNum, limitNum, function (res) {
-                var doc = res.doc;
-                var count = 0;
-                doc.forEach(function (item) {
-                    item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
-                    item.cleanContent = _delHtmlTag(item.content);
-                    item.starTime = moment(item.starTime);
-                    item.endTime = moment(item.endTime);
-                    self.jobLogs.push(item);
-                    count++;
-                });
-                if (count !== MAXNUMPREPAGE) {
-                    self.isShowShowMoreAcitivtyBtn = false;
-                } else {
-                    self.isShowShowMoreAcitivtyBtn = true;
-                }
-                self.pageNum++;
-            }, function (res) {
+            if (projectID !== "turnBack") {
+                MyJobsServices.getJobLogs(account, projectIDs, skipNum, limitNum, function (res) {
+                    var doc = res.doc;
+                    var count = 0;
+                    doc.forEach(function (item) {
+                        item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        item.cleanContent = _delHtmlTag(item.content);
+                        item.starTime = moment(item.starTime);
+                        item.endTime = moment(item.endTime);
+                        self.jobLogs.push(item);
+                        count++;
+                    });
+                    if (count !== MAXNUMPREPAGE) {
+                        self.isShowShowMoreAcitivtyBtn = false;
+                    } else {
+                        self.isShowShowMoreAcitivtyBtn = true;
+                    }
+                    self.pageNum++;
+                }, function (res) {
 
-            });
+                });
+            } else {
+                MyJobsServices.getJobLogs_TurnBack(account, [], skipNum, limitNum, function (res) {
+                    var doc = res.doc;
+                    var count = 0;
+                    doc.forEach(function (item) {
+                        item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        item.cleanContent = _delHtmlTag(item.content);
+                        item.starTime = moment(item.starTime);
+                        item.endTime = moment(item.endTime);
+                        self.jobLogs.push(item);
+                        count++;
+                    });
+                    if (count !== MAXNUMPREPAGE) {
+                        self.isShowShowMoreAcitivtyBtn = false;
+                    } else {
+                        self.isShowShowMoreAcitivtyBtn = true;
+                    }
+                    self.pageNum++;
+                }, function (res) {
+
+                });
+            }
         }
 
         function _showMoreActivity() {
