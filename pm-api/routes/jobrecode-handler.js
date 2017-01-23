@@ -388,11 +388,19 @@
             };
         }
 
+        if (!_.isUndefined(startNum)) {
+            startNum = Number(startNum);
+        }
+
+        if (!_.isUndefined(pageSize)) {
+            pageSize = Number(pageSize);
+        }
+
         JobLogSchema
             .find(condition)
             .skip(startNum - 1)
             .limit(pageSize)
-            .sort({'data': -1, 'starTime': -1})
+            .sort({'starTime': -1})
             .exec(function (err, doc) {
 
                 if (err) {
