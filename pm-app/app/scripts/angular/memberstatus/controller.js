@@ -302,7 +302,7 @@
         function _showMoreActivity() {
             var skipNum = self.pageNum * MAXNUMPREPAGE;
             var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-            _getProjectJobLogs(self.selectedMemberAccount, skipNum, limitNum);
+            _getProjectJobLogs(self.selectedProjectID, skipNum, limitNum);
         }
 
         function _openThisProject(projectID) {
