@@ -93,7 +93,16 @@
 
             recodeEditor.summernote({
                 minHeight:200,
-                maxHeight:390
+                maxHeight:390,
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']]
+                ]
+
             });
         }
 
