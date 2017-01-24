@@ -196,12 +196,13 @@
                     var doc = res.doc;
                     self.departmentLogs.splice(0, self.departmentLogs.length);
                     doc.forEach(function (item) {
-                        item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                        item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                         self.departmentLogs.push(item);
                         if (self.displayLogs.length < MAXNUMPREPAGE) {
                             self.displayLogs.push(item);
                         }
                     });
+
                     /**
                      * @description 处理这些数据 并显示
                      */
@@ -283,7 +284,7 @@
                     var isExist = false;
                     for (var k = 0; k < baseDataList.length; k++) {
                         var data = baseDataList[k];
-                        if ((data.name + "@" + data.account) === dataSetItem.label && moment(data.date).add(8, "h").format("MM月DD日") === tmp) {
+                        if ((data.name + "@" + data.account) === dataSetItem.label && moment(data.date).format("MM月DD日") === tmp) {
                             dataSetItem.data.push(data.duration_Real);
                             isExist = true;
                             break;
@@ -522,6 +523,22 @@
             }
           //返回状态
             return is_Manager;
+        }
+
+        /**
+         * 清除html标签
+         * @param str
+         * @returns {*}
+         * @private
+         */
+        function _delHtmlTag(str) {
+            var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+            tmpStr = tmpStr.replace(/&NBSP;/g, "");
+            tmpStr = tmpStr.replace(/&nbsp;/g, "");
+            if (tmpStr.length > 130) {
+                tmpStr = tmpStr.substring(0, 130) + '...';
+            }
+            return tmpStr;
         }
     }
 

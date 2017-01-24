@@ -12,10 +12,6 @@
     function RecodeController(PMSoftServices, $cookies) {
 
         var self = this;
-        var accountID = '';
-        var accountName = '';
-        var accountAvatar = '';
-        var accountDepartment = '';
         self.projects = [];
         self.dates = [];
         self.times = [];
@@ -46,10 +42,10 @@
 
         function init() {
 
-            accountID = $cookies.get('account');
-            accountName = $cookies.get('name');
-            accountAvatar = $cookies.get('avatar');
-            accountDepartment = $cookies.get('department');
+            /*accountID = $cookies.get('account');*/
+            /*accountName = $cookies.get('name');*/
+            /*accountAvatar = $cookies.get('avatar');*/
+            /*accountDepartment = $cookies.get('department');*/
 
             /*获取项目列表*/
             _getProjects();
@@ -63,7 +59,7 @@
                  * 因为还要用它来比较是否重复提交
                  */
                 _getJobList({
-                    username: $cookies.get('username'),
+                    username: $cookies.get('account'),
                     startDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10),
                     endDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10)
                 }, function (err) {
@@ -97,7 +93,16 @@
 
             recodeEditor.summernote({
                 minHeight:200,
-                maxHeight:390
+                maxHeight:390,
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']]
+                ]
+
             });
         }
 
@@ -109,23 +114,23 @@
 
         function timeFormat(time) {
 
-            return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
-                + ':' +
-                ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
+            if (time === null || time === undefined) return "";
+
+            return moment(time).format("HH:mm");
 
         }
 
         function dateTimeFormat(dateTime) {
-
-            var str = dateTime.toISOString();
-            return str.substring(0, 10) + ' ' + str.substring(11, 19);
+            if (dateTime !== null && dateTime !== undefined) {
+                return moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
+            }
         }
 
         function dateSelect(date) {
             self.selectedDate = date;
             self.showSubmitBtn = false;
             _getJobList({
-                username: $cookies.get('username'),
+                username: $cookies.get('account'),
                 startDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10),
                 endDate: new Date(self.selectedDate.date.substring(0, 10)).toISOString().substring(0, 10)
             }, function (err) {
@@ -141,7 +146,7 @@
             self.projects = [];
 
             /*获取项目列表*/
-            PMSoftServices.getPastProjects(accountID, function (data) {
+            PMSoftServices.getPastProjects($cookies.get('account'), function (data) {
 
                 data.forEach(function (item) {
                     var project = {};
@@ -220,10 +225,10 @@
 
 
             var jobRecode = {
-                authorID: accountID,
-                authorName: accountName,
-                authorAvatar: accountAvatar,
-                authorDepartment: accountDepartment,
+                authorID: $cookies.get('account'),
+                authorName: $cookies.get('name'),
+                authorAvatar: $cookies.get('avatar'),
+                authorDepartment: $cookies.get('department'),
                 type: self.selectedType,
                 content: self.markup,
                 projectID: self.selectedProject._id,
@@ -281,6 +286,14 @@
                 return false;
             }
 
+            //开始时间 必须小于结束时间
+            var startTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str);
+            var endTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str);
+            if (moment(startTime) > moment(endTime)) {
+                alert('时间选择错误');
+                return false;
+            }
+
             return true;
 
         }
@@ -293,7 +306,10 @@
             var result = true;
 
             self.recodedJobs.forEach(function (item) {
-                if (endTime.getTime() > item.startTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
+                /*if (endTime.getTime() > item.starTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
+                    result = result && false;
+                }*/
+                if (moment(endTime) > moment(item.startTime) && moment(startTime) < moment(item.endTime)) {
                     result = result && false;
                 }
             });
@@ -331,11 +347,11 @@
                 try {
                     result.forEach(function (item) {
                         self.recodedJobs.push({
-                            startTime: new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
-                            endTime: new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                            startTime: moment(item.starTime),//new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
+                            endTime: moment(item.endTime),//new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000),
                             cnName: item.projectCName,
                             enName: item.projectEName,
-                            reportTime: new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
+                            reportTime: moment(item.reportTime)//new Date(new Date(item.reportTime.substring(0, 10) + ' ' + item.reportTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000)
                         });
                     });
                 } catch (err) {
@@ -354,7 +370,6 @@
                 }
             });
         }
-
 
         function _subStr(str, count) {
             return (str.length > count) ? str.substring(0, count) + '...' : str.substring(0, count);

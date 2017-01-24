@@ -31,6 +31,7 @@
             getProjectStaticByAccount: _getProjectStaticByAccount,
             getDepartmentMembers: _getDepartmentMembers,
             getSysConfig: _getSysConfig,
+            changePwd: _changePwd,
 
             pastProjects: [], /*参与过的项目列表*/
             jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
@@ -43,6 +44,24 @@
         }
 
         return self;
+
+        function _changePwd(account, orgPwd, newPwd, successFn, errorFn) {
+            /*$http({
+                url: 'http://123.56.135.196:4001/api/user/changepwd',
+                method: 'POST',
+                params: {
+                    username: account,
+                    orgpassword: orgPwd,
+                    newpassword: newPwd
+                }
+            }).success(successFn).error(errorFn);*/
+            var body = {
+                username: account,
+                orgpassword: orgPwd,
+                newpassword: newPwd
+            }
+            $http.post('http://123.56.135.196:4001/api/user/changepwd', body).success(successFn).error(errorFn);
+        }
 
         function _getEmployeeByAccount(memberAccount, successFn, errorFn) {
             $http({

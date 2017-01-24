@@ -146,7 +146,7 @@
                 var isExist = false;
                 for (var j = 0; j < datas.length; j++) {
                     var data = datas[j];
-                    if (moment(data.date).add(8, "h").format("MM月DD日") === tmpStr) {
+                    if (moment(data.date).format("MM月DD日") === tmpStr) {
                         dataList.push(data.duration);
                         isExist = true;
                         break;

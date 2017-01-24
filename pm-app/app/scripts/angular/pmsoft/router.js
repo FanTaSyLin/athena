@@ -53,6 +53,11 @@
             //controller: 'BuildingCtrl'
         });
 
+        $routeProvider.when('/accountconfig', {
+            templateUrl: 'partials/accountconfig.html'
+            //controller: 'BuildingCtrl'
+        });
+
         $routeProvider.otherwise({
             redirectTo: '/building'
         });

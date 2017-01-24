@@ -127,8 +127,8 @@
                 doc.forEach(function (item) {
                     item.thumb = _extractImg(item.content);
                     item.cleanContent = _delHtmlTag(item.content);
-                    item.starTime = moment(item.starTime).add(8, "h");
-                    item.endTime = moment(item.endTime).add(8, "h");
+                    item.starTime = moment(item.starTime);
+                    item.endTime = moment(item.endTime);
                     PMSoftServices.unauditedJobList_Total.push(item);
                 });
                 cb(null, data.count);
@@ -312,9 +312,9 @@
          */
         function _timeFormat(time) {
 
-            return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
-                + ':' +
-                ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
+            if (time === null || typeof time !== Date) return "";
+
+            return moment(time).format("HH:mm");
 
         }
 

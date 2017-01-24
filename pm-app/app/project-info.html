@@ -120,7 +120,7 @@
                                         style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                             </button>
-                            <label>{{log.content}}</label>
+                            <label>{{log.content | delHtmlTag}}</label>
                         </div>
                         <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
                                 ng-click="MainCtrl.showMoreActivity()"
@@ -228,11 +228,11 @@
                                     <div class="dropdown-item btn btn-align-left function-select-item-item">
                                         <img src="/public/project-type-gongcheng.png"
                                              style="width: 20px;height: 20px"/>
-                                        <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('工程')">工程类</a>
+                                        <a class="btn btn-align-left" ng-click="MainCtrl.selectedPType('工程')">工程类</a>
                                     </div>
                                     <div class="dropdown-item btn btn-align-left function-select-item-item">
                                         <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                        <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('自研')">自研类</a>
+                                        <a class="btn btn-align-left" ng-click="MainCtrl.selectedPType('自研')">自研类</a>
                                     </div>
                                 </ul>
                             </div>
