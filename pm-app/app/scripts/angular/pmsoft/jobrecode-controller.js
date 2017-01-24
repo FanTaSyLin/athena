@@ -277,6 +277,14 @@
                 return false;
             }
 
+            //开始时间 必须小于结束时间
+            var startTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedStart.str);
+            var endTime = new Date(self.selectedDate.date.substring(0, 10) + ' ' + self.selectedEnd.str);
+            if (moment(startTime) > moment(endTime)) {
+                alert('时间选择错误');
+                return false;
+            }
+
             return true;
 
         }
