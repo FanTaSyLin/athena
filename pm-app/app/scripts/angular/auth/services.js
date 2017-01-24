@@ -33,7 +33,7 @@
                     username: data.username,
                     password: data.password
                 }
-            }).success(success).error(error)
+            }).success(success).error(error);
 
         }
 
