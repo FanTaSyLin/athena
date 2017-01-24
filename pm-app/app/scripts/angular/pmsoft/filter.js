@@ -28,6 +28,16 @@
      */
     app.filter('substring_str', substring_str);
 
+    /**
+     * 日期格式化
+     */
+    app.filter("dateFormat", dateFormat);
+
+    /**
+     * 清除html标签
+     */
+    app.filter("delHtmlTag", delHtmlTag);
+
     toTrusted.$inject = ['$sce'];
 
     function toTrusted($sce) {
@@ -86,6 +96,28 @@
             } else {
                 return str;
             }
+        }
+    }
+
+    function dateFormat() {
+        return function (dateTime, formatStr) {
+            if (dateTime !== null && dateTime !== undefined) {
+                return moment(dateTime).format(formatStr);
+            } else {
+                return "";
+            }
+        }
+    }
+
+    function delHtmlTag() {
+        return function (str) {
+            var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+            tmpStr = tmpStr.replace(/&NBSP;/g, "");
+            tmpStr = tmpStr.replace(/&nbsp;/g, "");
+            if (tmpStr.length > 130) {
+                tmpStr = tmpStr.substring(0, 130) + '...';
+            }
+            return tmpStr;
         }
     }
 })();

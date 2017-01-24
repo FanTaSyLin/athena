@@ -123,7 +123,7 @@
                                     added 工作记录 to {{log.projectCName}} <span style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                             </button>
-                            <label>{{log.cleanContent}}</label>
+                            <label>{{log.content | delHtmlTag}}</label>
                         </div>
                         <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
                                 ng-click="MyJobsCtrl.showMoreActivity(MyJobsCtrl.selectedMemberAccount, MyJobsCtrl.pageNum)"

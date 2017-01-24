@@ -216,7 +216,6 @@
                     var count = 0;
                     doc.forEach(function (item) {
                         item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
-                        item.cleanContent = _delHtmlTag(item.content);
                         item.starTime = moment(item.starTime);
                         item.endTime = moment(item.endTime);
                         self.jobLogs.push(item);

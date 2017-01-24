@@ -197,12 +197,12 @@
                     self.departmentLogs.splice(0, self.departmentLogs.length);
                     doc.forEach(function (item) {
                         item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
-                        item.cleanContent = _delHtmlTag(item.content);
                         self.departmentLogs.push(item);
                         if (self.displayLogs.length < MAXNUMPREPAGE) {
                             self.displayLogs.push(item);
                         }
                     });
+
                     /**
                      * @description 处理这些数据 并显示
                      */
