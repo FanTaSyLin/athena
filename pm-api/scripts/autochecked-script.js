@@ -15,8 +15,8 @@
     var mongoose = require('mongoose');
     var JobSchema = require('./../modules/joblog-schema.js');
 
-    const MAXTIMELINE = (14 * 24 * 60 * 60 * 1000);
-    const MONGOOSE_URI = process.env.MONGOOSE_URI || "123.56.135.196/pmsoft";
+    const MAXTIMELINE = (7 * 24 * 60 * 60 * 1000);
+    const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
     var timer = new Timer(1000);
     var opt_Mongoose = {
         server: {
@@ -54,8 +54,8 @@
 
     /**
      * 自动审核工作记录 
-     * @param {any} docList
-     * @param {any} cb
+     * @param {object[]} docList
+     * @callback cb
      */
     function _autoCheckedJob(docList, cb) {
         if (docList.length === 0) {
@@ -88,7 +88,7 @@
                 }
             }, function (err) {
                 console.error(err.stack);
-                _autoCheckedJob(docList);
+                _autoCheckedJob(docList, cb);
             });
 
     }

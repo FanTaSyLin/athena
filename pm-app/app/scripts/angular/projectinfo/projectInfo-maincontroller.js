@@ -91,11 +91,16 @@
         /*显示工作记录详情模态框*/
         self.showActivityDetial = _showActivityDetial;
 
+        self.selectedPType = _selectedPType;
+
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
             _selectMonthRange();
         });
 
+        function _selectedPType(type) {
+            self.thisProjectInfo.type = type;
+        }
 
         /**
          * 添加一个项目成员
@@ -420,7 +425,7 @@
                 var doc = res.doc;
                 var count = 0;
                 doc.forEach(function (item) {
-                    item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
+                    item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                     self.jobLogs.push(item);
                     count++;
                 });

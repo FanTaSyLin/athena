@@ -14,9 +14,6 @@
     function JobCheckController(PMSoftServices, $cookies) {
 
         var self = this;
-        var accountID = '';
-        var accountName = '';
-        var accountAvatar = '';
         var difficultyEditor = angular.element(document.getElementById('difficulty'));
         var efficiencyEditor = angular.element(document.getElementById('efficiency'));
         var qualityEditor = angular.element(document.getElementById('quality'));
@@ -37,9 +34,6 @@
 
         function _init() {
             self.currentJob = PMSoftServices.currentUnauditedJob;
-            accountID = $cookies.get('account');
-            accountName = $cookies.get('name');
-            accountAvatar = $cookies.get('avatar');
         }
 
         function _goForwardJob() {
@@ -54,7 +48,7 @@
                 }
             } else {
                 PMSoftServices.currentUnauditedJobIndex = PMSoftServices.unauditedJobList_Filter.length -1;
-                return;
+                return true;
             }
         }
 
@@ -85,9 +79,9 @@
         }
 
         function _checkThisJob(body) {
-            body.reviewerID = accountID;
-            body.reviewerName = accountName;
-            body.reviewerAvatar = accountAvatar;
+            body.reviewerID = $cookies.get('account');
+            body.reviewerName = $cookies.get('name');
+            body.reviewerAvatar = $cookies.get('avatar');
             body.difficulty = difficultyEditor.slider('getValue');
             body.efficiency = efficiencyEditor.slider('getValue');
             body.quality = qualityEditor.slider('getValue');
@@ -108,8 +102,8 @@
         
         function _turnBackJob(reasonStr, body) {
             body.turnBackReason = reasonStr;
-            body.reviewerID = accountID;
-            body.reviewerName = accountName;
+            body.reviewerID = $cookies.get('account');
+            body.reviewerName = $cookies.get('name');
             PMSoftServices.recodeTurnBack(body, function (res) {
                 var item = PMSoftServices.unauditedJobList_Filter[PMSoftServices.currentUnauditedJobIndex];
                 item.status = 'TurnBack';

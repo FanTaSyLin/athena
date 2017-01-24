@@ -1,0 +1,21 @@
+<form class="auth-form form-horizontal tb-auth" ng-controller="AccountConfigController as AccountCtrl" data-ng-init="AccountCtrl.init()">
+    <input name="account" type="hidden" value="">
+    <div class="form-field">
+        <input name="account" class="form-control" required="" type="text" placeholder="账号" ng-model="AccountCtrl.account" disabled="disabled"/>
+    </div>
+    <div class="form-field">
+        <input name="password" class="form-control password" required="" type="password" placeholder="原密码" ng-model="AccountCtrl.orgPassword"/>
+    </div>
+    <div class="form-field">
+        <input name="password" class="form-control password" required="" type="password" placeholder="新密码" ng-model="AccountCtrl.newPassword"/>
+    </div>
+    <div class="form-field">
+        <input name="password" class="form-control password" required="" type="password" placeholder="确认新密码" ng-model="AccountCtrl.newPassword2"
+               ng-keypress="AccountCtrl.changePasswordByKey($event)"/>
+    </div>
+    <div class="form-field">
+        <a class="btn btn-primary anim-blue1 signin" href ng-click="AccountCtrl.changePassword()">
+            修改密码
+        </a>
+    </div>
+</form>
