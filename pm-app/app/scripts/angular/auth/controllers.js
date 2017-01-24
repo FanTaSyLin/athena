@@ -84,7 +84,7 @@
 
 
             }, function (data, status, headers, config) {
-                alert('err');
+                alert('用户名与密码不一致');
             });
         }
     }
