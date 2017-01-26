@@ -128,7 +128,7 @@
         _projectStaticByMonthMember(projectList10, '201610');
         _projectStaticByMonthMember(projectList11, '201611');
         _projectStaticByMonthMember(projectList12, '201612');
-        _projectStaticByMonthMember(projectList13, '201701');
+        //_projectStaticByMonthMember(projectList13, '201701');
     });
 
     /**
