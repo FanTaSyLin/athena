@@ -620,7 +620,6 @@
 
         /**
          * 将传入的数据按项目组成员进行统计
-         *
          * @param {Array} data
          * @param {Function} cb
          * @param {Error} cb.err
@@ -650,8 +649,7 @@
         }
 
         /**
-         *
-         *
+         * 判断项目是否应该加星
          * @param {String} projectID
          * @returns
          */
