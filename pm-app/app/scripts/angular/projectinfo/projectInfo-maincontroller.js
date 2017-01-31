@@ -658,6 +658,7 @@
         function _checkIsStarred(projectID) {
             var stars = $cookies.getObject('mystar-project');
             var result = false;
+            if (stars === null || stars === undefined) return false;
             for (var i = 0; i < stars.length; i++) {
                 if (stars[i] === projectID) {
                     result = true;
