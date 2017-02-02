@@ -472,6 +472,14 @@
             }, function (res) {
 
             });
+
+            /**
+             * @description 根据所选日期范围 获取 活动纪律
+             */
+            var startDate = moment(startMonth + "01");
+            var endDate = moment(endMonth + "01").endOf("month");
+            console.log(startDate.format("YYYY-MM-DD"));
+            console.log(endDate.format("YYYY-MM-DD"));
         }
 
         /**
