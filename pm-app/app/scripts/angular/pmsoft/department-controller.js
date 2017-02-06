@@ -237,6 +237,13 @@
             //生成x轴标签列表
             for (var i = 0; i <= timeSpan; i++) {
                 var tmpStr = moment(startDateStr).add(i, "d").format("MM月DD日");
+                
+                if (moment(startDateStr).add(i, "d").day() === 6) {
+                    tmpStr = "周六";
+                } else  if (moment(startDateStr).add(i, "d").day() === 0) {
+                    tmpStr = "周日";
+                }
+
                 xLabels.push(tmpStr);
             }
 
