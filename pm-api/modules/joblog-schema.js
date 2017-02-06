@@ -2,8 +2,6 @@
  * Created by FanTaSyLin on 2016/8/18.
  */
 
-///<reference path="./../../typings/index.d.ts" />
-
 var mongoose = require('mongoose');
 var _ = require('lodash');
 var DataVerifyError = require('./../errors/DataVerifyError.js');
