@@ -31,13 +31,15 @@
          * @description 获取项目相关的工作记录
          * @param {string[]} accounts
          * @param {string} projectID
+         * @param {string} startDate
+         * @param {string} endDate
          * @param {Number} skip
          * @param {Number} limit
          * @callback successFn
          * @callback errorFn
          * @private
          */
-        function _getJobLogs(accounts, projectID, skip, limit, successFn, errorFn) {
+        function _getJobLogs(accounts, projectID, startDate, endDate, skip, limit, successFn, errorFn) {
             var accountStr = "";
             accounts.forEach(function (account) {
                 accountStr += account + " ";
@@ -45,6 +47,7 @@
             var url = BASEPATH + "/jobrecode/joblist/fixnum?";
             url = url + "projectid=" + projectID;
             url = url + "&skip=" + skip + "&limit=" + limit;
+            url = url + "&startdate=" + startDate + "&enddate=" + endDate;
             if (accounts.length > 0) {
                 url = url + "&account=" + accountStr;
             }

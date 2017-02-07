@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/11/4.
  */
 
-(function () {
+(function() {
 
     'use strict';
 
@@ -14,7 +14,7 @@
 
     function MainControllerFn($location, $cookies, ProjectInfoServices) {
 
-        var MAXNUMPREPAGE = 30;//一次获取的工作记录条目个数
+        var MAXNUMPREPAGE = 30; //一次获取的工作记录条目个数
         var self = this;
         var myStar = [];
         var projectID = '';
@@ -58,7 +58,8 @@
         self.isShowShowMoreAcitivtyBtn = true;
         self.jobLogs = [];
         self.pageNum = 0;
-
+        self.startDate = "";
+        self.endDate = "";
 
         self.init = _init;
         self.starred = _starred;
@@ -94,7 +95,7 @@
         self.selectedPType = _selectedPType;
 
         //当 collapse 隐藏时 触发查询
-        dateSelectArea.on('hidden.bs.collapse', function () {
+        dateSelectArea.on('hidden.bs.collapse', function() {
             _selectMonthRange();
         });
 
@@ -107,12 +108,12 @@
          * @param {Object} member 成员
          */
         function _addMemberToProject(member) {
-            ProjectInfoServices.addMemberToProject(projectID, member, function (res) {
+            ProjectInfoServices.addMemberToProject(projectID, member, function(res) {
                 //成功后 添加到成员列表
                 self.thisProject.members.push(member);
                 //关闭 模态框
                 memberAddModal.modal('hide');
-            }, function (res) {
+            }, function(res) {
                 //失败 最好能有原因提示
                 alert(res);
             });
@@ -126,12 +127,12 @@
             if ($event.keyCode !== 13) {
                 return;
             }
-            ProjectInfoServices.searchMembers(condition, function (res) {
+            ProjectInfoServices.searchMembers(condition, function(res) {
                 self.foundMembers.splice(0, self.foundMembers.length);
-                res.forEach(function (member) {
+                res.forEach(function(member) {
                     self.foundMembers.push(member);
                 });
-            }, function (res) {
+            }, function(res) {
 
             });
         }
@@ -161,13 +162,13 @@
             }
 
             if (rmShowedMemberClickCount % 2 === 1) {
-                ProjectInfoServices.rmMemberToProject(projectID, member, function (res) {
+                ProjectInfoServices.rmMemberToProject(projectID, member, function(res) {
                     //成功了需要从 成员列表中移除
                     var index = self.thisProject.members.indexOf(member);
                     self.thisProject.members.splice(index, 1);
                     //关闭 模态框
                     memberStatusModal.modal('hide');
-                }, function (res) {
+                }, function(res) {
                     //失败了 最好有个提示
                     alert('Faild');
                 });
@@ -183,7 +184,7 @@
          * @private
          */
         function _setShowedMemberAuthority(authority, member) {
-            ProjectInfoServices.setProjectMemberAuthority(projectID, authority, member, function (res) {
+            ProjectInfoServices.setProjectMemberAuthority(projectID, authority, member, function(res) {
                 if (authority === 'reviewer') {
                     self.showedMember.isReviewer = true;
                 } else if (authority === 'normal') {
@@ -191,7 +192,7 @@
                 }
                 //关闭 模态框
                 memberStatusModal.modal('hide');
-            }, function (res) {
+            }, function(res) {
 
             });
         }
@@ -321,7 +322,7 @@
             self.isStarred = _checkIsStarred(projectID);
 
             //获取整个项目的基本属性 （projectSchema）
-            ProjectInfoServices.getProjectBaseInfo(projectID, function (res) {
+            ProjectInfoServices.getProjectBaseInfo(projectID, function(res) {
                 if (res.data !== null && res.data !== undefined && res.data.length > 0) {
                     var doc = res.data[0];
                     for (var p in doc) {
@@ -354,7 +355,7 @@
                      */
                     document.title = self.thisProject.cnName;
                 }
-            }, function (err) {
+            }, function(err) {
 
             });
 
@@ -374,13 +375,13 @@
                 'projectID': projectID,
                 'startMonth': startMonth,
                 'endMonth': endMonth
-            }, function (res) {
+            }, function(res) {
                 if (res.error) {
                     alert(res.error);
                 }
 
                 //按项目组成员进行统计
-                _projectStaticByMember(res.doc, function (err, data) {
+                _projectStaticByMember(res.doc, function(err, data) {
                     //根据计算后的结果生成图表
                     _createBarByResult(data);
                     _createPieByResult(data);
@@ -395,7 +396,7 @@
                 self.monthRange.endYear = y1;
                 self.monthRange.endMonth = m1;
 
-            }, function (res) {
+            }, function(res) {
 
             });
 
@@ -406,25 +407,31 @@
             self.pageNum = 0;
             var skipNum = self.pageNum * MAXNUMPREPAGE;
             var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-            _getMemberJobLogs("all", skipNum, limitNum);
+            var startDate = moment(startMonth + "01").format("YYYY-MM-DD");
+            var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
+            self.startDate = startDate;
+            self.endDate = endDate;
+            _getMemberJobLogs("all", startDate, endDate, skipNum, limitNum);
         }
 
         /**
-         * 获取项目组成员的工作记录
-         * @param memberAccount
-         * @param skipNum
-         * @param limitNum
+         * @description 获取项目组成员的工作记录
+         * @param {string} memberAccount
+         * @param {string} startDate
+         * @param {string} endDate 
+         * @param {Number} skipNum
+         * @param {Number} limitNum
          * @private
          */
-        function _getMemberJobLogs(memberAccount, skipNum, limitNum) {
+        function _getMemberJobLogs(memberAccount, startDate, endDate, skipNum, limitNum) {
             var accounts = [];
             if (memberAccount !== "all") {
                 accounts.push(memberAccount);
             }
-            ProjectInfoServices.getJobLogs(accounts, projectID, skipNum, limitNum, function (res) {
+            ProjectInfoServices.getJobLogs(accounts, projectID, startDate, endDate, skipNum, limitNum, function(res) {
                 var doc = res.doc;
                 var count = 0;
-                doc.forEach(function (item) {
+                doc.forEach(function(item) {
                     item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                     self.jobLogs.push(item);
                     count++;
@@ -435,7 +442,7 @@
                     self.isShowShowMoreAcitivtyBtn = true;
                 }
                 self.pageNum++;
-            }, function (res) {
+            }, function(res) {
 
             });
         }
@@ -453,13 +460,13 @@
                 'projectID': projectID,
                 'startMonth': startMonth,
                 'endMonth': endMonth
-            }, function (res) {
+            }, function(res) {
                 if (res.error) {
                     alert(res.error);
                 }
 
                 //按项目组成员进行统计
-                _projectStaticByMember(res.doc, function (err, data) {
+                _projectStaticByMember(res.doc, function(err, data) {
                     //根据计算后的结果生成图表
                     _createBarByResult(data);
                     _createPieByResult(data);
@@ -469,9 +476,22 @@
                 self.title = '统计范围 (' + startMonth.toString().substring(0, 4) + '年' + startMonth.toString().substring(4, 6) + '月 至 ' +
                     endMonth.toString().substring(0, 4) + '年' + endMonth.toString().substring(4, 6) + '月)';
 
-            }, function (res) {
+            }, function(res) {
 
             });
+
+            /**
+             * @description 获取项目组成员的工作记录
+             * 根据条件首次获取定量的条目             *
+             */
+            self.pageNum = 0;
+            var skipNum = self.pageNum * MAXNUMPREPAGE;
+            var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
+            var startDate = moment(startMonth + "01").format("YYYY-MM-DD");
+            var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
+            self.startDate = startDate;
+            self.endDate = endDate;
+            _getMemberJobLogs(self.selectedMemberAccount, startDate, endDate, skipNum, limitNum);
         }
 
         /**
@@ -545,7 +565,7 @@
             var config = {};
 
             if (data === undefined || data.length < 1) {
-                self.thisProject.members.forEach(function (member) {
+                self.thisProject.members.forEach(function(member) {
                     x_Labels.push(member.name);
                     duration_Checked_List.push(0);
                     duration_Real_List.push(0);
@@ -620,7 +640,6 @@
 
         /**
          * 将传入的数据按项目组成员进行统计
-         *
          * @param {Array} data
          * @param {Function} cb
          * @param {Error} cb.err
@@ -650,14 +669,14 @@
         }
 
         /**
-         *
-         *
+         * 判断项目是否应该加星
          * @param {String} projectID
          * @returns
          */
         function _checkIsStarred(projectID) {
             var stars = $cookies.getObject('mystar-project');
             var result = false;
+            if (stars === null || stars === undefined) return false;
             for (var i = 0; i < stars.length; i++) {
                 if (stars[i] === projectID) {
                     result = true;
@@ -715,14 +734,14 @@
                 self.pageNum = 0;
                 var skipNum = self.pageNum * MAXNUMPREPAGE;
                 var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-                _getMemberJobLogs(self.selectedMemberAccount, skipNum, limitNum);
+                _getMemberJobLogs(self.selectedMemberAccount, self.startDate, self.endDate, skipNum, limitNum);
             }
         }
 
         function _showMoreActivity() {
             var skipNum = self.pageNum * MAXNUMPREPAGE;
             var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-            _getMemberJobLogs(self.selectedMemberAccount, skipNum, limitNum);
+            _getMemberJobLogs(self.selectedMemberAccount, self.startDate, self.endDate, skipNum, limitNum);
         }
 
         function _isShowArea(item) {
@@ -748,7 +767,7 @@
         function _getIsManager(authorID) {
             var isManager = false;
             var sysconfig = $cookies.getObject('Sysconfig');
-            sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
+            sysconfig[0].departmentGroups.forEach(function(departmentGroup) {
                 for (var i = 0; i < departmentGroup.manager.length; i++) {
                     var manager = departmentGroup.manager[i];
                     if (manager.account === account) {

@@ -48,12 +48,15 @@
 
         /**
          * @description 获取一定数量的工作记录, 适用于 “加载更多” 场景
-         * 参数1：account - string[] 如果 undefined 则此条件无效
-         * 参数2：project -string[] 如果 undefined 则此条件无效
-         * 参数3：skip - Number 跳过的记录条数 如果 undefined skip = 0;
-         * 参数4: limit - Number 指定读取的记录条数 如果 undefined limit = 50;
-         * 参数5: detail -Boolean 指定获取内容的信息量 如果 undefined detail = true;
+         * @param {string[]} account 如果 undefined 则此条件无效
+         * @param {string[]} project 如果 undefined 则此条件无效
+         * @param {Number} skip 跳过的记录条数 如果 undefined skip = 0;
+         * @param {Number} limit 指定读取的记录条数 如果 undefined limit = 50;
+         * @param {Boolean} detail 指定获取内容的信息量 如果 undefined detail = true;
          * detail 这个参数 如果为 false 则代表获取的信息不包括 JobLogSchema.content 中的内容;
+         * @param {string} turnback 是否只获取被退回的工作记录 y/n
+         * @param {string} startdate 如果 undefined 则此条件无效
+         * @param {string} enddate 如果 undefined 则此条件无效
          */
         server.get({
             path: BASEPATH + '/jobrecode/joblist/fixnum',
@@ -99,6 +102,8 @@
         var turnBack = req.params.turnback;
         var skipNum = req.params.skip;
         var limitNum = req.params.limit;
+        var startDate = req.params.startdate;
+        var endDate = req.params.enddate;
 
         var condition = {};
 
@@ -140,9 +145,16 @@
             limitNum = Number(limitNum);
         }
 
+        if (!_.isUndefined(startDate) && !_.isUndefined(endDate)) {
+            condition.date = {
+                $gte: startDate,
+                $lte: endDate
+            };
+        }
+
         JobLogSchema
             .find(condition)
-            .sort({"reportTime": -1})
+            .sort({"starTime": -1})
             .skip(skipNum)
             .limit(limitNum)
             .exec(function (err, doc) {
