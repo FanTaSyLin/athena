@@ -20,8 +20,9 @@
             </li>
         </ul>
     </div>
+    <!--近期工作 start-->
     <div class="main-area-item">
-        <!--近期工作 start-->
+
         <div ng-show="DptCtrl.isShowArea('Active')">
             <!--工作量统计图表区域 start-->
             <h2 class="f4 mb-2 text-normal mt-4">
@@ -31,6 +32,7 @@
                 <canvas id="department-Chart-ByDay" height="2" width="16"></canvas>
             </div>
             <!--工作量统计图表区域 end-->
+
             <!--成员列表 start-->
             <h2 class="f4 mb-2 text-normal mt-8">
                 <span class="glyphicon glyphicon-user" style="color: #646464;">  成员列表</span>
@@ -52,6 +54,7 @@
                 </ul>
             </div>
             <!--成员列表 end-->
+            
             <!--活动 start-->
             <h2 class="f4 mb-2 text-normal">
                 <span class="glyphicon glyphicon-align-left" style="color: #646464;">  成员动态</span>
@@ -101,8 +104,9 @@
                     </li>
                 </ul>
             </div>
+            <!--活动 end-->
         </div>
-        <!--活动 end-->
+        
         <!--工作记录详情对话框 start-->
         <div class="modal fade" id="jobDetail">
             <div class="modal-dialog size-jobsheet">
@@ -251,10 +255,13 @@
             </div>
         </div>
         <!--工作记录详情对话框 end-->
+
     </div>
     <!--近期工作 end-->
+
     <!--Shared start-->
     <div ng-show="DptCtrl.isShowArea('Shared')">
+
         <div class="wall-view card fade in">
             <div class="wall-wrap">
                 <div class="wall-left-column">
@@ -284,7 +291,7 @@
                                 <section>
                                     <div class="avatar img-36 img-circle pull-left" style="background-image: url(/public/100.png)"></div>
                                     <div class="post-content">
-                                        <p class="post-title" style="font-weight: 400" ng-class="{active: DptCtrl.sharingItemIsSelected(sharing)}">
+                                        <p class="post-title" style="font-weight: 400" ng-class="{active: sharing.isSelected}">
                                             <span class="post-title" title="{{sharing.title}}">{{sharing.title}}</span>
                                         </p>
                                         <p class="post-info muted">
@@ -301,11 +308,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="sharingEdit">
+            
+        </div>
+
     </div>
     <!--Shared end-->
+
     <!--部门资产 start-->
     <div ng-show="DptCtrl.isShowArea('Repositories')">
     </div>
     <!--部门资产 end-->
-</div>
+
+
+
 </div>

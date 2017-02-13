@@ -38,6 +38,11 @@ a:hover, a:focus, a:active {
     background: #fff;
 }
 
+.row {
+    margin-right: 0px!important;
+    margin-left: 0px!important;
+}
+
 .ls5px {
     letter-spacing: 5px;
 }
@@ -1580,9 +1585,9 @@ h3 {
     background-color: transparent!important;
 }
 
-.fade.in {
+/*.fade.in {
     opacity: 1;
-}
+}*/
 
 .card {
     border: 0;
