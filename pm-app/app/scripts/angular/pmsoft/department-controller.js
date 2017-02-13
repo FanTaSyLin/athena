@@ -40,6 +40,11 @@
         self.departments = [];
         self.isShowDptNav = false;
         self.selectedDepartment = {};
+        self.sortType = "VarDate";
+        self.sharingRange = "所有分享";
+        self.sharings = [];
+        self.currentSharing = {};
+
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
@@ -51,10 +56,65 @@
         self.showMoreActivity = _showMoreActivity;
         self.showActivityDetial = _showActivityDetial;
         self.isSelectedDepartment =_isSelectedDepartment;
+        self.selectSortType = _selectSortType;
+        self.isSelectedSortType = _isSelectedSortType;
+        self.selectSharingRange = _selectSharingRange;
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
         /*取消审核模态框*/
         self.disMissModal = _disMissModal;
+        /**
+         * 选择分享列表中的对象
+         */
+        self.selectSharingItem = _selectSharingItem;
+        /**
+         * 判断分享对象是否是已选中的对象
+         */
+        self.sharingItemIsSelected = _sharingItemIsSelected;
+
+        self.sharings.push({
+            _id: "123",
+            authorID: "FanTaSyLin",
+            authorName: "范霖",
+            varDate: "2017年2月9日",
+            title: "敏捷，才是最优雅的开发姿势",
+            content: ""
+        });
+
+        self.sharings.push({
+            _id: "456",
+            authorID: "FanTaSyLin",
+            authorName: "范霖",
+            varDate: "2017年2月10日",
+            title: "敏捷，才不是最优雅的开发姿势",
+            content: ""
+        });
+
+        /**
+         * @description 判断分享对象是否是已选中的对象
+         */
+        function _sharingItemIsSelected(item) {
+            return item._id === self.currentSharing._id;
+        }
+
+        /**
+         * @description 选择分享列表中的对象
+         */
+        function _selectSharingItem(item) {
+            self.currentSharing = item;
+        }
+
+        function _selectSharingRange(sharingRange) {
+            self.sharingRange = sharingRange;
+        }
+        
+        function _isSelectedSortType(sortType) {
+            return self.sortType === sortType;
+        }
+        
+        function _selectSortType(sortType) {
+            self.sortType = sortType;
+        }
 
         function _isSelectedDepartment(department) {
             return department.id === self.selectedDepartment.id;
@@ -613,5 +673,4 @@
      * @property {Number} pointBorderWidth
      */
 
-})
-();
+})();
