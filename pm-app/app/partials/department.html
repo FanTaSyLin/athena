@@ -280,7 +280,7 @@
                             </ul>
                         </div>
                         <div class="btn-group post-create-wrap pull-right">
-                            <a class="open-post-creator-handler link-add-handler" style="font-size: 16px; cursor: pointer">
+                            <a class="open-post-creator-handler link-add-handler" style="font-size: 16px; cursor: pointer" ng-click="DptCtrl.showSharingEdit()">
                                 <span class="glyphicon glyphicon-pencil"></span>  添加分享
                             </a>
                         </div>
@@ -296,7 +296,7 @@
                                         </p>
                                         <p class="post-info muted">
                                             {{sharing.authorID}}发布于
-                                            <span class="react-time-stamp">{{sharing.varDate}}
+                                            <span class="react-time-stamp">{{sharing.showTime}}
                                         </p>
                                     </div>
                                 </section>
@@ -305,12 +305,54 @@
                     </nav>
                 </div>
                 <div class="wall-right-column">
+                    <div class="post-detail-wrapper">
+                        <article class="post-detail-view">
+                            <section class="detail-content">
+                                <div class="post-detail-header-wrap">
+                                    <div class="post-detail-header">
+                                        <h4 class="post-title">
+                                            {{DptCtrl.sharingDetail.title}} 
+                                        </h4>
+                                        <div class="dropdown menu-handler">
+                                            <a class="dropdown-toggle menu-tip" data-toggle="dropdown" ng-show="DptCtrl.authorIsMe">
+                                                更多...
+                                            </a>    
+                                            <ul class="dropdown-menu menu-handler-menu" role="menu">
+                                                <div class="dropdown-menu-header">
+                                                    <strong class="">分享菜单</strong>
+                                                </div>
+                                                <div class="dropdown-split-line"></div>
+                                                <a class="dropdown-item" href ng-click="DptCtrl.showSharingEdit(DptCtrl.sharingDetail)">
+                                                    <span class="glyphicon glyphicon-pencil"></span>
+                                                    编辑分享
+                                                </a>
+                                                <a class="dropdown-item" href disabled="disabled">
+                                                    <span class="glyphicon glyphicon-duplicate"></span>
+                                                    复制分享
+                                                </a>
+                                                <a class="dropdown-item" href disabled="disabled">
+                                                    <span class="glyphicon glyphicon-share"></span>
+                                                    移动分享
+                                                </a>
+                                                <div class="dropdown-split-line" href></div>
+                                                <a class="dropdown-item" href ng-click="DptCtrl.deleteSharing(DptCtrl.sharingDetail)">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                    删除分享
+                                                </a>
+                                            </ul>  
+                                        </div>                                  
+                                    </div>
+                                </div>
+                                <div class="post-detail-content-wrap">
+                                    <div class="post-content">
+                                        <div ng-bind-html="DptCtrl.sharingDetail.content | to_trusted"></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </article>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="modal fade" id="sharingEdit">
-            
         </div>
 
     </div>

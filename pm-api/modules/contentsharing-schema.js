@@ -37,10 +37,12 @@ var ContentSharingSchema = new Schema({
         description: { type: String },
         url: { type: String },
     }],
+
     /**
      * @description 标签
      */
     tags: { type: [String] },
+
     /**
      * @description 范围(谁能看见)
      * type - 范围类型:
@@ -54,10 +56,11 @@ var ContentSharingSchema = new Schema({
      * type === project params = [projectID]
      * type === private params 无效
      */
-    range: [{
+    ranges: [{
         type: { type: String},
-        params:{ type: [String]}
+        param:{ type: String } 
     }],
+
     logs: [{ 
         /**
          * @description 日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态
@@ -85,7 +88,7 @@ var ContentSharingSchema = new Schema({
 
 ContentSharingSchema.methods.submitInit = function (body) {
     var self = this;
-    if (!dataVerify(body)) {
+    if (!_dataVerify(body)) {
         throw new DataVerifyError("415", {
             message: "Invalid data"
         });
@@ -94,7 +97,7 @@ ContentSharingSchema.methods.submitInit = function (body) {
         for (var p in body) {
             self[p] = body[p];
         }
-        self.reportTime = new Date();
+        self.varDate = new Date();
         self.logs = [];
         self.logs.push({
             type: "New",
@@ -125,3 +128,5 @@ function _dataVerify (body) {
         return true;
     }
 }
+
+module.exports = mongoose.model('ContentSharing', ContentSharingSchema);

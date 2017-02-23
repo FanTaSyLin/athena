@@ -14,11 +14,17 @@
 
     function MainController($cookies, PMSoftServices) {
         var self = this;
+        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
 
         self.gotoMyJobsPage = _gotoMyJobsPage;
         self.signOut = _signOut;
+        self.showSharingEditModal = _showSharingEditModal;
         
         _init();
+
+        function _showSharingEditModal() {
+            sharingEdit.modal({backdrop: 'static', keyboard: false});
+        }
 
         /**
          * 初始化数据

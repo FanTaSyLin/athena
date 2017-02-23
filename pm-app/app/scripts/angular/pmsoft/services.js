@@ -32,18 +32,99 @@
             getDepartmentMembers: _getDepartmentMembers,
             getSysConfig: _getSysConfig,
             changePwd: _changePwd,
+            submitSharing: _submitSharing,
+            /**
+             * 获取分享列表
+             */
+            getSharings: _getSharings, 
+            /**
+             * 获取单个分享的详细数据 （主要是content部分）
+             */
+            getSharingDetail: _getSharingDetail,
 
-            pastProjects: [], /*参与过的项目列表*/
-            jobRecodeDateList: [], /*填写工作记录时所使用的日期列表*/
-            recodedJobLogList: [], /*已提交工作记录列表*/
-            currentUnauditedJob: {}, /*当前待审核工作记录 为UnauditedsCtrl与 ReviewCtrl 传递参数*/
-            unauditedJobList_Total: [], /*未审核工作列表-总体 为ReviewCtrl 传递参数*/
-            unauditedJobList_Filter: [], /*未审核工作列表-筛选后保留 为ReviewCtrl 传递参数*/
-            unauditedJobList_View: [], /*未审核工作列表-分页后显示用 为ReviewCtrl 传递参数*/
-            currentUnauditedJobIndex: 0 /*一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0*/
+            /**
+             * 提交编辑后的内容
+             */
+            editSharing: _editSharing,
+
+            /**
+             * 删除分享的内容
+             */
+            deleteSharing: _deleteSharing,
+
+
+            /**
+             * 当提交了一个新的分享时触发此事件
+             */
+            onNewSharingSubmited: undefined,
+
+            /**
+             * 当对当前分享进行了修改后触发
+             */
+            onSharingEdited: undefined,
+
+            /**
+             * 参与过的项目列表
+             */
+            pastProjects: [],
+            /**
+             * 填写工作记录时所使用的日期列表
+             */
+            jobRecodeDateList: [],
+            /**
+             * 已提交工作记录列表
+             */
+            recodedJobLogList: [],
+            /**
+             * 当前待审核工作记录 为UnauditedsCtrl与 ReviewCtrl 传递参数
+             */
+            currentUnauditedJob: {},
+            /**
+             * 未审核工作列表-总体 为ReviewCtrl 传递参数
+             */
+            unauditedJobList_Total: [],
+            /**
+             * 未审核工作列表-筛选后保留 为ReviewCtrl 传递参数
+             */
+            unauditedJobList_Filter: [],
+            /**
+             * 未审核工作列表-分页后显示用 为ReviewCtrl 传递参数
+             */
+            unauditedJobList_View: [],
+            /**
+             * 一个计数器，用来标识currentUnauditedJob 在数组中的位置 每次数组更新 该下标重置为0
+             */
+            currentUnauditedJobIndex: 0,
+            /**
+             * 当前需要显示在modal中的分享内容详细信息
+             */
+            currentSharingDetail: undefined
         }
 
         return self;
+
+        function _deleteSharing(data, successFn, errorFn) {
+            $http.post("http://localhost:4003/api" + "/sharing/delete", data).success(successFn).error(errorFn);
+        }
+
+        function _editSharing(data, successFn, errorFn) {
+            $http.post("http://localhost:4003/api" + "/sharing/edit", data).success(successFn).error(errorFn);
+        }
+
+        function _getSharingDetail(_id, successFn, errorFn) {
+            $http.get("http://localhost:4003/api" + "/sharing/detail?id=" + _id).success(successFn).error(errorFn);
+        }
+
+        function _getSharings (rangeType, departmentID, successFn, errorFn) {
+            var paramStr = "";
+            paramStr += "rangetype=" + rangeType;
+            paramStr += "&param=" + departmentID.toString();
+            $http.get("http://localhost:4003/api" + "/sharing/list?" + paramStr).success(successFn).error(errorFn);
+        }
+
+        function _submitSharing(data, successFn, errorFn) {
+            $http.post("http://localhost:4003/api" + "/sharing/new", data).success(successFn).error(errorFn);
+        }
 
         function _changePwd(account, orgPwd, newPwd, successFn, errorFn) {
             /*$http({
