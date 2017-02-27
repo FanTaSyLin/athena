@@ -20,8 +20,8 @@
         var account = "";
         var departmentID = "";
         var departmentName = "";
-        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
-        var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+            var sharingEdit = angular.element(document.getElementById('sharingEdit'));
+            var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
         var departmentNav = angular.element(document.getElementById('departmentNav'));
         /*详情弹窗*/

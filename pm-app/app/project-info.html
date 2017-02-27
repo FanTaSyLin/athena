@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PMSoft</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/summernote/dist/summernote.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="stylesheet" href="/styles/buttons.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
@@ -23,9 +24,10 @@
 <!--页头 end-->
 
 <div role="main" class="container-project px-3 mt-4">
-    <div class="project-info-top">
-        <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span>
-        （<span class="project-info-top-title">{{MainCtrl.thisProject.enName}}</span>）
+    
+     <div class="project-info-top">
+        <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span> （
+        <span class="project-info-top-title">{{MainCtrl.thisProject.enName}}</span>）
         <span class="glyphicon glyphicon-star-empty project-info-top-star"
               ng-class="{'is-starred': MainCtrl.isStarred === true, 'un-starred': MainCtrl.isStarred === false}"></span>
     </div>
@@ -34,127 +36,225 @@
         <nav class="underline-nav" role="navigation">
             <a class="underline-nav-item" role="tab" ng-class="{'selected': MainCtrl.profileNavIsSeleced('Active')}"
                ng-click="MainCtrl.selectProfileNavItem('Active')">活动</a>
-            <a class="underline-nav-item" role="tab" ng-class="{'selected': MainCtrl.profileNavIsSeleced('Wiki')}"
-               ng-click="MainCtrl.selectProfileNavItem('Wiki')">Wiki</a>
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': MainCtrl.profileNavIsSeleced('Shared')}"
+               ng-click="MainCtrl.selectProfileNavItem('Shared')">分享</a>
             <a class="underline-nav-item" role="tab"
                ng-class="{'selected': MainCtrl.profileNavIsSeleced('Repositories')}"
                ng-click="MainCtrl.selectProfileNavItem('Repositories')">资产</a>
         </nav>
     </div>
     <!--活动 start-->
-    <div ng-show="MainCtrl.profileNavIsSeleced('Active')">
-        <h2 class="f4 mb-2 text-normal mt-4">
-            <span class="glyphicon glyphicon-stats" style="color: #646464;">  工作量统计</span>
-        </h2>
-        <div class="panel-group" id="accordion" role="tab">
-            <div class="chart-title">
-                <a class="button button-glow button-border button-rounded button-primary collapsed"
-                   data-toggle="collapse"
-                   data-parent="#accordion"
-                   href="#dateSelectArea" aria-expanded="false" aria-controls="dateSelectArea"
-                   title="点击打开日期选择面板，再次点击确认选择">
-                    {{MainCtrl.title}}
-                </a>
-            </div>
-            <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                <div style="height: 80px;">
-                    <div class="date-select">
-                <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                      ng-click="MainCtrl.startYearSubstract()"></span>
-                        {{MainCtrl.monthRange.startYear}}年
-                        <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                              ng-click="MainCtrl.startYearAdd()"></span>
-                        <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                              ng-click="MainCtrl.startMonthSubstract()"></span>
-                        {{MainCtrl.monthRange.startMonth}}月
-                        <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                              ng-click="MainCtrl.startMonthAdd()"></span>
-                        至
-                        <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                              ng-click="MainCtrl.endYearSubstract()"></span>
-                        {{MainCtrl.monthRange.endYear}}年
-                        <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                              ng-click="MainCtrl.endYearAdd()"></span>
-                        <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                              ng-click="MainCtrl.endMonthSubstract()"></span>
-                        {{MainCtrl.monthRange.endMonth}}月
-                        <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                              ng-click="MainCtrl.endMonthAdd()"></span>
-                    </div>
+    <div class="main-area-item">
+        <div ng-show="MainCtrl.profileNavIsSeleced('Active')">
+            <h2 class="f4 mb-2 text-normal mt-4">
+                <span class="glyphicon glyphicon-stats" style="color: #646464;">  工作量统计</span>
+            </h2>
+            <div class="panel-group" id="accordion" role="tab">
+                <div class="chart-title">
+                    <a class="button button-glow button-border button-rounded button-primary collapsed"
+                    data-toggle="collapse" data-parent="#accordion" href="#dateSelectArea" aria-expanded="false"
+                    aria-controls="dateSelectArea" title="点击打开日期选择面板，再次点击确认选择">
+                        {{MainCtrl.title}}
+                    </a>
                 </div>
-            </div>
-        </div>
-        <div class="container" style="margin: 0px; width: 100%">
-            <div class="col-md-8">
-                <canvas id='Chart-ByMember-bar' height="2" width="8" class="chart-area"></canvas>
-            </div>
-            <div class="col-md-4">
-                <canvas id='Chart-ByMember-pie' height="3" width="6" class="chart-area"></canvas>
-            </div>
-        </div>
-
-        <h2 class="f4 mb-2 text-normal">
-            <span class="glyphicon glyphicon-align-left" style="color: #646464;">  成员动态</span>
-        </h2>
-        <div>
-            <div class="col-md-10 activity-listing contribution-activity" style="min-height: 378px;">
-                <div class="contribution-activity-listing col-10 float-left">
-                    <div class="profile-timeline discussion-timeline width-full pd-4">
-                        <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1"
-                            style="margin-top: 0px; background-color: #f6f8f8">
-                            全体成员
-                        </h3>
-                        <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
-                             ng-repeat="log in MainCtrl.jobLogs" ng-click="MainCtrl.showActivityDetial(log)">
-                                <span class="discussion-item-icon">
-                                <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
-                                     viewBox="0 0 12 16" width="12" style="margin-top: 1px">
-                                    <path fill-rule="evenodd"
-                                          d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
-                                </svg>
-                            </span>
-                            <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
-                                    type="button">
-                                <span class="float-left">
-                                    {{log.authorName}}@{{log.authorID}} added 工作记录 <span
-                                        style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
-                                </span>
-                            </button>
-                            <label>{{log.content | delHtmlTag}}</label>
+                <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div style="height: 80px;">
+                        <div class="date-select">
+                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                ng-click="MainCtrl.startYearSubstract()"></span> {{MainCtrl.monthRange.startYear}}年
+                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                ng-click="MainCtrl.startYearAdd()"></span>
+                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                ng-click="MainCtrl.startMonthSubstract()"></span> {{MainCtrl.monthRange.startMonth}}月
+                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                ng-click="MainCtrl.startMonthAdd()"></span> 至
+                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                ng-click="MainCtrl.endYearSubstract()"></span> {{MainCtrl.monthRange.endYear}}年
+                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                ng-click="MainCtrl.endYearAdd()"></span>
+                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                ng-click="MainCtrl.endMonthSubstract()"></span> {{MainCtrl.monthRange.endMonth}}月
+                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                ng-click="MainCtrl.endMonthAdd()"></span>
                         </div>
-                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
-                                ng-click="MainCtrl.showMoreActivity()"
-                                ng-show="MainCtrl.isShowShowMoreAcitivtyBtn">
-                            加载更多活动
-                        </button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 member-list">
-                <ul class="nav nav-pills nav-stacked" id="memberNav">
-                    <li ng-class="{active: MainCtrl.memberItemIsSelected('all')}">
-                        <a href ng-click="MainCtrl.selectMemberItem('all')">
-                            全体
-                        </a>
-                    </li>
-                    <li ng-repeat="member in MainCtrl.thisProject.members"
-                        ng-class="{active: MainCtrl.memberItemIsSelected(member.account)}">
-                        <a href ng-click="MainCtrl.selectMemberItem(member.account)">
-                            {{member.name}}
-                        </a>
-                    </li>
-                </ul>
+            <div class="container" style="margin: 0px; width: 100%">
+                <div class="col-md-8">
+                    <canvas id='Chart-ByMember-bar' height="2" width="8" class="chart-area"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <canvas id='Chart-ByMember-pie' height="3" width="6" class="chart-area"></canvas>
+                </div>
             </div>
-        </div>
 
+            <h2 class="f4 mb-2 text-normal">
+                <span class="glyphicon glyphicon-align-left" style="color: #646464;">  成员动态</span>
+            </h2>
+            <div>
+                <div class="col-md-10 activity-listing contribution-activity" style="min-height: 378px;">
+                    <div class="contribution-activity-listing col-10 float-left">
+                        <div class="profile-timeline discussion-timeline width-full pd-4">
+                            <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1"
+                                style="margin-top: 0px; background-color: #f6f8f8">
+                                全体成员
+                            </h3>
+                            <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
+                                ng-repeat="log in MainCtrl.jobLogs" ng-click="MainCtrl.showActivityDetial(log)">
+                                    <span class="discussion-item-icon">
+                                    <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
+                                        viewBox="0 0 12 16" width="12" style="margin-top: 1px">
+                                        <path fill-rule="evenodd"
+                                            d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
+                                    </svg>
+                                </span>
+                                <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
+                                        type="button">
+                                    <span class="float-left">
+                                        {{log.authorName}}@{{log.authorID}} added 工作记录 <span
+                                            style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
+                                    </span>
+                                </button>
+                                <label>{{log.content | delHtmlTag}}</label>
+                            </div>
+                            <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
+                                    ng-click="MainCtrl.showMoreActivity()" ng-show="MainCtrl.isShowShowMoreAcitivtyBtn">
+                                加载更多活动
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 member-list">
+                    <ul class="nav nav-pills nav-stacked" id="memberNav">
+                        <li ng-class="{active: MainCtrl.memberItemIsSelected('all')}">
+                            <a href ng-click="MainCtrl.selectMemberItem('all')">
+                                全体
+                            </a>
+                        </li>
+                        <li ng-repeat="member in MainCtrl.thisProject.members"
+                            ng-class="{active: MainCtrl.memberItemIsSelected(member.account)}">
+                            <a href ng-click="MainCtrl.selectMemberItem(member.account)">
+                                {{member.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
     <!--活动 end-->
 
-    <!--Wiki start-->
-    <div ng-show="MainCtrl.profileNavIsSeleced('Wiki')">
-
+    <!--分享 start-->
+    <div ng-show="MainCtrl.profileNavIsSeleced('Shared')">
+        <div class="wall-view card fade in">
+            <div class="wall-wrap">
+                <div class="wall-left-column">
+                    <header class="wall-left-column-header clearfix" style="display: block">
+                        <div class="dropdown" style="float: left!important">
+                            <a class="dropdown-toggle header-item-padding" data-toggle="dropdown" href
+                               style="font-size: 18px; color: #646464">
+                                {{MainCtrl.sharingRange}}
+                            </a>
+                            <a class="caret" style="color: #646464"></a>
+                            <ul class="dropdown-menu dropdown-menu-custom" role="menu">
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="MainCtrl.selectSharingRange('所有分享')">所有分享</a>
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="MainCtrl.selectSharingRange('我的分享')">我的分享</a>
+                                <div class="dropdown-split-line" href="/"></div>
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="MainCtrl.selectSortType('VarDate')">按发布时间排序 
+                                   <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.isSelectedSortType('VarDate')"></span>
+                                </a>
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="MainCtrl.selectSortType('ReplyDate')">按回复时间排序
+                                    <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.isSelectedSortType('ReplyDate')"></span>
+                                </a>
+                            </ul>
+                        </div>
+                        <div class="btn-group post-create-wrap pull-right">
+                            <a class="open-post-creator-handler link-add-handler"
+                               style="font-size: 16px; cursor: pointer" ng-click="MainCtrl.showSharingEdit()">
+                                <span class="glyphicon glyphicon-pencil"></span> 添加分享
+                            </a>
+                        </div>
+                    </header>
+                    <nav class="posts-navigator">
+                        <ul style="padding-left: 0px">
+                            <li class="post" ng-repeat="sharing in MainCtrl.sharings"
+                                ng-class="{active: MainCtrl.sharingItemIsSelected(sharing)}"
+                                ng-click="MainCtrl.selectSharingItem(sharing)">
+                                <section>
+                                    <div class="avatar img-36 img-circle pull-left"
+                                         style="background-image: url(/public/100.png)"></div>
+                                    <div class="post-content">
+                                        <p class="post-title" style="font-weight: 400"
+                                           ng-class="{active: sharing.isSelected}">
+                                            <span class="post-title" title="{{sharing.title}}">{{sharing.title}}</span>
+                                        </p>
+                                        <p class="post-info muted">
+                                            {{sharing.authorID}}发布于
+                                            <span class="react-time-stamp">{{sharing.showTime}}</span>
+                                        </p>
+                                    </div>
+                                </section>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="wall-right-column">
+                    <div class="post-detail-wrapper">
+                        <article class="post-detail-view">
+                            <section class="detail-content">
+                                <div class="post-detail-header-wrap">
+                                    <div class="post-detail-header">
+                                        <h4 class="post-title">
+                                            {{MainCtrl.sharingDetail.title}}
+                                        </h4>
+                                        <div class="dropdown menu-handler">
+                                            <a class="dropdown-toggle menu-tip" data-toggle="dropdown"
+                                               ng-show="MainCtrl.authorIsMe">
+                                                更多...
+                                            </a>
+                                            <ul class="dropdown-menu menu-handler-menu" role="menu">
+                                                <div class="dropdown-menu-header">
+                                                    <strong class="">分享菜单</strong>
+                                                </div>
+                                                <div class="dropdown-split-line"></div>
+                                                <a class="dropdown-item" href
+                                                   ng-click="MainCtrl.showSharingEdit(MainCtrl.sharingDetail)">
+                                                    <span class="glyphicon glyphicon-pencil"></span> 编辑分享
+                                                </a>
+                                                <a class="dropdown-item" href disabled="disabled">
+                                                    <span class="glyphicon glyphicon-duplicate"></span> 复制分享
+                                                </a>
+                                                <a class="dropdown-item" href disabled="disabled">
+                                                    <span class="glyphicon glyphicon-share"></span> 移动分享
+                                                </a>
+                                                <div class="dropdown-split-line" href></div>
+                                                <a class="dropdown-item" href
+                                                   ng-click="MainCtrl.deleteSharing(MainCtrl.sharingDetail)">
+                                                    <span class="glyphicon glyphicon-trash"></span> 删除分享
+                                                </a>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-detail-content-wrap">
+                                    <div class="post-content">
+                                        <div ng-bind-html="MainCtrl.sharingDetail.content | to_trusted"></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--Wiki end-->
+    <!--分享 end-->
 
     <!--资产 start-->
     <div ng-show="MainCtrl.profileNavIsSeleced('Repositories')">
@@ -168,7 +268,7 @@
             <a ng-click="MainCtrl.showMenu(true)">...显示菜单</a>
         </div>
     </div>
-    <div class="project-info-main-menu-body hide" ng-class="{hide: MainCtrl.isShowMenu==false}">
+    <div class="project-info-main-menu-body hide" ng-class="{'hide': MainCtrl.isShowMenu===false}">
         <div>
             <h3 class="project-info-main-menu-header-title ">菜 单</h3>
             <a title="关闭菜单" class="project-info-main-menu-header-closebtn" ng-click="MainCtrl.showMenu(false)">
@@ -188,8 +288,7 @@
                 </ul>
             </div>
             <a class="project-info-main-menu-addmember" ng-click="MainCtrl.openAddMemberModal()">
-                <span class="glyphicon glyphicon-user"></span>
-                &nbsp添加成员...
+                <span class="glyphicon glyphicon-user"></span> &nbsp;添加成员...
             </a>
             <hr class="project-info-main-menu-header-divider"/>
         </div>
@@ -198,12 +297,11 @@
                 <a class="project-info-main-menu-editbtn collapsed" title="点击修改项目信息" data-toggle="collapse"
                    data-parent="#project-info-edit" href="#edit-project-info" aria-expanded="false"
                    aria-controls="edit-project-info">
-                    <span class="glyphicon glyphicon-cog"></span>
-                    &nbsp修改项目信息<!--{{MainCtrl.thisProject.cnName}}-->
+                    <span class="glyphicon glyphicon-cog"></span> &nbsp;修改项目信息
+                    <!--{{MainCtrl.thisProject.cnName}}-->
                 </a>
                 <div id="edit-project-info" class="panel-collapse collapse project-info-main-menu-edit-item"
-                     role="tabpanel"
-                     aria-labelledby="headingOne">
+                     role="tabpanel" aria-labelledby="headingOne">
                     <div class="form-field">
                         <p>项目全称</p>
                         <input class="form-control" required="" type="text" placeholder="项目全称"
@@ -226,8 +324,7 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                        <img src="/public/project-type-gongcheng.png"
-                                             style="width: 20px;height: 20px"/>
+                                        <img src="/public/project-type-gongcheng.png" style="width: 20px;height: 20px"/>
                                         <a class="btn btn-align-left" ng-click="MainCtrl.selectedPType('工程')">工程类</a>
                                     </div>
                                     <div class="dropdown-item btn btn-align-left function-select-item-item">
@@ -244,12 +341,10 @@
                                   ng-model="MainCtrl.thisProjectInfo.about"></textarea>
                     </div>
                     <a class="project-info-main-menu-addmember" ng-click="MainCtrl.submitProjectInfo()">
-                        <span class="glyphicon glyphicon-ok"></span>
-                        &nbsp提交修改...
+                        <span class="glyphicon glyphicon-ok"></span> &nbsp;提交修改...
                     </a>
                     <a class="project-info-main-menu-addmember" ng-click="MainCtrl.cancelProjectInfo()">
-                        <span class="glyphicon glyphicon-remove"></span>
-                        &nbsp取消修改...
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp;取消修改...
                     </a>
                 </div>
             </div>
@@ -257,8 +352,7 @@
         </div>
         <div>
             <p class="project-info-main-menu-active">
-                <span class="glyphicon glyphicon-list"></span>
-                &nbsp活动
+                <span class="glyphicon glyphicon-list"></span> &nbsp;活动
             </p>
         </div>
     </div>
@@ -289,8 +383,7 @@
             <div style="height: 200px;">
                 <p class="project-info-main-menu-active"
                    style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;">
-                    <span class="glyphicon glyphicon-list"></span>
-                    &nbsp更改权限
+                    <span class="glyphicon glyphicon-list"></span> &nbsp;更改权限
                 </p>
                 <ul class="member-status-modal-authority-item-list">
                     <li>
@@ -319,8 +412,7 @@
                style="padding-left: 0px;padding-top: 0px;margin-top: 0px; margin-bottom: 0px;padding-bottom: 0px;"
                ng-click="MainCtrl.rmShowedMember(MainCtrl.showedMember)"
                ng-class="{'normal': MainCtrl.descriptionForRmBtn === '从项目组移除', 'alert': MainCtrl.descriptionForRmBtn !== '从项目组移除'}">
-                <span class="glyphicon glyphicon-ban-circle"></span>
-                &nbsp{{MainCtrl.descriptionForRmBtn}}
+                <span class="glyphicon glyphicon-ban-circle"></span> &nbsp;{{MainCtrl.descriptionForRmBtn}}
             </a>
         </div>
     </div>
@@ -345,12 +437,11 @@
                 <div ng-show="MainCtrl.foundMembers.length>0">
                     <p style="margin-top: 10px;margin-left: 5px; margin-bottom: 0px; font-size: 1.1em">点击添加</p>
                     <hr class="project-info-main-menu-header-divider" style="color: #393d40; margin-top: 3px"/>
-                    <div ng-show="true" class="form-field"
-                         style="max-height: 200px; overflow: auto;">
+                    <div ng-show="true" class="form-field" style="max-height: 200px; overflow: auto;">
                         <div ng-repeat="member in MainCtrl.foundMembers" class="found-member"
                              ng-click="MainCtrl.addMemberToProject(member)">
-                            <img style="width: 25px;height: 25px; border-radius: 5px; margin-left: 5px;"
-                                 src="/public/12312312.jpg"/>
+                            <!--<img style="width: 25px;height: 25px; border-radius: 5px; margin-left: 5px;"
+                                 src="/public/12312312.jpg"/>-->
                             <label style="font-family: 'Microsoft Yahei'; font-size: 1em; font-weight: 500; margin-top: 7px">{{member.name}}</label>
                             <label style="font-family: 'Microsoft Yahei'; font-size: 1em; font-weight: 500; margin-top: 7px">@{{member.account}}</label>
                             <span class="glyphicon glyphicon-arrow-right add-member-flg"></span>
@@ -386,8 +477,7 @@
                                 <p class="title-h8">项目</p>
                                 <div class="function-select-area-projects">
                                     <span class="glyphicon glyphicon-list-alt"></span>
-                                    <a class="title-h7 dropdown-toggle"
-                                       style="font-size: 14px; font-weight: 600"
+                                    <a class="title-h7 dropdown-toggle" style="font-size: 14px; font-weight: 600"
                                        title="{{MainCtrl.currentJob.projectCName}}" href>
                                         {{MainCtrl.currentJob.projectCName | substring_str: 10}}
                                     </a>
@@ -413,22 +503,22 @@
                                     </a>
                                 </div>
                                 <!--
-                                <div class="row function-select-area-time">
-                                    <div class="col-xs-4 ">
-                                        <a class="title-h7 dropdown-toggle" href>
-                                            {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
-                                        </a>
-                                    </div>
-                                    <i class="col-xs-1">
-                                        -
-                                    </i>
-                                    <div class="col-xs-4">
-                                        <a class="title-h7 dropdown-toggle" href>
-                                            {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
-                                        </a>
-                                    </div>
+                            <div class="row function-select-area-time">
+                                <div class="col-xs-4 ">
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
+                                    </a>
                                 </div>
-                                -->
+                                <i class="col-xs-1">
+                                    -
+                                </i>
+                                <div class="col-xs-4">
+                                    <a class="title-h7 dropdown-toggle" href>
+                                        {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
+                                    </a>
+                                </div>
+                            </div>
+                            -->
                             </div>
 
                         </div>
@@ -454,7 +544,7 @@
                     <div class="row" style="padding-top: 5px;">
                         <div class="function-select-area item-border">
                             <!--提交人-->
-                            <div class="col-md-4 function-select-item item-border"   >
+                            <div class="col-md-4 function-select-item item-border">
                                 <p class="title-h8">提交人</p>
                                 <div class="function-select-area-date">
                                     <span class="glyphicon glyphicon glyphicon-user"></span>
@@ -474,7 +564,7 @@
                                 </div>
                             </div>
                             <!--记录状态-->
-                            <div class="col-md-4 function-select-item item-border"  >
+                            <div class="col-md-4 function-select-item item-border">
                                 <p class="title-h8">审核状态</p>
                                 <div class="function-select-area-date">
                                     <span class="glyphicon glyphicon glyphicon-info-sign"></span>
@@ -504,8 +594,7 @@
                             </p>
                             <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500"
                                ng-repeat="log in MainCtrl.currentJob.logs">
-                                <b>{{log.authorName}}</b>: {{log.msg}}
-                                {{MainCtrl.formatDateTime(log.logTime)}}
+                                <b>{{log.authorName}}</b>: {{log.msg}} {{MainCtrl.formatDateTime(log.logTime)}}
                             </p>
                         </div>
                     </div>
@@ -514,8 +603,7 @@
             <!--页脚-->
             <div class="modal-footer">
 
-                <button type="button" class="btn btn-default" data-dismiss="modal"
-                        ng-click="MainCtrl.disMissModal()">关闭
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="MainCtrl.disMissModal()">关闭
                 </button>
 
             </div>
@@ -523,6 +611,43 @@
     </div>
 </div>
 <!--工作记录详情对话框 end-->
+
+<!--新建分享对话框 start-->
+<div class="modal fade" id="sharingEdit" ng-controller="SharingController as SharingCtrl">
+    <div class="modal-dialog sharingEdit">
+        <div class="modal-content">
+            <div class="modal-body">
+                <header class="creator-header">
+                    <h4 class="creator-title">
+                        <span class="tips">创建分享至</span>
+                        <a class="handler dropdown-toggle" data-toggle="dropdown">
+                            {{SharingCtrl.currentTargetItem.name}}
+                            <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <ul class="dropdown-menu dropdown-menu-custom" role="menu"
+                            ng-show="SharingCtrl.allowSelectTarget">
+                            <a class="dropdown-item menu-item" href ng-repeat="targetItem in SharingCtrl.targetItems"
+                               ng-click="SharingCtrl.selectTargetItem(targetItem)">{{targetItem.name}}</a>
+                        </ul>
+                    </h4>
+                </header>
+                <header class="post-creator-header">
+                    <input class="form-control post-title-input" type="text" maxlength="70" placeholder="输入文档标题"
+                           ng-model="SharingCtrl.sharingTitle" value="">
+                </header>
+                <div class="summernote" id="sharing-summernote"></div>
+                <!--<section class="post-creator-editor-wrap">
+                    <div class="summernote" id="sharing-summernote" maxHeight="700"></div>
+                </section>-->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary submit-handler" ng-click="SharingCtrl.submitSharing()">立即发布</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--新建分享对话框 end-->
 
 <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -532,12 +657,14 @@
 <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
 <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
 <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+<script type="text/javascript" src="/bower_components/summernote/dist/summernote.js"></script>
 
 <script type="text/javascript" src="/scripts/angular/projectinfo/module.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/config.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/router.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/services.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/projectInfo-maincontroller.js"></script>
+<script type="text/javascript" src="/scripts/angular/projectinfo/sharingedit-controller.js"></script>
 <script type="text/javascript" src="/scripts/angular/projectinfo/filter.js"></script>
 </body>
 

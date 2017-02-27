@@ -22,10 +22,49 @@
             searchMembers: _searchMembers,
             addMemberToProject: _addMemberToProject,
             rmMemberToProject: _rmMemberToProject,
-            getJobLogs: _getJobLogs
+            getJobLogs: _getJobLogs,
+
+            /**
+             * 提交一个新建的分享
+             */
+            submitSharing: _submitSharing,
+
+            /**
+             * 当提交了一个新的分享时触发此事件
+             */
+            onNewSharingSubmited: undefined,
+
+            /**
+             * 当对当前分享进行了修改后触发
+             */
+            onSharingEdited: undefined,
+
+            /**
+             * 用来传递 分享至 后面的地址列表
+             */
+            sharingTargets: [],
+
+            /**
+             * 用来传递 分享至 后面的地址
+             */
+            sharingTarget: {},
+
+            /**
+             * 当前需要显示在modal中的分享内容详细信息
+             */
+            currentSharingDetail: undefined
+
         };
 
         return service;
+
+        /**
+         * @description 提交一个新的分享
+         * @param {Object} data 分享内容数据
+         */
+        function _submitSharing(data, successFn, errorFn) {
+            $http.post(BASEPATH + "/sharing/new", data).success(successFn).error(errorFn);
+        }
 
         /**
          * @description 获取项目相关的工作记录

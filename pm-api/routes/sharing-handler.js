@@ -184,7 +184,7 @@
             condition["ranges.type"] = req.params.rangetype;
             condition["ranges.param"] = req.params.param.toString();
         }
-
+        console.log(JSON.stringify(condition));
         ContentSharingSchema
             .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate"])
             .sort({

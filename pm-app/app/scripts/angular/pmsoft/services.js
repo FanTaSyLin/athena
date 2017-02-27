@@ -104,26 +104,26 @@
         return self;
 
         function _deleteSharing(data, successFn, errorFn) {
-            $http.post("http://localhost:4003/api" + "/sharing/delete", data).success(successFn).error(errorFn);
+            $http.post(BASEPATH + "/sharing/delete", data).success(successFn).error(errorFn);
         }
 
         function _editSharing(data, successFn, errorFn) {
-            $http.post("http://localhost:4003/api" + "/sharing/edit", data).success(successFn).error(errorFn);
+            $http.post(BASEPATH + "/sharing/edit", data).success(successFn).error(errorFn);
         }
 
         function _getSharingDetail(_id, successFn, errorFn) {
-            $http.get("http://localhost:4003/api" + "/sharing/detail?id=" + _id).success(successFn).error(errorFn);
+            $http.get(BASEPATH + "/sharing/detail?id=" + _id).success(successFn).error(errorFn);
         }
 
         function _getSharings (rangeType, departmentID, successFn, errorFn) {
             var paramStr = "";
             paramStr += "rangetype=" + rangeType;
             paramStr += "&param=" + departmentID.toString();
-            $http.get("http://localhost:4003/api" + "/sharing/list?" + paramStr).success(successFn).error(errorFn);
+            $http.get(BASEPATH + "/sharing/list?" + paramStr).success(successFn).error(errorFn);
         }
 
         function _submitSharing(data, successFn, errorFn) {
-            $http.post("http://localhost:4003/api" + "/sharing/new", data).success(successFn).error(errorFn);
+            $http.post(BASEPATH + "/sharing/new", data).success(successFn).error(errorFn);
         }
 
         function _changePwd(account, orgPwd, newPwd, successFn, errorFn) {
