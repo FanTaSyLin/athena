@@ -98,7 +98,19 @@
             /**
              * 当前需要显示在modal中的分享内容详细信息
              */
-            currentSharingDetail: undefined
+            currentSharingDetail: undefined,
+            /**
+             * 用来传递 分享至 后面的地址列表
+             */
+            sharingTargets: [],
+            /**
+             * 用来传递 分享至 后面的地址
+             */
+            sharingTarget: {
+                param: "",
+                name: "",
+                type: ""
+            }
         }
 
         return self;

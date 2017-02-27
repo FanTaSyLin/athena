@@ -96,6 +96,7 @@
                     self.sharings[i].varDate = sharingItem.varDate;
                 }
             }
+            _getSharingDetail(sharingItem._id);
         }
 
         function _deleteSharing(sharingDetail) {
@@ -104,6 +105,7 @@
             PMSoftServices.deleteSharing(body, function (res) {
                 var index = self.sharings.indexOf(self.currentSharing);
                 self.sharings.splice(index, 1);
+                self.sharingDetail = {};
             }, function (res) {
 
             });
@@ -144,9 +146,6 @@
         function _showSharingEdit(sharingDetail) {
             if (sharingDetail) {
                 PMSoftServices.currentSharingDetail = {};
-                // for (var p in sharingDetail) {
-                //     PMSoftServices.currentSharingDetail[p] = sharingDetail[p];
-                // }
                 PMSoftServices.currentSharingDetail = sharingDetail;
                 PMSoftServices.currentSharingDetail.targetItem = {
                     id: departmentID,
@@ -156,6 +155,15 @@
             } else {
                 PMSoftServices.currentSharingDetail = undefined;
             }
+            PMSoftServices.sharingTargets.splice(0, PMSoftServices.sharingTargets.length);
+            PMSoftServices.sharingTargets.push({
+                param: departmentID,
+                name: departmentName,
+                type: "department"
+            });
+            PMSoftServices.sharingTarget.param = departmentID;
+            PMSoftServices.sharingTarget.name = departmentName;
+            PMSoftServices.sharingTarget.type = "department";
             sharingEdit.modal({
                 backdrop: 'static',
                 keyboard: false

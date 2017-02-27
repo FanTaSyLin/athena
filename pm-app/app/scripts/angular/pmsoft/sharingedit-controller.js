@@ -25,12 +25,12 @@
         /**
          * @type {TargetItem}
          */
-        self.currentTargetItem = {};
+        self.currentTargetItem = PMSoftServices.sharingTarget;
 
         /**
          * @type {TargetItem[]}
          */
-        self.targetItems = [];
+        self.targetItems = PMSoftServices.sharingTargets;
 
         self.sharingTitle = "";
 
@@ -59,7 +59,7 @@
             body.tags = [];
             body.ranges = [{
                 type: self.currentTargetItem.type,
-                param: [self.currentTargetItem.id]
+                param: [self.currentTargetItem.param]
             }];
 
             if (operateType === "Create") {
@@ -90,34 +90,6 @@
 
         function dataInit() {
 
-            self.targetItems = [];
-
-            var sysconfig = $cookies.getObject("Sysconfig");
-            var departmentID = $cookies.get("department");
-            var myDepartment = {};
-
-            for (var i = 0; i < sysconfig[0].departments.length; i++) {
-                if (sysconfig[0].departments[i].id.toString() === departmentID) {
-                    myDepartment = sysconfig[0].departments[i].name;
-                }
-            }
-
-            self.targetItems.push({
-                id: departmentID,
-                name: myDepartment,
-                type: "department"
-            });
-
-            _getProjects(function (err, data) {
-                data.forEach(function (item) {
-                    self.targetItems.push({
-                        id: item._id,
-                        name: item.cnName,
-                        type: "project"
-                    });
-                });
-            });
-
             _initSummernote();
 
             if (PMSoftServices.currentSharingDetail) {
@@ -127,7 +99,6 @@
                 summernote.summernote("code", PMSoftServices.currentSharingDetail.content);
                 operateType = "Edit";
             } else {
-                self.currentTargetItem = self.targetItems[0];
                 self.allowSelectTarget = true;
                 self.sharingTitle = "";
                 summernote.summernote("code", "");
@@ -155,38 +126,12 @@
 
             });
         }
-
-        function _getProjects(cb) {
-
-            pastProjects = [];
-
-            /*获取项目列表*/
-            PMSoftServices.getPastProjects($cookies.get('account'), function (data) {
-
-                data.forEach(function (item) {
-                    var project = {};
-                    project.cnName = item.cnName;
-                    project._id = item._id;
-                    project.enName = item.enName;
-                    pastProjects.push(project);
-                });
-
-                cb(null, pastProjects)
-
-            }, function (data, status, headers, config) {
-                cb(new Error(), null);
-            });
-
-
-        }
-
-
     }
 
     /**
      * @description 目标地址对象
      * @typedef {TargetItem} 
-     * @property {string} id
+     * @property {string} param
      * @property {string} name
      * @property {string} type
      */
