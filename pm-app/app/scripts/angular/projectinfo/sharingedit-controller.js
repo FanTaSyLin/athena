@@ -30,7 +30,7 @@
         /**
          * @type {TargetItem[]}
          */
-        self.targetItems = ProjectInfoServices.sharingTarget;
+        self.targetItems = ProjectInfoServices.sharingTargets;
 
         self.sharingTitle = "";
 
@@ -59,7 +59,7 @@
             body.tags = [];
             body.ranges = [{
                 type: self.currentTargetItem.type,
-                param: [self.currentTargetItem.id]
+                param: [self.currentTargetItem.param]
             }];
 
             if (operateType === "Create") {
@@ -99,7 +99,6 @@
                 summernote.summernote("code", ProjectInfoServices.currentSharingDetail.content);
                 operateType = "Edit";
             } else {
-                self.currentTargetItem = self.targetItems[0];
                 self.allowSelectTarget = true;
                 self.sharingTitle = "";
                 summernote.summernote("code", "");
@@ -134,7 +133,7 @@
     /**
      * @description 目标地址对象
      * @typedef {TargetItem} 
-     * @property {string} id
+     * @property {any} param
      * @property {string} name
      * @property {string} type
      */

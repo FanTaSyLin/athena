@@ -135,6 +135,7 @@
                     self.sharings[i].varDate = sharingItem.varDate;
                 }
             }
+            _getSharingDetail(sharingItem._id);
         }
 
         /**
@@ -158,10 +159,10 @@
          */
         function _getSharings() {
 
-            var rangeType = "department";
-            var departmentID = $cookies.get("department");
+            var rangeType = "project";
+            var id = self.thisProject._id;
 
-            ProjectInfoServices.getSharings(rangeType, departmentID, function (res) {
+            ProjectInfoServices.getSharings(rangeType, id, function (res) {
                 var doc = res.doc;
                 // self.sharings.splice(0, self.sharings.length);
                 doc.forEach(function (item) {
@@ -194,6 +195,7 @@
             ProjectInfoServices.deleteSharing(body, function (res) {
                 var index = self.sharings.indexOf(self.currentSharing);
                 self.sharings.splice(index, 1);
+                self.sharingDetail = {};
             }, function (res) {
 
             });
@@ -207,13 +209,22 @@
                 ProjectInfoServices.currentSharingDetail = {};
                 ProjectInfoServices.currentSharingDetail = sharingDetail;
                 ProjectInfoServices.currentSharingDetail.targetItem = {
-                    id: departmentID,
-                    name: departmentName,
-                    type: "department"
+                    id: self.thisProject.id,
+                    name: self.thisProject.cnName,
+                    type: "project"
                 };
             } else {
                 ProjectInfoServices.currentSharingDetail = undefined;
             }
+            ProjectInfoServices.sharingTargets.splice(0, ProjectInfoServices.sharingTargets.length);
+            ProjectInfoServices.sharingTargets.push({
+                param: self.thisProject.id,
+                name: self.thisProject.cnName,
+                type: "project"
+            });
+            ProjectInfoServices.sharingTarget.param = self.thisProject._id;
+            ProjectInfoServices.sharingTarget.name = self.thisProject.cnName;
+            ProjectInfoServices.sharingTarget.type = "project";
             sharingEdit.modal({
                 backdrop: 'static',
                 keyboard: false
@@ -877,7 +888,13 @@
         }
 
         function _selectProfileNavItem(item) {
+            var orgItem = self.profileNavCurrentItem;
             self.profileNavCurrentItem = item;
+            if (orgItem !== item) {
+                if (item === "Shared") {
+                    _getSharings();
+                }
+            }
         }
 
         function _memberItemIsSelected(memberAccount) {

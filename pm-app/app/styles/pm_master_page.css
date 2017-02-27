@@ -1893,6 +1893,14 @@ h3 {
 }
 
 
+.none-display-elem {
+    display: none
+}
+
+.display-elem {
+    display: inherit
+}
+
 
 
 

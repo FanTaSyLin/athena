@@ -25,6 +25,26 @@
             getJobLogs: _getJobLogs,
 
             /**
+             * 删除分享
+             */
+            deleteSharing: _deleteSharing,
+
+            /**
+             * 提交修改
+             */
+            editSharing: _editSharing,
+
+            /**
+             * 获取详细内容
+             */
+            getSharingDetail: _getSharingDetail,
+
+            /**
+             * 获取分享列表
+             */
+            getSharings: _getSharings,
+
+            /**
              * 提交一个新建的分享
              */
             submitSharing: _submitSharing,
@@ -47,7 +67,11 @@
             /**
              * 用来传递 分享至 后面的地址
              */
-            sharingTarget: {},
+            sharingTarget: {
+                param: "",
+                name: "",
+                type: ""
+            },
 
             /**
              * 当前需要显示在modal中的分享内容详细信息
@@ -57,6 +81,40 @@
         };
 
         return service;
+
+        /**
+         * @desc 删除分享
+         */
+        function _deleteSharing(data, successFn, errorFn) {
+            $http.post(BASEPATH + "/sharing/delete", data).success(successFn).error(errorFn);
+        }
+
+        /**
+         * @desc 提交修改
+         */
+        function _editSharing(data, successFn, errorFn) {
+            $http.post(BASEPATH + "/sharing/edit", data).success(successFn).error(errorFn);
+        }
+
+        /**
+         * @desc 获取详细分享内容
+         * @param {String} _id
+         */
+        function _getSharingDetail(_id, successFn, errorFn) {
+            $http.get(BASEPATH + "/sharing/detail?id=" + _id).success(successFn).error(errorFn);
+        }
+
+        /**
+         * @desc 获取分享列表
+         * @param {String} rangetype 范围类型
+         * @param {String} param 参数
+         */
+        function _getSharings (rangeType, param, successFn, errorFn) {
+            var paramStr = "";
+            paramStr += "rangetype=" + rangeType;
+            paramStr += "&param=" + param.toString();
+            $http.get(BASEPATH + "/sharing/list?" + paramStr).success(successFn).error(errorFn);
+        }
 
         /**
          * @description 提交一个新的分享
