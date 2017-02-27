@@ -11,7 +11,6 @@
  * 因此，为满足最大限度的统计覆盖率以及最小限度的计算量。每次统计只需要统计本月及上月的工作量即可。
  */
 
-/// <reference path="./../../typings/index.d.ts" />
 
 (function () {
 
@@ -23,12 +22,13 @@
 
     var mongoose = require('mongoose');
     var _ = require('lodash');
+    var moment = require('moment');
     var Timer = require('./../lib/timer.js').Timer;
     var ProjectSchema = require('./../modules/project-schema.js');
     var JobSchema = require('./../modules/joblog-schema.js');
     var ProjectStaticSchema = require('./../modules/project-static-schema.js');
-
-    var timer = new Timer(1000);
+    var index = 0;
+    var timer = new Timer(1000 * 60 * 60 * 3);
 
     const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
 
@@ -53,12 +53,12 @@
     timer.on('tick', function () {
 
 
-        if (new Date().format('hh:mm:ss') !== '03:00:00') return;
-
+        // if (new Date().format('hh:mm:ss') !== '03:00:00') return;
+        index = 0;
         var y = new Date().getFullYear();
         var m = new Date().getMonth() + 1;
-        var month1 = y.toString() + ((m.toString().length === 2) ? m.toString() : '0' + m.toString());
-        var month2 = (m === 1) ? (y - 1).toString() + '12' : (Number(month1) - 1).toString();
+        var month1 = moment(new Date()).format("YYYYMM");
+        var month2 = moment(new Date()).add('m', -1).format("YYYYMM");
 
         _getProjectList(function (err, data) {
             if (err) {
@@ -79,57 +79,6 @@
         });
 
     });
-
-    /* 临时补全用
-    */
-    /*_getProjectList(function (err, data) {
-        if (err) {
-            console.error(err.stack);
-        }
-        var projectList1 = [];
-        var projectList2 = [];
-        var projectList3 = [];
-        var projectList4 = [];
-        var projectList5 = [];
-        var projectList6 = [];
-        var projectList7 = [];
-        var projectList8 = [];
-        var projectList9 = [];
-        var projectList10 = [];
-        var projectList11 = [];
-        var projectList12 = [];
-        var projectList13 = [];
-
-        data.forEach(function (item) {
-            projectList1.push(item);
-            projectList2.push(item);
-            projectList3.push(item);
-            projectList4.push(item);
-            projectList5.push(item);
-            projectList6.push(item);
-            projectList7.push(item);
-            projectList8.push(item);
-            projectList9.push(item);
-            projectList10.push(item);
-            projectList11.push(item);
-            projectList12.push(item);
-            projectList13.push(item);
-        });
-
-        _projectStaticByMonthMember(projectList1, '201601');
-        _projectStaticByMonthMember(projectList2, '201602');
-        _projectStaticByMonthMember(projectList3, '201603');
-        _projectStaticByMonthMember(projectList4, '201604');
-        _projectStaticByMonthMember(projectList5, '201605');
-        _projectStaticByMonthMember(projectList6, '201606');
-        _projectStaticByMonthMember(projectList7, '201607');
-        _projectStaticByMonthMember(projectList8, '201608');
-        _projectStaticByMonthMember(projectList9, '201609');
-        _projectStaticByMonthMember(projectList10, '201610');
-        _projectStaticByMonthMember(projectList11, '201611');
-        _projectStaticByMonthMember(projectList12, '201612');
-        _projectStaticByMonthMember(projectList13, '201701');
-    });*/
 
     /**
      * 根据月份 统计项目组成员的工作量 
@@ -261,8 +210,8 @@
     function _getJobListByProjectID(_id, month, cb) {
         var y = month.substring(0, 4);
         var m = month.substring(4, 6);
-        var startDate = new Date(y + '-' + m + '-01');
-        var endDate = (m === 12) ? new Date((Number(y) + 1) + '-' + '01' + '-01').addDay(-1) : new Date(y + '-' + (Number(m) + 1) + '-01').addDay(-1);
+        var startDate = moment(month + '01');
+        var endDate = moment(month + '01').endOf('month');
         JobSchema
             .find({
                 'projectID': _id,
@@ -272,10 +221,21 @@
                 },
                 'status': 'Pass'
 
-            }, { 'authorID': 1, 'authorName': 1, 'status': 1, 'factor': 1, 'quality': 1, 'efficiency': 1, 'difficulty': 1, 'duration': 1, 'date': 1 })
+            }, {
+                'authorID': 1,
+                'authorName': 1,
+                'status': 1,
+                'factor': 1,
+                'quality': 1,
+                'efficiency': 1,
+                'difficulty': 1,
+                'duration': 1,
+                'date': 1
+            })
             .exec(function (err, doc) {
                 if (err) return cb(err, null);
-                console.log('项目ID：' + _id + '   joblog数：' + doc.length);
+                index++;
+                console.log(index + '   项目ID：' + _id + '   统计月份：' + month + '   joblog数：' + doc.length);
                 return cb(null, doc);
             });
     }

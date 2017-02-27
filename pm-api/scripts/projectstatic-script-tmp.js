@@ -11,7 +11,6 @@
  * 因此，为满足最大限度的统计覆盖率以及最小限度的计算量。每次统计只需要统计本月及上月的工作量即可。
  */
 
-/// <reference path="./../../typings/index.d.ts" />
 
 (function () {
 
@@ -23,12 +22,15 @@
 
     var mongoose = require('mongoose');
     var _ = require('lodash');
+    var moment = require("moment");
     var Timer = require('./../lib/timer.js').Timer;
     var ProjectSchema = require('./../modules/project-schema.js');
     var JobSchema = require('./../modules/joblog-schema.js');
     var ProjectStaticSchema = require('./../modules/project-static-schema.js');
 
     var timer = new Timer(1000);
+
+    var index = 0;
 
     const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
 
@@ -50,38 +52,9 @@
         timer.start();
     });
 
-    timer.on('tick', function () {
-
-
-        if (new Date().format('hh:mm:ss') !== '03:00:00') return;
-
-        var y = new Date().getFullYear();
-        var m = new Date().getMonth() + 1;
-        var month1 = y.toString() + ((m.toString().length === 2) ? m.toString() : '0' + m.toString());
-        var month2 = (m === 1) ? (y - 1).toString() + '12' : (Number(month1) - 1).toString();
-
-        _getProjectList(function (err, data) {
-            if (err) {
-                console.error(err.stack);
-            }
-            var projectList1 = [];
-            var projectList2 = [];
-            data.forEach(function (item) {
-                projectList1.push(item);
-                projectList2.push(item);
-            });
-
-            // //统计当月工作量
-            //_projectStaticByMonthMember(projectList1, month1);
-            // //统计上月工作量
-            //_projectStaticByMonthMember(projectList2, month2);
-
-        });
-
-    });
 
     /* 临时补全用
-    */
+     */
     _getProjectList(function (err, data) {
         if (err) {
             console.error(err.stack);
@@ -99,6 +72,7 @@
         var projectList11 = [];
         var projectList12 = [];
         var projectList13 = [];
+        var projectList14 = [];
 
         data.forEach(function (item) {
             projectList1.push(item);
@@ -114,21 +88,42 @@
             projectList11.push(item);
             projectList12.push(item);
             projectList13.push(item);
+            projectList14.push(item);
         });
+        _projectStaticByMonthMember(projectList1, '201701', function () {
+            _projectStaticByMonthMember(projectList1, '201702', function () {
 
-        _projectStaticByMonthMember(projectList1, '201601');
-        _projectStaticByMonthMember(projectList2, '201602');
-        _projectStaticByMonthMember(projectList3, '201603');
-        _projectStaticByMonthMember(projectList4, '201604');
-        _projectStaticByMonthMember(projectList5, '201605');
-        _projectStaticByMonthMember(projectList6, '201606');
-        _projectStaticByMonthMember(projectList7, '201607');
-        _projectStaticByMonthMember(projectList8, '201608');
-        _projectStaticByMonthMember(projectList9, '201609');
-        _projectStaticByMonthMember(projectList10, '201610');
-        _projectStaticByMonthMember(projectList11, '201611');
-        _projectStaticByMonthMember(projectList12, '201612');
-        //_projectStaticByMonthMember(projectList13, '201701');
+            });
+        });
+        // _projectStaticByMonthMember(projectList1, '201601', function () {
+        //     _projectStaticByMonthMember(projectList2, '201602', function () {
+        //         _projectStaticByMonthMember(projectList2, '201603', function () {
+        //             _projectStaticByMonthMember(projectList2, '201604', function () {
+        //                 _projectStaticByMonthMember(projectList2, '201605', function () {
+        //                     _projectStaticByMonthMember(projectList2, '201606', function () {
+        //                         _projectStaticByMonthMember(projectList2, '201607', function () {
+        //                             _projectStaticByMonthMember(projectList2, '201608', function () {
+        //                                 _projectStaticByMonthMember(projectList2, '201609', function () {
+        //                                     _projectStaticByMonthMember(projectList2, '201610', function () {
+        //                                         _projectStaticByMonthMember(projectList2, '201611', function () {
+        //                                             _projectStaticByMonthMember(projectList2, '201612', function () {
+        //                                                 _projectStaticByMonthMember(projectList2, '201701', function () {
+        //                                                     _projectStaticByMonthMember(projectList2, '201702', function () {
+
+        //                                                     });
+        //                                                 });
+        //                                             });
+        //                                         });
+        //                                     });
+        //                                 });
+        //                             });
+        //                         });
+        //                     });
+        //                 });
+        //             });
+        //         });
+        //     });
+        // });
     });
 
     /**
@@ -136,9 +131,9 @@
      * @param {Array} projectList - 项目列表
      * @param {String} month - '201609'/'201610'.....
      */
-    function _projectStaticByMonthMember(projectList, month) {
+    function _projectStaticByMonthMember(projectList, month, cb) {
         _projectStatic(projectList, month, function () {
-
+            cb();
         });
     }
 
@@ -156,22 +151,28 @@
         //根据项目ID 获取相关工作记录列表
         _getJobListByProjectID(projectItem._id, month, function (err, data) {
 
-            //TODO: 统计
-            var projectStatic = _staticData(projectItem, month, data);
+            if (err) console.log(err.message);
 
-            //首先尝试删除原纪录
-            _deleteProjectStaticResult(projectItem._id, month, function (err) {
+            //TODO: 统计 
+            try {
+                var projectStatic = _staticData(projectItem, month, data);
+                //首先尝试删除原纪录
+                _deleteProjectStaticResult(projectItem._id, month, function (err) {
 
-                if (err) console.error(err.message);
+                    if (err) console.log(err.message);
 
-                //重新提交新的记录结果 
-                _submitProjectStaticResult(projectStatic, function (err) {
-                    if (err) console.error(err.message);
-                    _projectStatic(projectList, month, cb);
+                    //重新提交新的记录结果 
+                    _submitProjectStaticResult(projectStatic, function (err) {
+                        if (err) console.log(err.message);
+                        setTimeout(function () {
+                            _projectStatic(projectList, month, cb);
+                        }, 500);
+                    });
+
                 });
-
-            });
-
+            } catch (err) {
+                console.error(err.message);
+            }
         });
     }
 
@@ -261,8 +262,8 @@
     function _getJobListByProjectID(_id, month, cb) {
         var y = month.substring(0, 4);
         var m = month.substring(4, 6);
-        var startDate = new Date(y + '-' + m + '-01');
-        var endDate = (m === 12) ? new Date((Number(y) + 1) + '-' + '01' + '-01').addDay(-1) : new Date(y + '-' + (Number(m) + 1) + '-01').addDay(-1);
+        var startDate = moment(month + '01');
+        var endDate = moment(month + '01').endOf('month');
         JobSchema
             .find({
                 'projectID': _id,
@@ -272,10 +273,21 @@
                 },
                 'status': 'Pass'
 
-            }, { 'authorID': 1, 'authorName': 1, 'status': 1, 'factor': 1, 'quality': 1, 'efficiency': 1, 'difficulty': 1, 'duration': 1, 'date': 1 })
+            }, {
+                'authorID': 1,
+                'authorName': 1,
+                'status': 1,
+                'factor': 1,
+                'quality': 1,
+                'efficiency': 1,
+                'difficulty': 1,
+                'duration': 1,
+                'date': 1
+            })
             .exec(function (err, doc) {
                 if (err) return cb(err, null);
-                console.log('项目ID：' + _id + '   joblog数：' + doc.length);
+                index++;
+                console.log(index + '   项目ID：' + _id + '   统计月份：' + month + '   joblog数：' + doc.length);
                 return cb(null, doc);
             });
     }
