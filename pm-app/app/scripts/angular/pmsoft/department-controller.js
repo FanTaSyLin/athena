@@ -18,7 +18,10 @@
         var dptNum = 0;
         var sysconfig = {};
         var account = "";
-        var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+        var departmentID = "";
+        var departmentName = "";
+            var sharingEdit = angular.element(document.getElementById('sharingEdit'));
+            var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
         var departmentNav = angular.element(document.getElementById('departmentNav'));
         /*详情弹窗*/
@@ -40,6 +43,13 @@
         self.departments = [];
         self.isShowDptNav = false;
         self.selectedDepartment = {};
+        self.sortType = "VarDate";
+        self.sharingRange = "所有分享";
+        self.sharings = [];
+        self.currentSharing = {};
+        self.sharingDetail = undefined;
+        self.authorIsMe = false;
+
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
         self.profileNavIsSeleced = _profileNavIsSeleced;
@@ -50,11 +60,158 @@
         self.isShowArea = _isShowArea;
         self.showMoreActivity = _showMoreActivity;
         self.showActivityDetial = _showActivityDetial;
-        self.isSelectedDepartment =_isSelectedDepartment;
+        self.isSelectedDepartment = _isSelectedDepartment;
+        self.selectSortType = _selectSortType;
+        self.isSelectedSortType = _isSelectedSortType;
+        self.selectSharingRange = _selectSharingRange;
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
         /*取消审核模态框*/
         self.disMissModal = _disMissModal;
+        /**
+         * 选择分享列表中的对象
+         */
+        self.selectSharingItem = _selectSharingItem;
+        /**
+         * 判断分享对象是否是已选中的对象
+         */
+        self.sharingItemIsSelected = _sharingItemIsSelected;
+        /**
+         * 显示编辑分享对话框 
+         */
+        self.showSharingEdit = _showSharingEdit;
+        /**
+         * 删除分享内容
+         */
+        self.deleteSharing = _deleteSharing;
+
+        PMSoftServices.onNewSharingSubmited = _getSharings;
+
+        PMSoftServices.onSharingEdited = _updateSharingList;
+
+        function _updateSharingList(sharingItem) {
+            for (var i = 0; i < self.sharings.length; i++) {
+                if (self.sharings[i]._id === sharingItem._id) {
+                    self.sharings[i].title = sharingItem.title;
+                    self.sharings[i].varDate = sharingItem.varDate;
+                }
+            }
+            _getSharingDetail(sharingItem._id);
+        }
+
+        function _deleteSharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            PMSoftServices.deleteSharing(body, function (res) {
+                var index = self.sharings.indexOf(self.currentSharing);
+                self.sharings.splice(index, 1);
+                self.sharingDetail = {};
+            }, function (res) {
+
+            });
+        }
+
+        /**
+         * @description 获取分享记录列表
+         */
+        function _getSharings() {
+
+            var rangeType = "department";
+            var departmentID = $cookies.get("department");
+
+            PMSoftServices.getSharings(rangeType, departmentID, function (res) {
+                var doc = res.doc;
+                // self.sharings.splice(0, self.sharings.length);
+                doc.forEach(function (item) {
+                    var isExist = false;
+                    for (var i = 0; i < self.sharings.length; i++) {
+                        if (self.sharings[i]._id === item._id) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        item.showTime = moment(item.varDate).format("YYYY年MM月DD日");
+                        self.sharings.push(item);
+                    }
+                });
+                if (self.sharingDetail === undefined && self.sharings.length > 0) {
+                    _getSharingDetail(self.sharings[0]._id);
+                }
+            }, function (res) {
+
+            });
+        }
+
+        function _showSharingEdit(sharingDetail) {
+            if (sharingDetail) {
+                PMSoftServices.currentSharingDetail = {};
+                PMSoftServices.currentSharingDetail = sharingDetail;
+                PMSoftServices.currentSharingDetail.targetItem = {
+                    id: departmentID,
+                    name: departmentName,
+                    type: "department"
+                };
+            } else {
+                PMSoftServices.currentSharingDetail = undefined;
+            }
+            PMSoftServices.sharingTargets.splice(0, PMSoftServices.sharingTargets.length);
+            PMSoftServices.sharingTargets.push({
+                param: departmentID,
+                name: departmentName,
+                type: "department"
+            });
+            PMSoftServices.sharingTarget.param = departmentID;
+            PMSoftServices.sharingTarget.name = departmentName;
+            PMSoftServices.sharingTarget.type = "department";
+            sharingEdit.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        /**
+         * @description 判断分享对象是否是已选中的对象
+         */
+        function _sharingItemIsSelected(item) {
+            return item._id === self.currentSharing._id;
+        }
+
+        /**
+         * @description 选择分享列表中的对象
+         */
+        function _selectSharingItem(item) {
+            var orgItem = self.currentSharing;
+            self.currentSharing = item;
+            if (orgItem !== item) {
+                _getSharingDetail(self.currentSharing._id);
+            }
+        }
+
+        function _getSharingDetail(_id) {
+            PMSoftServices.getSharingDetail(_id, function (res) {
+                    self.sharingDetail = res.doc[0];
+                    if (account === self.sharingDetail.authorID) {
+                        self.authorIsMe = true;
+                    } else {
+                        self.authorIsMe = false;
+                    }
+                }, function (res) {
+
+                });
+        }
+
+        function _selectSharingRange(sharingRange) {
+            self.sharingRange = sharingRange;
+        }
+
+        function _isSelectedSortType(sortType) {
+            return self.sortType === sortType;
+        }
+
+        function _selectSortType(sortType) {
+            self.sortType = sortType;
+        }
 
         function _isSelectedDepartment(department) {
             return department.id === self.selectedDepartment.id;
@@ -82,6 +239,12 @@
 
                 sysconfig = $cookies.getObject('Sysconfig');
                 account = $cookies.get('account');
+                departmentID = $cookies.get("department");
+                for (var i = 0; i < sysconfig[0].departments.length; i++) {
+                    if (sysconfig[0].departments[i].id.toString() === departmentID) {
+                        departmentName = sysconfig[0].departments[i].name;
+                    }
+                }
 
                 var isManager = false;
                 sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
@@ -120,50 +283,7 @@
                  * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
                 _getPageData(dptNum);
-
-                /*PMSoftServices.getDepartmentMembers(dptNum, function (res) {
-
-                    var doc = res.doc;
-                    var timeSpan = 45;
-                    var memberIDs = "";
-                    var endDateStr = moment.utc().format('YYYY-MM-DD');
-                    var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
-                    self.members.splice(0, self.members.length);
-                    for (var i = 0; i < doc.length; i++) {
-                        memberIDs += doc[i].account + " ";
-                        self.members.push(doc[i]);
-                    }
-
-                    var condition = {};
-                    condition.username = memberIDs;
-                    condition.startDate = startDateStr;
-                    condition.endDate = endDateStr;
-
-                    PMSoftServices.getJobList(condition, function (res) {
-
-                        var doc = res.doc;
-                        self.departmentLogs.splice(0, self.departmentLogs.length);
-                        doc.forEach(function (item) {
-                            item.showTime = moment(item.reportTime).add(8, "h").format('MM月DD日 YYYY HH:mm');
-                            self.departmentLogs.push(item);
-                            if (self.displayLogs.length < MAXNUMPREPAGE) {
-                                self.displayLogs.push(item);
-                            }
-                        });
-                        /!**
-                         * @description 处理这些数据 并显示
-                         *!/
-                        _lineInit(startDateStr, timeSpan, doc);
-
-                        _memberActiveStatics(doc);
-
-                    }, function (res) {
-
-                    });
-
-                }, function (res) {
-
-                });*/
+                
             }
         }
 
@@ -237,10 +357,10 @@
             //生成x轴标签列表
             for (var i = 0; i <= timeSpan; i++) {
                 var tmpStr = moment(startDateStr).add(i, "d").format("MM月DD日");
-                
+
                 if (moment(startDateStr).add(i, "d").day() === 6) {
                     tmpStr = "周六";
-                } else  if (moment(startDateStr).add(i, "d").day() === 0) {
+                } else if (moment(startDateStr).add(i, "d").day() === 0) {
                     tmpStr = "周日";
                 }
 
@@ -383,7 +503,13 @@
         }
 
         function _selectProfileNavItem(item) {
+            var orgItem = self.profileNavCurrentItem;
             self.profileNavCurrentItem = item;
+            if (orgItem !== item) {
+                if (item === "Shared") {
+                    _getSharings();
+                }
+            }
         }
 
         function _isShowArea(item) {
@@ -528,7 +654,7 @@
             if (m_accountList.indexOf(m_Account) != -1) {
                 is_Manager = true;
             }
-          //返回状态
+            //返回状态
             return is_Manager;
         }
 
@@ -539,7 +665,7 @@
          * @private
          */
         function _delHtmlTag(str) {
-            var tmpStr = str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+            var tmpStr = str.replace(/<[^>]+>/g, ""); //去掉所有的html标记
             tmpStr = tmpStr.replace(/&NBSP;/g, "");
             tmpStr = tmpStr.replace(/&nbsp;/g, "");
             if (tmpStr.length > 130) {
@@ -549,8 +675,7 @@
         }
     }
 
-    var ColourSystem = [
-        {
+    var ColourSystem = [{
             borderColor: "rgba(154, 89, 181, 0.7)",
             backgroundColor: "rgba(154, 89, 181, 0.2)"
         },
@@ -613,5 +738,4 @@
      * @property {Number} pointBorderWidth
      */
 
-})
-();
+})();

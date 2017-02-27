@@ -14,11 +14,46 @@
 
     function MainController($cookies, PMSoftServices) {
         var self = this;
+        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
 
         self.gotoMyJobsPage = _gotoMyJobsPage;
         self.signOut = _signOut;
+        self.showSharingEditModal = _showSharingEditModal;
         
         _init();
+
+        function _showSharingEditModal() {
+            
+            var sysconfig = $cookies.getObject("Sysconfig");
+            var departmentID = $cookies.get("department");
+            var myDepartment = {};
+
+            for (var i = 0; i < sysconfig[0].departments.length; i++) {
+                if (sysconfig[0].departments[i].id.toString() === departmentID) {
+                    myDepartment = sysconfig[0].departments[i].name;
+                }
+            }
+
+            PMSoftServices.sharingTarget.param = departmentID;
+            PMSoftServices.sharingTarget.name = myDepartment;
+            PMSoftServices.sharingTarget.type = "department";
+            PMSoftServices.sharingTargets.splice(0, PMSoftServices.sharingTargets.length);
+            PMSoftServices.sharingTargets.push({
+                param: departmentID,
+                name: myDepartment,
+                type: "department"
+            });
+            _getProjects(function (err, data) {
+                data.forEach(function (item) {
+                    PMSoftServices.sharingTargets.push({
+                        param: item._id,
+                        name: item.cnName,
+                        type: "project"
+                    });
+                });
+            });
+            sharingEdit.modal({backdrop: 'static', keyboard: false});
+        }
 
         /**
          * 初始化数据
@@ -66,6 +101,30 @@
             $cookies.remove('token');
             $cookies.remove('account');
             window.location.reload();
+        }
+
+        function _getProjects(cb) {
+
+            pastProjects = [];
+
+            /*获取项目列表*/
+            PMSoftServices.getPastProjects($cookies.get('account'), function (data) {
+
+                data.forEach(function (item) {
+                    var project = {};
+                    project.cnName = item.cnName;
+                    project._id = item._id;
+                    project.enName = item.enName;
+                    pastProjects.push(project);
+                });
+
+                cb(null, pastProjects)
+
+            }, function (data, status, headers, config) {
+                cb(new Error(), null);
+            });
+
+
         }
     }
 

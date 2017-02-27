@@ -15,464 +15,422 @@
 </head>
 
 <body>
-<header class="header" role="banner" ng-controller="MainController as MainCtrl">
-    <div class="cell">
-        <div class="header-logo">
-            <a href="/">
-                <img alt="PM-Soft" src="/public/PMSoft-LOGO.png"/>
-            </a>
-        </div>
-        <nav class="nav header-nav">
-            <!--tab start-->
-            <div>
-                <ul class="nav-list nav-list-object">
-                    <li class="nav-list-item">
-                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="#/project">项目</a>
-                        <div class="nav-list-item-font-mark"></div>
-                    </li>
-                    <li class="nav-list-item">
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="#/review">审核</a>
-                        <div class="nav-list-item-font-mark"></div>
-                    </li>
-                    <li class="nav-list-item">
-                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="#/department">部门</a>
-                        <div class="nav-list-item-font-mark"></div>
-                    </li>
-                    <li class="nav-list-item">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="#/my-own">我的</a>
-                        <div class="nav-list-item-font-mark"></div>
-                    </li>
-                    <li class="nav-list-item">
-                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        <a class="nav-list-item-font" href="#/calendar">日历</a>
-                        <div class="nav-list-item-font-mark"></div>
-                    </li>
-                </ul>
-            </div>
-            <!--tab end-->
-        </nav>
-        <div class="header-user-icon-container">
-            <div class="vertical-split-line "></div>
-            
-            <div>
-                <a class="glyphicon-size-middle header-item-padding" href="https://github.com/FanTaSyLin/athena">
-                    <img width="18" height="18" src="/public/invertocat.png" style="margin-bottom: 4px;"/>
+    <header class="header" role="banner" ng-controller="MainController as MainCtrl">
+        <div class="cell">
+            <div class="header-logo">
+                <a href="/">
+                    <img alt="PM-Soft" src="/public/PMSoft-LOGO.png" />
                 </a>
             </div>
-
-            <div>
-                <a class="glyphicon-size-middle header-item-padding" href="#">
-                    <span class="glyphicon glyphicon-envelope"></span>
-                </a>
-            </div>
-            <!--各类新建菜单 start-->
-            <div class="dropdown">
-                <a class="dropdown-toggle header-item-padding" data-toggle="dropdown" href title="Create New...">
-                    <span class="glyphicon glyphicon-plus glyphicon-size-middle"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-custom" role="menu">
-                    <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-backdrop="false" data-target="#JobSheet">记录工作</a>
-                    <a class="dropdown-item btn btn-align-left">新建维护</a>
-                    <a class="dropdown-item btn btn-align-left">新建任务</a>
-                    <a class="dropdown-item btn btn-align-left">新建提醒</a>
-                    <a class="dropdown-item btn btn-align-left">新建活动</a>
-                    <div class="dropdown-split-line" href="/"></div>
-                    <a class="dropdown-item btn btn-align-left" data-toggle="modal"
-                       data-target="#CreateProject">新建项目</a>
-                </ul>
-            </div>
-            <!--各类新建菜单 end-->
-
-            <!--其他菜单 start-->
-            <div class="dropdown">
-                <a class="header-item-padding dropdown-toggle" data-toggle="dropdown">
-                    <img class="user-icon" src="/public/header0.png"/>
-                </a>
-                <a class="caret"></a>
-                <ul class="dropdown-menu dropdown-menu-custom" role="menu">
-                    <div class="dropdown-menu-header">
-                        <strong class="">
+            <nav class="nav header-nav">
+                <!--tab start-->
+                <div>
+                    <ul class="nav-list nav-list-object">
+                        <li class="nav-list-item">
+                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                            <a class="nav-list-item-font" href="#/project">项目</a>
+                            <div class="nav-list-item-font-mark"></div>
+                        </li>
+                        <li class="nav-list-item">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            <a class="nav-list-item-font" href="#/review">审核</a>
+                            <div class="nav-list-item-font-mark"></div>
+                        </li>
+                        <li class="nav-list-item">
+                            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                            <a class="nav-list-item-font" href="#/department">部门</a>
+                            <div class="nav-list-item-font-mark"></div>
+                        </li>
+                        <li class="nav-list-item">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            <a class="nav-list-item-font" href="#/my-own">我的</a>
+                            <div class="nav-list-item-font-mark"></div>
+                        </li>
+                        <li class="nav-list-item">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            <a class="nav-list-item-font" href="#/calendar">日历</a>
+                            <div class="nav-list-item-font-mark"></div>
+                        </li>
+                    </ul>
+                </div>
+                <!--tab end-->
+            </nav>
+            <div class="header-user-icon-container">
+                <div class="vertical-split-line "></div>
+                <div>
+                    <a class="glyphicon-size-middle header-item-padding" href="https://github.com/FanTaSyLin/athena">
+                        <img width="18" height="18" src="/public/invertocat.png" style="margin-bottom: 4px;" />
+                    </a>
+                </div>
+                <div>
+                    <a class="glyphicon-size-middle header-item-padding" href="#">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                    </a>
+                </div>
+                <!--各类新建菜单 start-->
+                <div class="dropdown">
+                    <a class="dropdown-toggle header-item-padding" data-toggle="dropdown" href title="Create New...">
+                        <span class="glyphicon glyphicon-plus glyphicon-size-middle"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-custom" role="menu">
+                        <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-backdrop="false" data-target="#JobSheet">记录工作</a>
+                        <a class="dropdown-item btn btn-align-left" data-toggle="modal" ng-click="MainCtrl.showSharingEditModal()">新建分享</a>
+                        <a class="dropdown-item btn btn-align-left">新建维护</a>
+                        <a class="dropdown-item btn btn-align-left">新建任务</a>
+                        <a class="dropdown-item btn btn-align-left">新建提醒</a>
+                        <a class="dropdown-item btn btn-align-left">新建活动</a>
+                        <div class="dropdown-split-line" href="/"></div>
+                        <a class="dropdown-item btn btn-align-left" data-toggle="modal" data-target="#CreateProject">新建项目</a>
+                    </ul>
+                </div>
+                <!--各类新建菜单 end-->
+                <!--其他菜单 start-->
+                <div class="dropdown">
+                    <a class="header-item-padding dropdown-toggle" data-toggle="dropdown">
+                        <img class="user-icon" src="/public/header0.png" />
+                    </a>
+                    <a class="caret"></a>
+                    <ul class="dropdown-menu dropdown-menu-custom" role="menu">
+                        <div class="dropdown-menu-header">
+                            <strong class="">
                             {{MainCtrl.account}}
                         </strong>
-                    </div>
-                    <div class="dropdown-split-line"></div>
-                    <a class="dropdown-item" href="#/mystatus">状态一览</a>
-                    <a class="dropdown-item" href ng-click="MainCtrl.gotoMyJobsPage()">工作记录</a>
-                    <a class="dropdown-item" href>资料管理</a>
-                    <a class="dropdown-item" href="#/accountconfig">账号设置</a>
-                    <div class="dropdown-split-line" href></div>
-                    <!--<a class="dropdown-item" href="/pm-soft/sysconfig">系统设置</a>-->
-                    <a class="dropdown-item" href ng-click="MainCtrl.signOut()">注销</a>
-                </ul>
+                        </div>
+                        <div class="dropdown-split-line"></div>
+                        <a class="dropdown-item" href="#/mystatus">状态一览</a>
+                        <a class="dropdown-item" href ng-click="MainCtrl.gotoMyJobsPage()">工作记录</a>
+                        <a class="dropdown-item" href>资料管理</a>
+                        <a class="dropdown-item" href="#/accountconfig">账号设置</a>
+                        <div class="dropdown-split-line" href></div>
+                        <!--<a class="dropdown-item" href="/pm-soft/sysconfig">系统设置</a>-->
+                        <a class="dropdown-item" href ng-click="MainCtrl.signOut()">注销</a>
+                    </ul>
+                </div>
+                <!--其他菜单 end-->
             </div>
-            <!--其他菜单 end-->            
-
         </div>
+    </header>
+    <div class="main-area" ng-view="">
     </div>
-</header>
-<div class="main-area" ng-view="">
-</div>
-
-<!--工作记录填写对话框 start-->
-<div class="modal fade" id="JobSheet" ng-controller="RecodeController as RecodeCtrl">
-    <div class="modal-dialog size-jobsheet">
-        <div class="modal-content">
-            <!-- 标题 -->
-            <div class="modal-header dialog-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title title-h4">添加工作记录</h4>
-            </div>
-            <!-- 内容 -->
-            <div class="modal-body dialog-body">
-                <div class="container">
-                    <!-- 状态选择区 -->
-                    <div class="row">
-                        <div class="function-select-area item-border">
-                            <!--项目选择-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">项目</p>
-                                <div class="function-select-area-projects">
-                                    <span class="glyphicon glyphicon-list-alt"></span>
-                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
-                                        <b data-toggle="tooltip" data-placement="right" title="{{RecodeCtrl.selectedProject.cnName}}">
+    <!--工作记录填写对话框 start-->
+    <div class="modal fade" id="JobSheet" ng-controller="RecodeController as RecodeCtrl">
+        <div class="modal-dialog size-jobsheet">
+            <div class="modal-content">
+                <!-- 标题 -->
+                <div class="modal-header dialog-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title title-h4">添加工作记录</h4>
+                </div>
+                <!-- 内容 -->
+                <div class="modal-body dialog-body">
+                    <div class="container">
+                        <!-- 状态选择区 -->
+                        <div class="row">
+                            <div class="function-select-area item-border">
+                                <!--项目选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">项目</p>
+                                    <div class="function-select-area-projects">
+                                        <span class="glyphicon glyphicon-list-alt"></span>
+                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                            <b data-toggle="tooltip" data-placement="right" title="{{RecodeCtrl.selectedProject.cnName}}">
                                             {{RecodeCtrl.subStr(RecodeCtrl.selectedProject.cnName, 8)}}
                                         </b>
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item"
-                                             ng-repeat="project in RecodeCtrl.projects">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.projectSelect(project)"
-                                               data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item" ng-repeat="project in RecodeCtrl.projects">
+                                                <img src="/public/project-type-gongcheng.png" style="width: 20px;height: 20px" />
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.projectSelect(project)" data-toggle="tooltip" data-placement="right" title="{{project.cnName}}">
                                                 {{project.enName}}
                                             </a>
-                                        </div>
-                                    </ul>
+                                            </div>
+                                        </ul>
+                                    </div>
                                 </div>
-
-                            </div>
-                            <!--日期选择-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">日期</p>
-                                <div class="function-select-area-date">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                <!--日期选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">日期</p>
+                                    <div class="function-select-area-date">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
                                         {{RecodeCtrl.selectedDate.str}}
                                     </a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item"
-                                             ng-repeat="date in RecodeCtrl.dates">
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.dateSelect(date)">
+                                        <ul class="dropdown-menu" role="menu">
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item" ng-repeat="date in RecodeCtrl.dates">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.dateSelect(date)">
                                                 {{date.str}}
                                             </a>
-                                        </div>
-                                    </ul>
+                                            </div>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <!--时间选择-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">起止时间</p>
-                                <div class="row function-select-area-time">
-                                    <div class="col-xs-4 ">
-                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                <!--时间选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">起止时间</p>
+                                    <div class="row function-select-area-time">
+                                        <div class="col-xs-4 ">
+                                            <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
                                             {{RecodeCtrl.selectedStart.str}}
                                         </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
-                                                 ng-repeat="startTime in RecodeCtrl.times">
-                                                <a class="btn btn-align-left"
-                                                   ng-click="RecodeCtrl.sTimeSelect(startTime)">{{startTime.str}}</a>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                    <i class="col-xs-1">
+                                            <ul class="dropdown-menu" role="menu">
+                                                <div class="dropdown-item btn btn-align-left function-select-item-item" ng-repeat="startTime in RecodeCtrl.times">
+                                                    <a class="btn btn-align-left" ng-click="RecodeCtrl.sTimeSelect(startTime)">{{startTime.str}}</a>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                        <i class="col-xs-1">
                                         -
                                     </i>
-                                    <div class="col-xs-4">
-                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                        <div class="col-xs-4">
+                                            <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
                                             {{RecodeCtrl.selectedEnd.str}}
                                         </a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <div class="dropdown-item btn btn-align-left function-select-item-item" ng-repeat="endTime in RecodeCtrl.times">
+                                                    <a class="btn btn-align-left" ng-click="RecodeCtrl.eTimeSelect(endTime)">{{endTime.str}}</a>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--类型选择-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">类型</p>
+                                    <div class="function-select-area-type">
+                                        <span class="glyphicon glyphicon-tag"></span>
+                                        <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
+                                        {{RecodeCtrl.selectedType}}
+                                    </a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <div class="dropdown-item btn btn-align-left function-select-item-item"
-                                                 ng-repeat="endTime in RecodeCtrl.times">
-                                                <a class="btn btn-align-left"
-                                                   ng-click="RecodeCtrl.eTimeSelect(endTime)">{{endTime.str}}</a>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('技术')">技术</a>
+                                            </div>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('管理')">管理</a>
+                                            </div>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                                <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('维护')">维护</a>
                                             </div>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <!--类型选择-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">类型</p>
-                                <div class="function-select-area-type">
-                                    <span class="glyphicon glyphicon-tag"></span>
-                                    <a class="title-h7 dropdown-toggle" href data-toggle="dropdown">
-                                        {{RecodeCtrl.selectedType}}
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('技术')">技术</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('管理')">管理</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <a class="btn btn-align-left" ng-click="RecodeCtrl.typeSelect('维护')">维护</a>
-                                        </div>
-                                    </ul>
+                        </div>
+                        <!-- 内容填写区 -->
+                        <div class="row" style="padding-top: 1em">
+                            <div class="function-recode-area item-border">
+                                <div class="summernote" id="recode-editor">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 内容填写区 -->
-                    <div class="row" style="padding-top: 1em">
-                        <div class="function-recode-area item-border">
-                            <div class="summernote" id="recode-editor">
+                        <!--工作记录清单区-->
+                        <div style="padding-top: 1em" style="max-height: 200px; overflow: auto;">
+                            <div class="function-recode-area item-border row" style="height: 40px; margin-bottom: 8px" ng-repeat="job in RecodeCtrl.recodedJobs">
+                                <h5 style="margin-left: 8px;">
+                                    <a class="col-md-8" href>
+                                        <span class="glyphicon glyphicon-pencil"></span> {{RecodeCtrl.timeFormat(job.startTime)}}
+                                        至 {{RecodeCtrl.timeFormat(job.endTime)}} : {{job.cnName}}({{job.enName}})
+                                    </a>
+                                    <a class="col-md-3 col-md-offset-1" style="font-size: 0.9em; color: #5a5a5a;">
+                                        <span class="glyphicon glyphicon-time"></span> {{RecodeCtrl.dateTimeFormat(job.reportTime)}}提交
+                                    </a>
+                                </h5>
                             </div>
-                        </div>
-                    </div>
-                    <!--工作记录清单区-->
-                    <div style="padding-top: 1em" style="max-height: 200px; overflow: auto;">
-                        <div class="function-recode-area item-border row" style="height: 40px; margin-bottom: 8px"
-                             ng-repeat="job in RecodeCtrl.recodedJobs">
-                            <h5 style="margin-left: 8px;">
-                                <a class="col-md-8" href>
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                    {{RecodeCtrl.timeFormat(job.startTime)}}
-                                    至 {{RecodeCtrl.timeFormat(job.endTime)}} : {{job.cnName}}({{job.enName}})
-                                </a>
-                                <a class="col-md-3 col-md-offset-1" style="font-size: 0.9em; color: #5a5a5a;">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                    {{RecodeCtrl.dateTimeFormat(job.reportTime)}}提交
-                                </a>
-                            </h5>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- 页脚 -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-disabled="!RecodeCtrl.showSubmitBtn"
-                        ng-click="RecodeCtrl.recodeSubmit()">Save
-                </button>
+                <!-- 页脚 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!RecodeCtrl.showSubmitBtn" ng-click="RecodeCtrl.recodeSubmit()">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--工作记录填写对话框 end-->
-
-<!--创建项目对话框 start-->
-<div class="modal fade" id="CreateProject" ng-controller="CreateProjectCtrl as CPCtrl">
-    <div class="modal-dialog size-CreateProject">
-        <div class="modal-content">
-            <!--标题-->
-            <div class="modal-header dialog-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title title-h4">创建新项目</h4>
-            </div>
-            <!--内容-->
-            <div class="modal-body dialog-body">
-                <section class="process">
-                    <ul class="nav nav-pills">
-                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(1)}">
-                            <a href ng-click="CPCtrl.selectTab(1)">创建项目</a>
-                        </li>
-                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(2)}">
-                            <a href ng-click="CPCtrl.selectTab(2)">添加项目成员</a>
-                        </li>
-                        <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(3)}">
-                            <a href ng-click="CPCtrl.selectTab(3)">设置审批权限</a>
-                        </li>
-                    </ul>
-                    <div class="create-content-area">
-                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(1)">
-                            <div class="icon-project">
-                                <img src="/public/illustration.png"/>
-                            </div>
-                            <div class="horizontal-line"></div>
-                            <div class="form-field">
-                                <input class="form-control" required="" type="text" placeholder="项目全称"
-                                       ng-model="CPCtrl.projectModule.cnName"/>
-                            </div>
-                            <div class="form-field">
-                                <input class="form-control" required="" type="text" placeholder="项目简称"
-                                       ng-model="CPCtrl.projectModule.enName"/>
-                            </div>
-                            <div class="input-group form-field">
-                                <input class="form-control" required="" type="text" placeholder="项目类型"
-                                       ng-model="CPCtrl.projectModule.type"/>
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="true">
+    <!--工作记录填写对话框 end-->
+    <!--创建项目对话框 start-->
+    <div class="modal fade" id="CreateProject" ng-controller="CreateProjectCtrl as CPCtrl">
+        <div class="modal-dialog size-CreateProject">
+            <div class="modal-content">
+                <!--标题-->
+                <div class="modal-header dialog-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title title-h4">创建新项目</h4>
+                </div>
+                <!--内容-->
+                <div class="modal-body dialog-body">
+                    <section class="process">
+                        <ul class="nav nav-pills">
+                            <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(1)}">
+                                <a href ng-click="CPCtrl.selectTab(1)">创建项目</a>
+                            </li>
+                            <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(2)}">
+                                <a href ng-click="CPCtrl.selectTab(2)">添加项目成员</a>
+                            </li>
+                            <li role="presentation" ng-class="{active: CPCtrl.isSelectedTab(3)}">
+                                <a href ng-click="CPCtrl.selectTab(3)">设置审批权限</a>
+                            </li>
+                        </ul>
+                        <div class="create-content-area">
+                            <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(1)">
+                                <div class="icon-project">
+                                    <img src="/public/illustration.png" />
+                                </div>
+                                <div class="horizontal-line"></div>
+                                <div class="form-field">
+                                    <input class="form-control" required="" type="text" placeholder="项目全称" ng-model="CPCtrl.projectModule.cnName" />
+                                </div>
+                                <div class="form-field">
+                                    <input class="form-control" required="" type="text" placeholder="项目简称" ng-model="CPCtrl.projectModule.enName" />
+                                </div>
+                                <div class="input-group form-field">
+                                    <input class="form-control" required="" type="text" placeholder="项目类型" ng-model="CPCtrl.projectModule.type" />
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-gongcheng.png"
-                                                 style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('工程')">工程类</a>
-                                        </div>
-                                        <div class="dropdown-item btn btn-align-left function-select-item-item">
-                                            <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px"/>
-                                            <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('自研')">自研类</a>
-                                        </div>
-                                    </ul>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                                <img src="/public/project-type-gongcheng.png" style="width: 20px;height: 20px" />
+                                                <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('工程')">工程类</a>
+                                            </div>
+                                            <div class="dropdown-item btn btn-align-left function-select-item-item">
+                                                <img src="/public/project-type-ziyan.png" style="width: 20px;height: 20px" />
+                                                <a class="btn btn-align-left" ng-click="CPCtrl.selectedPType('自研')">自研类</a>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-field">
+                                    <textarea class="form-control fix-textarea" role="textbox" placeholder="项目介绍" ng-model="CPCtrl.projectModule.about"></textarea>
                                 </div>
                             </div>
-                            <div class="form-field">
-                                <textarea class="form-control fix-textarea" role="textbox" placeholder="项目介绍"
-                                          ng-model="CPCtrl.projectModule.about"></textarea>
-                            </div>
-                        </div>
-                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(2)">
-                            <div class="form-field" style="margin-top: 50px">
-                                <input class="form-control" required="" type="text" placeholder="请输入成员姓名，确认按回车"
-                                       ng-model="CPCtrl.newMemberName"
-                                       ng-keydown="CPCtrl.addNewMember($event, CPCtrl.newMemberName)"
-                                />
-                            </div>
-                            <div ng-hide="CPCtrl.projectModule.members.length > 1">
-                                <div class="icon-project">
-                                    <img src="/public/illustration-baton.png"/>
+                            <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(2)">
+                                <div class="form-field" style="margin-top: 50px">
+                                    <input class="form-control" required="" type="text" placeholder="请输入成员姓名，确认按回车" ng-model="CPCtrl.newMemberName" ng-keydown="CPCtrl.addNewMember($event, CPCtrl.newMemberName)"
+                                    />
                                 </div>
-                                <p>现在项目中只有你一个,</p>
-                                <p>你可以在此邀请你的小伙伴一起协作。</p>
-                            </div>
-                            <div ng-show="CPCtrl.projectModule.members.length > 1" class="form-field"
-                                 style="max-height: 350px; overflow: auto; width: 370px">
-                                <div ng-repeat="member in CPCtrl.projectModule.members" ng-show="member.showInMembers"
-                                     style="padding-bottom: 8px; margin: 0 auto; width: 350px">
-                                    <div>
-                                        <img style="width: 35px;height: 35px; border-radius: 5px"
-                                             src="/public/12312312.jpg"/>
-                                        <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
-                                        <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
-                                        <button class="btn btn-default ls5px" style="margin: 0 0 0 35px;"
-                                                style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
+                                <div ng-hide="CPCtrl.projectModule.members.length > 1">
+                                    <div class="icon-project">
+                                        <img src="/public/illustration-baton.png" />
+                                    </div>
+                                    <p>现在项目中只有你一个,</p>
+                                    <p>你可以在此邀请你的小伙伴一起协作。</p>
+                                </div>
+                                <div ng-show="CPCtrl.projectModule.members.length > 1" class="form-field" style="max-height: 350px; overflow: auto; width: 370px">
+                                    <div ng-repeat="member in CPCtrl.projectModule.members" ng-show="member.showInMembers" style="padding-bottom: 8px; margin: 0 auto; width: 350px">
+                                        <div>
+                                            <!--<img style="width: 35px;height: 35px; border-radius: 5px" src="/public/12312312.jpg" />-->
+                                            <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
+                                            <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
+                                            <button class="btn btn-default ls5px" style="margin: 0 0 0 35px;" style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
                                                 ng-click="CPCtrl.rmMember(member.account)">
                                             删除
                                         </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(3)">
-                            <div class="form-field"
-                                 style="height: 480px; max-height: 580px; overflow: auto; width: 590px">
-                                <div ng-repeat="member in CPCtrl.projectModule.members" ng-show="member.showInMembers"
-                                     style="padding-bottom: 8px; margin: 0 auto; width: 570px">
-                                    <div>
-                                        <img style="width: 35px;height: 35px; border-radius: 5px"
-                                             src="/public/12312312.jpg"/>
-                                        <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
-                                        <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
-                                        <div class="btn-group" style="margin: 0 5px 0 170px;">
-                                            <button type="button" class="btn btn-default dropdown-toggle"
-                                                    data-toggle="dropdown"
-                                                    style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;">
+                            <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(3)">
+                                <div class="form-field" style="height: 480px; max-height: 580px; overflow: auto; width: 590px">
+                                    <div ng-repeat="member in CPCtrl.projectModule.members" ng-show="member.showInMembers" style="padding-bottom: 8px; margin: 0 auto; width: 570px">
+                                        <div>
+                                            <!--<img style="width: 35px;height: 35px; border-radius: 5px" src="/public/12312312.jpg" />-->
+                                            <label style="font-family: 'Microsoft Yahei'; font-size: 1.2em; font-weight: 500;width: 100px;">{{member.name}}</label>
+                                            <label style="font-family: 'Microsoft Yahei'; font-size: 0.9em; color:grey; font-weight: 500; width: 100px;">@{{member.account}}</label>
+                                            <div class="btn-group" style="margin: 0 5px 0 170px;">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;">
                                                 {{CPCtrl.getPermissionName(member.permission)}} <span
                                                     class="caret"></span>
                                             </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;"
-                                                       ng-click="CPCtrl.selectedMemberPermission(member, '1')">审核</a>
-                                                </li>
-                                                <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;"
-                                                       ng-click="CPCtrl.selectedMemberPermission(member, '0')">普通</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <button class="btn btn-default ls5px"
-                                                style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;" ng-click="CPCtrl.selectedMemberPermission(member, '1')">审核</a>
+                                                    </li>
+                                                    <li><a href style="font-family: 'Microsoft Yahei'; font-size: 1em;" ng-click="CPCtrl.selectedMemberPermission(member, '0')">普通</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <button class="btn btn-default ls5px" style="font-size: 1em; font-family: 'Microsoft Yahei'; font-weight: 500; color: grey;"
                                                 ng-click="CPCtrl.rmMember(member.account)">
                                             删除
                                         </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(4)">
+                                <h1 style="color: #3385ff; margin: 200px 0 0 200px">
+                                    项目创建成功
+                                </h1>
+                            </div>
                         </div>
-                        <div class="panel project-edit-info-area" ng-show="CPCtrl.isSelectedTab(4)">
-                            <h1 style="color: #3385ff; margin: 200px 0 0 200px">
-                                项目创建成功
-                            </h1>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <!--页脚-->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-default" ng-click="CPCtrl.back()">上一步</button>
-                <button type="button" class="btn btn-default" ng-click="CPCtrl.forward()"
-                        ng-hide="CPCtrl.isSelectedTab(3) || CPCtrl.isSelectedTab(4)">下一步
+                    </section>
+                </div>
+                <!--页脚-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" ng-click="CPCtrl.back()">上一步</button>
+                    <button type="button" class="btn btn-default" ng-click="CPCtrl.forward()" ng-hide="CPCtrl.isSelectedTab(3) || CPCtrl.isSelectedTab(4)">下一步
                 </button>
-                <button type="button" class="btn btn-primary" ng-show="CPCtrl.isSelectedTab(3)"
-                        ng-click="CPCtrl.createProject(CPCtrl.projectModule)">创建
+                    <button type="button" class="btn btn-primary" ng-show="CPCtrl.isSelectedTab(3)" ng-click="CPCtrl.createProject(CPCtrl.projectModule)">创建
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="CPCtrl.isSelectedTab(4)">完成
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="CPCtrl.isSelectedTab(4)">完成
                 </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--创建项目对话框 end-->
-
-<!--工作记录审核对话框 start-->
-<div class="modal fade" id="JobAudited" ng-controller="JobCheckController as JobCheckCtrl" data-ng-init="JobCheckCtrl.init()">
-    <div class="modal-dialog size-jobsheet">
-        <div class="modal-content">
-            <!--标题-->
-            <div class="modal-header dialog-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title title-h4">
-                    工作记录审核
-                    <!--<img width="30px" height="30px" src="/public/checked.png"
+    <!--创建项目对话框 end-->
+    <!--工作记录审核对话框 start-->
+    <div class="modal fade" id="JobAudited" ng-controller="JobCheckController as JobCheckCtrl" data-ng-init="JobCheckCtrl.init()">
+        <div class="modal-dialog size-jobsheet">
+            <div class="modal-content">
+                <!--标题-->
+                <div class="modal-header dialog-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title title-h4">
+                        工作记录审核
+                        <!--<img width="30px" height="30px" src="/public/checked.png"
                     ng-show="ReviewCtrl.currentJob.status === 'Pass'"/>-->
-                </h4>
-            </div>
-            <!--内容-->
-            <div class="modal-body dialog-body">
-                <form>
-                    <!-- 状态显示区 -->
-                    <div class="row">
-                        <div class="function-select-area item-border">
-                            <!--项目显示-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">项目</p>
-                                <div class="function-select-area-projects">
-                                    <span class="glyphicon glyphicon-list-alt"></span>
-                                    <a class="title-h7 dropdown-toggle" style="font-size: 14px; font-weight: 600" title="{{JobCheckCtrl.currentJob.projectCName}}" href>
+                    </h4>
+                </div>
+                <!--内容-->
+                <div class="modal-body dialog-body">
+                    <form>
+                        <!-- 状态显示区 -->
+                        <div class="row">
+                            <div class="function-select-area item-border">
+                                <!--项目显示-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">项目</p>
+                                    <div class="function-select-area-projects">
+                                        <span class="glyphicon glyphicon-list-alt"></span>
+                                        <a class="title-h7 dropdown-toggle" style="font-size: 14px; font-weight: 600" title="{{JobCheckCtrl.currentJob.projectCName}}"
+                                            href>
                                         {{JobCheckCtrl.currentJob.projectCName | substring_str: 18}}
                                     </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <!--日期显示-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">日期</p>
-                                <div class="function-select-area-date">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                    <a class="title-h7 dropdown-toggle" href>
+                                <!--日期显示-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">日期</p>
+                                    <div class="function-select-area-date">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
                                         {{JobCheckCtrl.currentJob.date.substring(0, 10)}}
                                     </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <!--时间显示-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">所用时间</p>
-                                <div class="function-select-area-type">
-                                    <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
-                                    <a class="title-h7 dropdown-toggle" href>
+                                <!--时间显示-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">所用时间</p>
+                                    <div class="function-select-area-type">
+                                        <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
                                         {{JobCheckCtrl.currentJob.duration}}小时
                                     </a>
-                                </div>
-                                <!--
+                                    </div>
+                                    <!--
                                 <div class="row function-select-area-time">
                                     <div class="col-xs-4 ">
                                         <a class="title-h7 dropdown-toggle" href>
@@ -489,141 +447,150 @@
                                     </div>
                                 </div>
                                 -->
-                            </div>
-                            <!--类型显示-->
-                            <div class="col-md-3 function-select-item item-border">
-                                <p class="title-h8">类型</p>
-                                <div class="function-select-area-type">
-                                    <span class="glyphicon glyphicon-tag"></span>
-                                    <a class="title-h7 dropdown-toggle" href>
+                                </div>
+                                <!--类型显示-->
+                                <div class="col-md-3 function-select-item item-border">
+                                    <p class="title-h8">类型</p>
+                                    <div class="function-select-area-type">
+                                        <span class="glyphicon glyphicon-tag"></span>
+                                        <a class="title-h7 dropdown-toggle" href>
                                         {{JobCheckCtrl.currentJob.type}}
                                     </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--系数设置区-->
-                    <div class="row" style="padding-top: 5px">
-                        <div class="function-select-area item-border">
-                            <!--工作难度-->
-                            <div class="col-md-4" style="margin-top: 10px">
-                                <p class="title-h6">难度系数</p>
-                                <input id="difficulty" type="text"
-                                       data-provide="slider"
-                                       data-slider-ticks="[0.5, 1, 1.5]"
-                                       data-slider-min="0.5"
-                                       data-slider-max="1.5"
-                                       data-slider-step="0.5"
-                                       data-slider-value="1"
-                                />
-                            </div>
-                            <!--时间系数-->
-                            <div class="col-md-4" style="margin-top: 10px">
-                                <p class="title-h6">效率系数</p>
-                                <input id="efficiency" type="text"
-                                       data-provide="slider"
-                                       data-slider-ticks="[0, 0.5, 1, 1.5, 2]"
-                                       data-slider-min="0"
-                                       data-slider-max="2"
-                                       data-slider-step="0.5"
-                                       data-slider-value="1"
-                                />
-                            </div>
-                            <!--完成质量-->
-                            <div class="col-md-4" style="margin-top: 10px">
-                                <p class="title-h6">质量系数</p>
-                                <input id="quality" type="text"
-                                       data-provide="slider"
-                                       data-slider-ticks="[0, 0.25, 0.5, 0.75, 1]"
-                                       data-slider-min="0"
-                                       data-slider-max="1"
-                                       data-slider-step="0.25"
-                                       data-slider-value="1"
-                                />
+                        <!--系数设置区-->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-select-area item-border">
+                                <!--工作难度-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                    <p class="title-h6">难度系数</p>
+                                    <input id="difficulty" type="text" data-provide="slider" data-slider-ticks="[0.5, 1, 1.5]" data-slider-min="0.5" data-slider-max="1.5"
+                                        data-slider-step="0.5" data-slider-value="1" />
+                                </div>
+                                <!--时间系数-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                    <p class="title-h6">效率系数</p>
+                                    <input id="efficiency" type="text" data-provide="slider" data-slider-ticks="[0, 0.5, 1, 1.5, 2]" data-slider-min="0" data-slider-max="2"
+                                        data-slider-step="0.5" data-slider-value="1" />
+                                </div>
+                                <!--完成质量-->
+                                <div class="col-md-4" style="margin-top: 10px">
+                                    <p class="title-h6">质量系数</p>
+                                    <input id="quality" type="text" data-provide="slider" data-slider-ticks="[0, 0.25, 0.5, 0.75, 1]" data-slider-min="0" data-slider-max="1"
+                                        data-slider-step="0.25" data-slider-value="1" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 内容显示区 -->
-                    <div class="row" style="padding-top: 5px">
-                        <div class="function-recode-area item-border"
-                             style="overflow: auto; min-height: 390px; max-height: 390px">
-                            <div ng-bind-html="JobCheckCtrl.currentJob.content | to_trusted">
+                        <!-- 内容显示区 -->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-recode-area item-border" style="overflow: auto; min-height: 390px; max-height: 390px">
+                                <div ng-bind-html="JobCheckCtrl.currentJob.content | to_trusted">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 日志显示区 -->
-                    <div class="row" style="padding-top: 5px">
-                        <div class="function-recode-area item-border"
-                             style="overflow: auto; min-height: 200px; max-height: 200px">
-                            <p class="title-h7" style="margin-left: 15px; font-weight: 500">
-                                <span class="glyphicon glyphicon-list-alt"></span> 日志：
-                            </p>
-                            <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500" ng-repeat="log in JobCheckCtrl.currentJob.logs" >
-                                <b>{{log.authorName}}</b>: {{log.msg}}             {{JobCheckCtrl.formatDateTime(log.logTime)}}
-                            </p>
+                        <!-- 日志显示区 -->
+                        <div class="row" style="padding-top: 5px">
+                            <div class="function-recode-area item-border" style="overflow: auto; min-height: 200px; max-height: 200px">
+                                <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                    <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                                </p>
+                                <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500" ng-repeat="log in JobCheckCtrl.currentJob.logs">
+                                    <b>{{log.authorName}}</b>: {{log.msg}} {{JobCheckCtrl.formatDateTime(log.logTime)}}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <!--页脚-->
-            <div class="modal-footer">
-                <!--<button type="button" class="btn btn-warning" data-dismiss="modal"
+                    </form>
+                </div>
+                <!--页脚-->
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-warning" data-dismiss="modal"
                  ng-click="ReviewCtrl.ignoreThisJob(ReviewCtrl.currentJob._id)">忽 略</button>-->
-                <div class="btn-group dropup">
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
                         拒 绝 <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href ng-click="JobCheckCtrl.turnBackJob('项目选择错误', JobCheckCtrl.currentJob)">项目选择错误</a></li>
-                        <li><a href ng-click="JobCheckCtrl.turnBackJob('描述过于简单', JobCheckCtrl.currentJob)">描述过于简单</a></li>
-                        <li><a href ng-click="JobCheckCtrl.turnBackJob('类型选择错误', JobCheckCtrl.currentJob)">类型选择错误</a></li>
-                    </ul>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href ng-click="JobCheckCtrl.turnBackJob('项目选择错误', JobCheckCtrl.currentJob)">项目选择错误</a></li>
+                            <li><a href ng-click="JobCheckCtrl.turnBackJob('描述过于简单', JobCheckCtrl.currentJob)">描述过于简单</a></li>
+                            <li><a href ng-click="JobCheckCtrl.turnBackJob('类型选择错误', JobCheckCtrl.currentJob)">类型选择错误</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="JobCheckCtrl.disMissModal()">取 消</button>
+                    <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableBackwardBtn" ng-click="JobCheckCtrl.goBackwardJob()">上一条
+                </button>
+                    <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableForwardBtn" ng-click="JobCheckCtrl.goForwardJob()">下一条
+                </button>
+                    <button type="button" class="btn btn-success" ng-click="JobCheckCtrl.checkThisJob(JobCheckCtrl.currentJob)">审 核</button>
                 </div>
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="JobCheckCtrl.disMissModal()">取 消</button>
-                <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableBackwardBtn"
-                        ng-click="JobCheckCtrl.goBackwardJob()">上一条
-                </button>
-                <button type="button" class="btn btn-default" ng-disable="ReviewCtrl.disableForwardBtn"
-                        ng-click="JobCheckCtrl.goForwardJob()">下一条
-                </button>
-                <button type="button" class="btn btn-success" ng-click="JobCheckCtrl.checkThisJob(JobCheckCtrl.currentJob)">审 核</button>
             </div>
         </div>
     </div>
-</div>
-<!--工作记录审核对话框 end-->
-
-<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/bower_components/summernote/dist/summernote.js"></script>
-<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
-<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
-<script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
-<script type="text/javascript" src="/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
-<script type="text/javascript" src="/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
-<script type="text/javascript" src="/bower_components/percircle/dist/js/percircle.js"></script>
-
-
-<script type="text/javascript" src="/scripts/angular/pmsoft/module.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/config.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/router.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/filter.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/mainform-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/createproject-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/mystatus-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/unauditeds-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/check-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/projectlist-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/calendar-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/department-controller.js"></script>
-<script type="text/javascript" src="/scripts/angular/pmsoft/accountconfig-controller.js"></script>
-<script type="text/javascript" src="/lib/ngStorage.js"></script>
-<!--<script type="text/javascript" src="/scripts/jqueryFn.js"></script>-->
+    <!--工作记录审核对话框 end-->
+    <!--分享编辑对话框 start-->
+    <div class="modal fade" id="sharingEdit" ng-controller="SharingController as SharingCtrl">
+        <div class="modal-dialog sharingEdit">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <header class="creator-header">
+                        <h4 class="creator-title">
+                            <span class="tips">创建分享至</span>
+                            <a class="handler dropdown-toggle" data-toggle="dropdown">
+                                {{SharingCtrl.currentTargetItem.name}} 
+                                <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                            </a>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <ul class="dropdown-menu dropdown-menu-custom" role="menu" ng-show="SharingCtrl.allowSelectTarget">
+                                <a class="dropdown-item menu-item" href ng-repeat="targetItem in SharingCtrl.targetItems" ng-click="SharingCtrl.selectTargetItem(targetItem)">{{targetItem.name}}</a>
+                            </ul>
+                        </h4>
+                    </header>
+                    <header class="post-creator-header">
+                        <input class="form-control post-title-input" type="text" maxlength="70" placeholder="输入文档标题" ng-model="SharingCtrl.sharingTitle" value="">
+                    </header>
+                    <div class="summernote" id="sharing-summernote"></div>
+                    <!--<section class="post-creator-editor-wrap">
+                        <div class="summernote" id="sharing-summernote" maxHeight="700"></div>
+                    </section>-->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary submit-handler" ng-click="SharingCtrl.submitSharing()">立即发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--分享编辑对话框 end-->
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/summernote/dist/summernote.js"></script>
+    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="/bower_components/chart.js/dist/Chart.min.js"></script>
+    <script type="text/javascript" src="/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="/bower_components/percircle/dist/js/percircle.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/module.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/config.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/router.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/services.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/filter.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/mainform-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/createproject-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/jobrecode-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/mystatus-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/unauditeds-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/check-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/projectlist-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/calendar-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/department-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/accountconfig-controller.js"></script>
+    <script type="text/javascript" src="/scripts/angular/pmsoft/sharingedit-controller.js"></script>
+    <script type="text/javascript" src="/lib/ngStorage.js"></script>
+    <!--<script type="text/javascript" src="/scripts/jqueryFn.js"></script>-->
 </body>
 
 </html>
