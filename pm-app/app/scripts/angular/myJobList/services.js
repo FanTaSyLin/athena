@@ -149,7 +149,7 @@
         function _getJobList(condition, successFn, errorFn) {
             var conditionStr = '';
             if (condition.username) {
-                conditionStr += ('username=' + condition.username + '&');
+                conditionStr += ('memberid=' + condition.username + '&');
             }
             if (condition.projectID) {
                 conditionStr += ('projectid=' + condition.projectID + '&');
