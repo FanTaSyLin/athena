@@ -285,9 +285,9 @@
                                     {{MyJobsCtrl.timeFormat(job.startTime)}}
                                     至 {{MyJobsCtrl.timeFormat(job.endTime)}} : {{job.cnName}}({{job.enName}})
                                 </a>
-                                <a class="col-md-3 col-md-offset-1" style="font-size: 0.9em; color: #5a5a5a;">
+                                <a class="col-md-4" style="font-size: 0.9em; color: #5a5a5a;">
                                     <span class="glyphicon glyphicon-time"></span>
-                                    {{MyJobsCtrl.dateTimeFormat(job.reportTime)}}提交
+                                    {{MyJobsCtrl.formatDateTime(job.reportTime)}}提交
                                 </a>
                             </h5>
                         </div>
