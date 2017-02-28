@@ -99,8 +99,6 @@
                 },
                 eventRender: function (event, element) {
                     //重置title样式（需要区分view）
-                    //   console.log(event);
-                    // console.log(element);
                     /*  var evtcontent = '<div class="fc-event-vert" style="color:white;"> ';
                      evtcontent = evtcontent + '<span class="fc-event-titlebg" style="cursor:pointer">' + event.title + '</span>';
                      element.html(evtcontent);*/
@@ -119,16 +117,13 @@
             //初始化项目列表
             if (self.account && self.account.length > 0) {
                 PMSoftServices.getPastProjects(self.account, function (data) {
-                    //console.log(data);
                     data.forEach(function (project) {
                         self.projects.push(project);
                     });
-                    // console.log(self.projects);
                 }, function (err) {
                     console.log(err);
                 });
             }
-
         }
 
         /**
@@ -173,6 +168,7 @@
                 return true;
             }, function (err) {
                 //返回空列表
+                console.log(err);
                 callback([]);
                 return false;
             });
@@ -259,16 +255,14 @@
         //选择项目点击事件
         function _selectproject(project) {
             //是否被选择
-            //console.log(project);
             var _id = project._id;
             var m_event = [];
             //遍历筛选事件
             self.events.forEach(function (m_item) {
                 if (m_item.detail.projectID == _id) {
                     m_event.push(m_item);
-                    // console.log(m_item);
                 }
-            });
+              });
             //刷新显示
             /*筛选 当前event*/
             myCalendar.fullCalendar('removeEvents');
