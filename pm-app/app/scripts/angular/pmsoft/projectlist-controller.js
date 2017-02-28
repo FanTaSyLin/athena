@@ -84,7 +84,7 @@
                         self.projectList.push(project);
                     });
                     //获取星标项目
-                    _getStarProjectList();
+                    _getStarProjectList();                    
                 });
             }
 

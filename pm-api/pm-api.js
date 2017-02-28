@@ -76,8 +76,13 @@ require('./routes/jobrecode-handler.js')(server, BASEPATH);
  */
 require('./routes/static-handler.js')(server, BASEPATH);
 
+/**
+ * 分享相关API
+ */
+require('./routes/sharing-handler.js')(server, BASEPATH);
+
 server.listen(HTTP_PORT, function () {
-    debug('%s listening at %s ', server.name, server.url);
+    console.log('%s listening at %s ', server.name, server.url);
 });
 
 
