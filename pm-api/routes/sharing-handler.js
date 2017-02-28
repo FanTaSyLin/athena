@@ -26,7 +26,7 @@
          * 
          * @typedef {range} 可见范围
          * @property {string} type (global, department, project, private)
-         * @property {string[]} params 
+         * @property {string} params 
          */
 
         /**
@@ -188,6 +188,7 @@
         ContentSharingSchema
             .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate"])
             .sort({
+                "pinFlg" : 1,
                 "varDate": -1
             })
             .exec(function (err, doc) {

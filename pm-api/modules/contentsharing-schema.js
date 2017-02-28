@@ -27,7 +27,10 @@ var ContentSharingSchema = new Schema({
      * @description 内容
      */
     content: { type: String },
-
+    /**
+     * @description 置顶标记
+     */
+    pinFlg: { type: Boolean },
     /**
      * @description 附件
      */
@@ -122,7 +125,7 @@ function _dataVerify (body) {
     if (_.isUndefined(body.authorID) ||
     _.isUndefined(body.authorName) ||
     _.isUndefined(body.title) ||
-    _.isUndefined(body.content) ) {
+    _.isUndefined(body.content)) {
         return false;
     } else {
         return true;
