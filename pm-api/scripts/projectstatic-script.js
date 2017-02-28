@@ -58,7 +58,7 @@
         var y = new Date().getFullYear();
         var m = new Date().getMonth() + 1;
         var month1 = moment(new Date()).format("YYYYMM");
-        var month2 = moment(new Date()).add('m', -1).format("YYYYMM");
+        var month2 = moment(new Date()).add('M', -1).format("YYYYMM");
 
         _getProjectList(function (err, data) {
             if (err) {
