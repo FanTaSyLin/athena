@@ -219,7 +219,7 @@
         }
         console.log(JSON.stringify(condition));
         ContentSharingSchema
-            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate"])
+            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate", "pinFlg"])
             .sort({
                 "pinFlg": 1,
                 "varDate": -1
