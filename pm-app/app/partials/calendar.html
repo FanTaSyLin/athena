@@ -1,3 +1,114 @@
-<div ng-controller="CalendarController as CalendarCtrl" data-ng-init="CalendarCtrl.initData()">
-    <div id="myCalendar"></div>
+<div ng-controller="CalendarController as CalendarCtrl" data-ng-init="CalendarCtrl.initData()" class="row">
+
+    <div class="row">
+        <!--  左侧信息栏 start -->
+        <div style="margin-top: 0px;" class="col-lg-2">
+
+            <!--项目及相关关注列表-->
+            <div id="myItemList" ng-show="CalendarCtrl.is_ListShow">
+                <div class="panel-group" id="itemlist">
+                    <!--项目列表-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse"
+                                   data-parent="#itemlist"
+                                   href="/#prolist">
+                                    <label style="margin-top: 0px;">项目列表</label>
+                                    <span class="badge">{{CalendarCtrl.projects.length }}</span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="prolist" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <ul ng-repeat="project in CalendarCtrl.projects" class="list-unstyled"
+                                    style="padding: 0px;">
+                                    <a ng-click="CalendarCtrl.selectproject(project)" class="dropdown-item btn btn-align-left"> {{project.cnName}}</a>
+                                </ul>
+                                <!-- {{CalendarCtrl.projects}}-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--关注列表-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="/#collapseTwo">
+                                    <label> 关注列表</label>
+                                    <span class="badge">{{CalendarCtrl.follows.length }}</span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul ng-repeat="follow in CalendarCtrl.follows" class="list-unstyled"
+                                    style="padding: 0px;">
+                                    <a class="dropdown-item btn btn-align-left"> {{follow.cnName}}</a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--其他列表-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="/#collapseThree">
+                                    <label>其他</label> <span class="badge">{{CalendarCtrl.others.length }}</span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul ng-repeat="other in CalendarCtrl.others" class="list-unstyled"
+                                    style="padding: 0px;">
+                                    <a class="dropdown-item btn btn-align-left"> {{other.cnName}}</a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  项目及相关关注列表 end -->
+            <div class="hidden">
+                <a ng-click="CalendarCtrl.listAnimation()">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+            </div>
+        </div>
+        <!--  左侧信息栏 end  -->
+        <!--  日历控件 start -->
+        <div class="col-lg-10">
+            <div id="myCalendar"></div>
+        </div>
+        <!--  日历控件 end -->
+    </div>
+
+    <button ng-click="CalendarCtrl.showDetail()"></button>
+    <!--工作记录详情对话框 start-->
+    <div class="modal fade" id="jobDetail">
+        <div class="modal-dialog size-jobsheet">
+            <div class="modal-content">
+                <div class="modal-header dialog-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title title-h4">
+                        工作记录详情
+                    </h4>
+                </div>
+                <div class="modal-body dialog-body" id="jobDetail_content">
+
+                </div>
+                <!--页脚-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                            ng-click="DptCtrl.disMissModal()">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--工作记录详情对话框 end-->
 </div>
