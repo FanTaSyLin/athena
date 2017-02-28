@@ -25,6 +25,8 @@
         self.follows = [];
         //其他列表
         self.others = [];
+        //当前显示的工作列表
+        self.events = [];
 
 
         self.showDetail = _showDetail;
@@ -121,7 +123,7 @@
                     data.forEach(function (project) {
                         self.projects.push(project);
                     });
-                    console.log(self.projects);
+                    // console.log(self.projects);
                 }, function (err) {
                     console.log(err);
                 });
@@ -163,6 +165,7 @@
                     };
                     self.projectevents.push(m_newevent);
                     m_event.push(m_newevent);
+                    self.events.push(m_newevent);
                 });
                 //重新加载events
                 myCalendar.fullCalendar('removeEvents');
@@ -258,10 +261,18 @@
             //是否被选择
             //console.log(project);
             var _id = project._id;
+            var m_event = [];
+            //遍历筛选事件
+            self.events.forEach(function (m_item) {
+                if (m_item.detail.projectID == _id) {
+                    m_event.push(m_item);
+                    // console.log(m_item);
+                }
+            });
             //刷新显示
             /*筛选 当前event*/
-            myCalendar.fullCalendar('updateEvents', event);
-           // console.log(m_eventlist);
+            myCalendar.fullCalendar('removeEvents');
+            myCalendar.fullCalendar('addEventSource', m_event);
         }
 
     }
