@@ -347,6 +347,11 @@ a:hover, a:focus, a:active {
     height: 60em;
 }
 
+.size-jobsheet-create {
+    width: 63em;
+    height: 60em;
+}
+
 .size-CreateProject {
     width: 47.5em;
     height: 50em;
@@ -410,6 +415,21 @@ a:hover, a:focus, a:active {
     background: white;
     height: 6em;
     width: 55em;
+    border-radius: 5px;
+}
+
+.size-jobsheet-create .function-select-area {
+    background: white;
+    height: 6em;
+    width: 58.5em;
+    border-radius: 5px;
+}
+
+.size-jobsheet-create .function-recode-area {
+    background: white;
+    height: auto;
+    max-height: 500px;
+    width: 58.5em;
     border-radius: 5px;
 }
 
