@@ -88,11 +88,22 @@
          * 设置置顶
          */
         self.pinSharing = _pinSharing;
-
+        /**
+         * 在新窗口中打开分享内容
+         */
+        self.newWindowSharing = _newWindowSharing;
 
         PMSoftServices.onNewSharingSubmited = _getSharings;
 
         PMSoftServices.onSharingEdited = _updateSharingList;
+
+        /**
+         * @description 在新窗口中打开分享内容
+         */
+        function _newWindowSharing(_id) {
+            var url = 'pm-soft/sharingcontent?id=' + _id;
+            window.open(url);
+        }
 
         /**
          * @description 设置置顶

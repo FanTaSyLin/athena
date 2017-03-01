@@ -91,12 +91,48 @@
             version: "0.0.1",
         }, _getContentList);
 
+        /**
+         * @description 获取分享详细信息
+         * @param {string} _id
+         */
         server.get({
             path: BASEPATH + "/sharing/detail",
             version: "0.0.1",
         }, _getSharingDetail);
 
+        /**
+         * @description 获取分享详细信息的内容部分
+         * @param {string} _id
+         */
+        server.get({
+            path: BASEPATH + "/sharing/content",
+            version: "0.0.1",
+        }, _getSharingContent);
+
     };
+
+    function _getSharingContent(req, res, next) {
+        if (_.isUndefined(req.params.id)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var id = req.params.id;
+
+        ContentSharingSchema
+            .findOne({
+                _id: id
+            }, ["content", "title"]).exec(function (err, doc) {
+
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
+
+                res.end(JSON.stringify(doc));
+
+            });
+    }
 
     function _pinSharing(req, res, next) {
         if (_.isUndefined(req.body)) {

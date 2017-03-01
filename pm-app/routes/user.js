@@ -22,6 +22,8 @@ module.exports = function () {
 
     router.route('/pm-soft/memberstatus').get(memberstatus);
 
+    router.route('/pm-soft/sharingcontent').get(sharingcontent);
+
     router.unless = require('express-unless');
 
     return router;
@@ -55,4 +57,8 @@ function projectInfo(req, res, next) {
 
 function memberstatus(req, res, next) {
     res.sendfile('app/member-status.html');
+}
+
+function sharingcontent(req, res, next) {
+    res.sendfile('app/sharing-content.html');
 }
