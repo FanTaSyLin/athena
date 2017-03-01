@@ -136,7 +136,10 @@
         self.modalEditContent = _modalEditContent;
         self.modalSaveContent = _modalSaveContent;
         self.modalUpdateRecode = _modalUpdateRecode;
-
+        /**
+         * 删除工作记录
+         */
+        self.deleteRecode = _deleteRecode;
         self.getDateFormat = _getDateFormat;
 
         function _init() {
@@ -267,60 +270,7 @@
 
         function _modalTypeSelect(type) {
             self.currentJobInfo.selectedJobType = type;
-        }
-
-        /*function _getJobListPagination(condition, cb) {
-            MyJobsServices.getJobListPagination(condition, function (data) {
-                cb(null, data.count);
-            }, function (data) {
-                cb(new Error(data), null);
-            });
-        }
-
-        /!**
-         * 获取页面的分页标签
-         * @param count
-         * @private
-         *!/
-        function _getPagination(count) {
-            var pageCount = Math.ceil(count / self.pageSize);
-            self.paginations = [];
-            self.minPage = 1;
-            self.maxPage = pageCount;
-            for (var i = 1; i <= pageCount; i++) {
-                self.paginations.push({
-                    num: i
-                });
-            }
-            if (count > self.pageSize) {
-                self.isShowPagination = true;
-            } else {
-                self.isShowPagination = false;
-            }
-        }
-
-        /!**
-         * 按分页获取工作记录
-         * @param condition
-         * @param cb
-         * @private
-         *!/
-        function _getJobListByPage(condition, cb) {
-            MyJobsServices.getJobListByPage(condition, function (data) {
-                var doc = data.doc;
-                self.myJobList.splice(0, self.myJobList.length);
-                doc.forEach(function (item) {
-                    item.thumb = _extractImg(item.content);
-                    item.cleanContent = _delHtmlTag(item.content);
-                    item.starTime = new Date(new Date(item.starTime.substring(0, 10) + ' ' + item.starTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
-                    item.endTime = new Date(new Date(item.endTime.substring(0, 10) + ' ' + item.endTime.substring(11, 19)).getTime() + 8 * 60 * 60 * 1000);
-                    self.myJobList.push(item);
-                });
-                cb(null);
-            }, function (err) {
-                cb(new Error(err));
-            });
-        }*/
+        }        
 
         /**
          * 提取字符串中的 Data URL 数据
@@ -586,7 +536,21 @@
                 JobInfo.modal('hide');
                 location.reload();
             }, function (data) {
+                
+            });
+        }
 
+        /**
+         * 删除工作记录
+         */
+        function _deleteRecode() {
+            var body = {};
+            body._id = self.currentJobInfo.jobModule._id;
+            MyJobsServices.deleteRecode(body, function (res) {
+                JobInfo.modal('hide');
+                location.reload();
+            }, function (data) {
+                alert("删除失败， 请稍后再试。");
             });
         }
 

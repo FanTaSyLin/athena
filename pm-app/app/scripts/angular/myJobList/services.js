@@ -51,6 +51,8 @@
          */
         self.getJobLogs = _getJobLogs;
 
+        self.deleteRecode = _deleteRecode;
+
 
         function _getJobLogs_TurnBack(account, projectIDs, skip, limit, successFn, errorFn) {
             var projectIDStr = "";
@@ -165,6 +167,10 @@
 
         function _recodeUpdate(data, successFn, errorFn) {
             $http.post(BASEPATH + '/jobrecode/update', data).success(successFn).error(errorFn);
+        }
+
+        function _deleteRecode(body, successFn, errorFn) {
+            $http.post(BASEPATH + '/jobrecode/delete', body).success(successFn).error(errorFn);
         }
 
         return self;

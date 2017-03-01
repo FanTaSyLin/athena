@@ -155,7 +155,7 @@
 
             <!-- 内容 -->
             <div class="modal-body dialog-body">
-                <div class="container">
+                <div>
                     <!-- 状态选择区 -->
                     <div class="row">
                         <div class="function-select-area item-border">
@@ -296,6 +296,7 @@
             </div>
             <!-- 页脚 -->
             <div class="modal-footer">
+                <button type="button" class="btn btn-warning" ng-click="MyJobsCtrl.deleteRecode()" ng-show="MyJobsCtrl.currentJobInfo.isShowEditBtn">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" ng-disabled="!MyJobsCtrl.currentJobInfo.enableSubmitBtn"
                         ng-click="MyJobsCtrl.modalUpdateRecode()">Save
