@@ -20,8 +20,8 @@
         var account = "";
         var departmentID = "";
         var departmentName = "";
-            var sharingEdit = angular.element(document.getElementById('sharingEdit'));
-            var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
+        var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
         var departmentNav = angular.element(document.getElementById('departmentNav'));
         /*详情弹窗*/
@@ -84,10 +84,37 @@
          * 删除分享内容
          */
         self.deleteSharing = _deleteSharing;
+        /**
+         * 设置置顶
+         */
+        self.pinSharing = _pinSharing;
+
 
         PMSoftServices.onNewSharingSubmited = _getSharings;
 
         PMSoftServices.onSharingEdited = _updateSharingList;
+
+        /**
+         * @description 设置置顶
+         * @param {Object} sharingDetail 分享内容详情
+         */
+        function _pinSharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            body.pinFlg = sharingDetail.pinFlg;
+            body.pinFlg = !body.pinFlg;
+            PMSoftServices.setSharingPin(body, function (res) {
+                sharingDetail.pinFlg = !sharingDetail.pinFlg;
+                for (var i = 0; i < self.sharings.length; i++) {
+                    if (self.sharings[i]._id === sharingDetail._id) {
+                        self.sharings[i].pinFlg = sharingDetail.pinFlg;
+                        break;
+                    }
+                }
+            }, function (res) {
+                alert("设置失败，请检查网络并稍后再试。");
+            });
+        }
 
         function _updateSharingList(sharingItem) {
             for (var i = 0; i < self.sharings.length; i++) {
@@ -190,15 +217,15 @@
 
         function _getSharingDetail(_id) {
             PMSoftServices.getSharingDetail(_id, function (res) {
-                    self.sharingDetail = res.doc[0];
-                    if (account === self.sharingDetail.authorID) {
-                        self.authorIsMe = true;
-                    } else {
-                        self.authorIsMe = false;
-                    }
-                }, function (res) {
+                self.sharingDetail = res.doc[0];
+                if (account === self.sharingDetail.authorID) {
+                    self.authorIsMe = true;
+                } else {
+                    self.authorIsMe = false;
+                }
+            }, function (res) {
 
-                });
+            });
         }
 
         function _selectSharingRange(sharingRange) {
@@ -283,7 +310,7 @@
                  * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
                 _getPageData(dptNum);
-                
+
             }
         }
 

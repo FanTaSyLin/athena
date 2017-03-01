@@ -299,6 +299,9 @@
                                         </p>
                                     </div>
                                 </section>
+                                <div style="position: absolute;top: 16px;right: 8px" ng-show="sharing.pinFlg">
+                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                </div>
                             </li>
                         </ul>
                     </nav>
@@ -321,20 +324,28 @@
                                                     <strong class="">分享菜单</strong>
                                                 </div>
                                                 <div class="dropdown-split-line"></div>
-                                                <a class="dropdown-item" href ng-click="DptCtrl.showSharingEdit(DptCtrl.sharingDetail)">
+                                                <a class="dropdown-item" href ng-click="DptCtrl.showSharingEdit(DptCtrl.sharingDetail)" style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     编辑分享
                                                 </a>
-                                                <a class="dropdown-item" href disabled="disabled">
+                                                <a class="dropdown-item" href ng-click="DptCtrl.pinSharing(DptCtrl.sharingDetail)"  style="color: #3f3f3f" ng-show="!DptCtrl.sharingDetail.pinFlg">
+                                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                                    置顶分享
+                                                </a>
+                                                <a class="dropdown-item" href ng-click="DptCtrl.pinSharing(DptCtrl.sharingDetail)"  style="color: #3f3f3f" ng-show="DptCtrl.sharingDetail.pinFlg">
+                                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                                    取消置顶
+                                                </a>
+                                                <a class="dropdown-item" href  style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-duplicate"></span>
                                                     复制分享
                                                 </a>
-                                                <a class="dropdown-item" href disabled="disabled">
+                                                <a class="dropdown-item" href  style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-share"></span>
                                                     移动分享
                                                 </a>
                                                 <div class="dropdown-split-line" href></div>
-                                                <a class="dropdown-item" href ng-click="DptCtrl.deleteSharing(DptCtrl.sharingDetail)">
+                                                <a class="dropdown-item" href ng-click="DptCtrl.deleteSharing(DptCtrl.sharingDetail)"  style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                     删除分享
                                                 </a>

@@ -100,6 +100,7 @@ ContentSharingSchema.methods.submitInit = function (body) {
         for (var p in body) {
             self[p] = body[p];
         }
+        self.pinFlg = false;
         self.varDate = new Date();
         self.logs = [];
         self.logs.push({

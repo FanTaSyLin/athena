@@ -52,6 +52,10 @@
              */
             deleteSharing: _deleteSharing,
 
+            /**
+             * 设置分享置顶
+             */
+             setSharingPin: _setSharingPin,
 
             /**
              * 当提交了一个新的分享时触发此事件
@@ -114,6 +118,10 @@
         }
 
         return self;
+
+        function _setSharingPin(body, successFn, errorFn) {
+            $http.post(BASEPATH + "/sharing/pin", body).success(successFn).error(errorFn);
+        }
 
         function _deleteSharing(data, successFn, errorFn) {
             $http.post(BASEPATH + "/sharing/delete", data).success(successFn).error(errorFn);
