@@ -20,6 +20,10 @@ var ContentSharingSchema = new Schema({
      */
     varDate: { type: Date },
     /**
+     * @description 隐私标记
+     */
+    privacyFlg: { type: Boolean },    
+    /**
      * @description 标题
      */
     title: { type: String },
@@ -101,6 +105,7 @@ ContentSharingSchema.methods.submitInit = function (body) {
             self[p] = body[p];
         }
         self.pinFlg = false;
+        self.privacyFlg = false;
         self.varDate = new Date();
         self.logs = [];
         self.logs.push({
