@@ -49,6 +49,11 @@
          */
         self.submitSharing = _submitSharing;
 
+        /**
+         * 保存已编辑的内容
+         */
+        self.saveSharing = _saveSharing;
+
         function _submitSharing() {
             var body = {};
             body.authorID = $cookies.get("account");
@@ -75,6 +80,39 @@
                 body._id = PMSoftServices.currentSharingDetail._id;
                 PMSoftServices.editSharing(body, function (res) {
                     sharingEditModal.modal('hide');
+                    if (PMSoftServices.onSharingEdited !== undefined && typeof PMSoftServices.onSharingEdited === "function") {
+                        PMSoftServices.onSharingEdited(body);
+                    }
+                }, function (res) {
+                    alert("提交失败。请检查网络！");
+                });
+            }
+        }
+
+        function _saveSharing() {
+            var body = {};
+            body.authorID = $cookies.get("account");
+            body.authorName = $cookies.get("name");
+            body.title = self.sharingTitle;
+            body.content = summernote.summernote('code');
+            body.attachments = [];
+            body.tags = [];
+            body.ranges = [{
+                type: self.currentTargetItem.type,
+                param: [self.currentTargetItem.param]
+            }];
+
+            if (operateType === "Create") {
+                PMSoftServices.submitSharing(body, function (res) {
+                    if (PMSoftServices.onNewSharingSubmited !== undefined && typeof PMSoftServices.onNewSharingSubmited === "function") {
+                        PMSoftServices.onNewSharingSubmited();
+                    }
+                }, function (res) {
+                    alert("提交失败。请检查网络！");
+                });
+            } else if (operateType === "Edit") {
+                body._id = PMSoftServices.currentSharingDetail._id;
+                PMSoftServices.editSharing(body, function (res) {
                     if (PMSoftServices.onSharingEdited !== undefined && typeof PMSoftServices.onSharingEdited === "function") {
                         PMSoftServices.onSharingEdited(body);
                     }
