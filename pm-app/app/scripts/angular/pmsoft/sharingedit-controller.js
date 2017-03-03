@@ -114,6 +114,7 @@
             summernote.summernote({
                 minHeight: 700,
                 maxHeight: 700,
+                dialogsInBody: true,
                 toolbar: [
                     ['option', ['undo', 'redo', 'style']],
                     ['style', ['bold', 'italic', 'underline', 'clear']],
