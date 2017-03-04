@@ -30,6 +30,7 @@
         /*是否为当前部门经理 初始化时候配置 用于判断显示*/
         var is_dptManager = false;
 
+        self.account = "";
         /*当前显示的工作记录*/
         self.currentJob = {};
         self.members = [];
@@ -92,10 +93,36 @@
          * 在新窗口中打开分享内容
          */
         self.newWindowSharing = _newWindowSharing;
+        /**
+         * 将分享内容设置为隐私或公开状态
+         */
+        self.setPrivacySharing = _setPrivacySharing;
 
         PMSoftServices.onNewSharingSubmited = _getSharings;
 
         PMSoftServices.onSharingEdited = _updateSharingList;
+
+        /**
+         * @description 将分享内容设置为隐私或公开状态
+         * @param {Object} sharingDetail 
+         */
+        function _setPrivacySharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            body.privacyFlg = sharingDetail.privacyFlg;
+            body.privacyFlg = !body.privacyFlg;
+            PMSoftServices.setSharingPrivacy(body, function (res) {
+                sharingDetail.privacyFlg = !sharingDetail.privacyFlg;
+                for (var i = 0; i < self.sharings.length; i++) {
+                    if (self.sharings[i]._id === sharingDetail._id) {
+                        self.sharings[i].privacyFlg = sharingDetail.privacyFlg;
+                        break;
+                    }
+                }
+            }, function (res) {
+                alert("设置失败，请检查网络并稍后再试。");
+            });
+        }
 
         /**
          * @description 在新窗口中打开分享内容
@@ -174,7 +201,14 @@
                     }
                 });
                 if (self.sharingDetail === undefined && self.sharings.length > 0) {
-                    _getSharingDetail(self.sharings[0]._id);
+                    for (var i = 0; i < self.sharings.length; i++) {
+                        if (self.sharings[i].privacyFlg === true && self.sharings[i].authorID !== account) {
+                            continue;
+                        } else {
+                            _getSharingDetail(self.sharings[i]._id);
+                            break;
+                        }
+                    }                    
                 }
             }, function (res) {
 
@@ -277,6 +311,7 @@
 
                 sysconfig = $cookies.getObject('Sysconfig');
                 account = $cookies.get('account');
+                self.account = account;
                 departmentID = $cookies.get("department");
                 for (var i = 0; i < sysconfig[0].departments.length; i++) {
                     if (sysconfig[0].departments[i].id.toString() === departmentID) {

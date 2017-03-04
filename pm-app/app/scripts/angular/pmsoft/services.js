@@ -57,6 +57,11 @@
              */
              setSharingPin: _setSharingPin,
 
+             /**
+              * 设置隐私模式
+              */
+             setSharingPrivacy: _setSharingPrivacy,
+
             /**
              * 当提交了一个新的分享时触发此事件
              */
@@ -118,6 +123,10 @@
         }
 
         return self;
+
+        function _setSharingPrivacy(body, successFn, errorFn) {
+            $http.post(BASEPATH + "/sharing/privacy", body).success(successFn).error(errorFn);
+        }
 
         function _setSharingPin(body, successFn, errorFn) {
             $http.post(BASEPATH + "/sharing/pin", body).success(successFn).error(errorFn);

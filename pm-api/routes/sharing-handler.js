@@ -80,6 +80,16 @@
         }, _pinSharing);
 
         /**
+         * @description 设置隐私或公开
+         * @param {string} body._id
+         * @param {Boolean} body.privacyFlg 隐私标记
+         */
+        server.post({
+            path: BASEPATH + "/sharing/privacy",
+            version: "0.0.1",
+        }, _privacySharing);
+
+        /**
          * @description 获取分享列表
          * @param {string} authorid 作者账号
          * @param {string} rangetype 可见范围
@@ -131,6 +141,29 @@
 
                 res.end(JSON.stringify(doc));
 
+            });
+    }
+
+    function _privacySharing(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: "body is undefined"
+            }));
+        }
+        var body = req.body;
+        ContentSharingSchema
+            .update({
+                _id: body._id
+            }, {
+                $set: {
+                    privacyFlg: body.privacyFlg
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
             });
     }
 
@@ -255,7 +288,7 @@
         }
         console.log(JSON.stringify(condition));
         ContentSharingSchema
-            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate", "pinFlg"])
+            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate", "pinFlg", "privacyFlg"])
             .sort({
                 "pinFlg": -1,
                 "varDate": -1
