@@ -148,9 +148,10 @@
                     console.log('发现重复记录: \r\n记录人：' + data[x].authorID + "\r\n开始时间：" + data[x].starTime + "\r\n内容：" + data[x].content);
                     break;
                 }
-                if (isUnique) {
-                    tmpJobLogs.push(data[x]);
-                }
+
+            }
+            if (isUnique) {
+                tmpJobLogs.push(data[x]);
             }
         }
         for (var i = 0; i < tmpJobLogs.length; i++) {
