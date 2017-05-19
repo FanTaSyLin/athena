@@ -303,6 +303,11 @@
             _getPageData(dptNum);
         }
 
+        /**
+         * @description 页面初始化函数 运行于页面加载完成后
+         * 既包括数据获取 也包括页面相关控件的初始化
+         * @private
+         */
         function _initData() {
             //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
@@ -389,7 +394,8 @@
                     var doc = res.doc;
                     self.departmentLogs.splice(0, self.departmentLogs.length);
                     doc.forEach(function (item) {
-                        item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        // item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        item.showTime = moment(item.starTime).format('MM月DD日 YYYY HH:mm');
                         self.departmentLogs.push(item);
                         if (self.displayLogs.length < MAXNUMPREPAGE) {
                             self.displayLogs.push(item);
@@ -562,7 +568,7 @@
         }
 
         /**
-         *
+         * @description 打开成员信息页面
          * @param member
          * @private
          */
