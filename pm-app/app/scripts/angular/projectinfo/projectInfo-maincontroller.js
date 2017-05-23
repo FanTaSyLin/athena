@@ -662,6 +662,7 @@
             var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
             self.startDate = startDate;
             self.endDate = endDate;
+            self.jobLogs.splice(0, self.jobLogs.length);
             _getMemberJobLogs(self.selectedMemberAccount, startDate, endDate, skipNum, limitNum);
         }
 

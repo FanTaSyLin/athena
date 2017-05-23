@@ -354,7 +354,7 @@
                 /**
                  * 获取是否为部门经理 软件中心，决定显示系数权限
                  */
-                is_dptManager = _getIsManager();
+                is_dptManager = _getIsManager() || isManager;
 
                 dptNum = $cookies.get('department');
                 /**
@@ -393,6 +393,7 @@
 
                     var doc = res.doc;
                     self.departmentLogs.splice(0, self.departmentLogs.length);
+                    self.displayLogs.splice(0, self.displayLogs.length);
                     doc.forEach(function (item) {
                         // item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                         item.showTime = moment(item.starTime).format('MM月DD日 YYYY HH:mm');
