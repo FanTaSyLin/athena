@@ -78,7 +78,7 @@
             /*已提交的工作列表  用来比对时间是否冲突*/
             recodedJobs: [],
             /*本条工作记录相关的操作日志*/
-            logs:[]
+            logs: []
         };
         /**
          * 工作记录列表
@@ -176,7 +176,7 @@
             });
         }
 
-        function _getDateFormat (time) {
+        function _getDateFormat(time) {
             return moment(time).format("YYYY年MM月DD日");
         }
 
@@ -224,7 +224,7 @@
                         self.jobLogs.push(item);
                         count++;
                     });
-                    if (count !== MAXNUMPREPAGE) {
+                   if (count !== MAXNUMPREPAGE) {
                         self.isShowShowMoreAcitivtyBtn = false;
                     } else {
                         self.isShowShowMoreAcitivtyBtn = true;
@@ -270,7 +270,9 @@
 
         function _modalTypeSelect(type) {
             self.currentJobInfo.selectedJobType = type;
-        }        
+
+        }
+        
 
         /**
          * 提取字符串中的 Data URL 数据
@@ -382,9 +384,9 @@
             return moment(time).format("HH:mm");
 
             /*return ((time.getHours() < 10) ? '0' + time.getHours() : time.getHours())
-                + ':' +
-                ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
-            */
+             + ':' +
+             ((time.getMinutes() < 10) ? '0' + time.getMinutes() : time.getMinutes());
+             */
         }
 
         /**
@@ -410,13 +412,13 @@
             });
             self.currentJobInfo.selectedDate = jobModule.starTime;
             self.currentJobInfo.selectedStartTime = jobModule.starTime;
-            self.currentJobInfo.selectedEndTime =  jobModule.endTime;
+            self.currentJobInfo.selectedEndTime = jobModule.endTime;
             self.currentJobInfo.selectedJobType = jobModule.type;
             self.currentJobInfo.content = jobModule.content;
             self.currentJobInfo.logs = jobModule.logs.sort(function (a, b) {
                 var x = new Date(a.logTime).getTime();
                 var y = new Date(b.logTime).getTime();
-                return y-x;
+                return y - x;
             });
             self.currentJobInfo.jobModule = jobModule;
             if (jobModule.status === 'TurnBack') {
@@ -493,8 +495,8 @@
          */
         function _modalEditContent() {
             mySummerNote.summernote({
-                minHeight:200,
-                maxHeight:390
+                minHeight: 200,
+                maxHeight: 390
             });
             mySummerNote.summernote({focus: true});
             self.currentJobInfo.isShowSaveBtn = true;
@@ -567,9 +569,19 @@
             var result = true;
 
             self.currentJobInfo.recodedJobs.forEach(function (item) {
-                if (endTime.getTime() > item.startTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
-                    result = result && false;
+                //若为Date类型--初始化添加
+                if (angular.isDate(endTime) && angular.isDate(startTime)) {
+                    if (endTime.getTime() > item.startTime.getTime() && startTime.getTime() < item.endTime.getTime()) {
+                        result = result && false;
+                    }
                 }
+                else {
+                    //若为moment 修改后添加
+                    if (endTime.isBefore(item.startTime) && startTime.isAfter(item.endTime)) {
+                        result = result && false;
+                    }
+                }
+
             });
 
             return !result;
