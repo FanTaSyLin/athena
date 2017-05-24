@@ -51,6 +51,8 @@
          */
         self.getJobLogs = _getJobLogs;
 
+        self.deleteRecode = _deleteRecode;
+
 
         function _getJobLogs_TurnBack(account, projectIDs, skip, limit, successFn, errorFn) {
             var projectIDStr = "";
@@ -149,7 +151,7 @@
         function _getJobList(condition, successFn, errorFn) {
             var conditionStr = '';
             if (condition.username) {
-                conditionStr += ('username=' + condition.username + '&');
+                conditionStr += ('memberid=' + condition.username + '&');
             }
             if (condition.projectID) {
                 conditionStr += ('projectid=' + condition.projectID + '&');
@@ -165,6 +167,10 @@
 
         function _recodeUpdate(data, successFn, errorFn) {
             $http.post(BASEPATH + '/jobrecode/update', data).success(successFn).error(errorFn);
+        }
+
+        function _deleteRecode(body, successFn, errorFn) {
+            $http.post(BASEPATH + '/jobrecode/delete', body).success(successFn).error(errorFn);
         }
 
         return self;

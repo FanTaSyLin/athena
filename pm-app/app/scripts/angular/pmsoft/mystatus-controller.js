@@ -203,14 +203,39 @@
                 labelList.push('近期无工作记录');
                 datalist.push(100);
             } else {
+                /**
+                 * @typedef projectItem
+                 * @property {string} name 
+                 * @property {Number} value 
+                 */
+                var tmpList = [];
                 for (var i = 0; i < datas.length; i++) {
                     total += datas[i].duration;
-                    labelList.push(datas[i].projectCName);
-                    datalist.push(datas[i].duration);
+                    /**
+                     * type projectItem
+                     */
+                    var projectItem = {
+                        name: datas[i].projectCName,
+                        value: datas[i].duration
+                    };
+                    if (labelList.indexOf(datas[i].projectCName) < 0) {
+                        labelList.push(datas[i].projectCName);
+                    }
+                    var isExist = false;
+                    for (var j = 0; j < tmpList.length; j++) {
+                        if (tmpList[j].name === datas[i].projectCName) {
+                            tmpList[j].value += datas[i].duration;
+                            isExist = true;
+                            break;
+                        }
+                    } 
+                    if (!isExist) {
+                        tmpList.push(projectItem);
+                    }
                 }
 
-                for (var i = 0; i < datalist.length; i++) {
-                    datalist[i] = Number((datalist[i] / total) * 100).toFixed(0);
+                for (var k = 0; k < tmpList.length; k++) {
+                    datalist.push(Number((tmpList[k].value / total) * 100).toFixed(0));
                 }
             }
 

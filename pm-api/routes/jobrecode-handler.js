@@ -76,24 +76,52 @@
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist',
             version: '0.0.1'
-        }, _getUnauditedList);//获取未审核工作记录 审核页面专用
+        }, _getUnauditedList); //获取未审核工作记录 审核页面专用
 
         server.get({
             path: BASEPATH + '/jobrecode/unauditedlist-count',
             version: '0.0.1'
-        }, _getUnauditedsCount);//获取未审核工作记录统计信息
+        }, _getUnauditedsCount); //获取未审核工作记录统计信息
 
         server.post({
             path: BASEPATH + '/jobrecode/check',
             version: '0.0.1'
-        }, _checkJob);//审核工作记录
+        }, _checkJob); //审核工作记录
 
         server.post({
             path: BASEPATH + '/jobrecode/turnback',
             version: '0.0.1'
-        }, _turnBackJob);//退回已提交的工作记录
+        }, _turnBackJob); //退回已提交的工作记录
+
+        server.post({
+            path: BASEPATH + '/jobrecode/delete',
+            version: '0.0.1'
+        }, _deleteRecode);
 
     };
+
+    function _deleteRecode(req, res, next) {
+
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var body = req.body;
+
+        JobLogSchema
+            .remove({
+                _id: body._id
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
+            });
+
+    }
 
     function _getfixNumRecodes(req, res, next) {
 
@@ -109,7 +137,7 @@
 
         if (!_.isUndefined(accounts)) {
             accounts = accounts.split(' ');
-            if(accounts.length > 1) {
+            if (accounts.length > 1) {
                 condition.authorID = {
                     $in: accounts
                 };
@@ -154,7 +182,9 @@
 
         JobLogSchema
             .find(condition)
-            .sort({"starTime": -1})
+            .sort({
+                "starTime": -1
+            })
             .skip(skipNum)
             .limit(limitNum)
             .exec(function (err, doc) {
@@ -290,7 +320,9 @@
             };
         }
 
-        JobLogSchema.find(condition).sort({'starTime': -1}).exec(function (err, doc) {
+        JobLogSchema.find(condition).sort({
+            'starTime': -1
+        }).exec(function (err, doc) {
 
             if (err) {
                 return next(new DBOptionError(415, err));
@@ -332,13 +364,16 @@
 
         if (!_.isUndefined(jobligid)) {
             //添加查询条件： ==username
-            condition._id=jobligid;
+            condition._id = jobligid;
 
         }
 
 
 
-        JobLogSchema.find(condition).sort({'data': 1, 'starTime': 1}).exec(function (err, doc) {
+        JobLogSchema.find(condition).sort({
+            'data': 1,
+            'starTime': 1
+        }).exec(function (err, doc) {
 
             if (err) {
                 return next(new DBOptionError(415, err));
@@ -417,7 +452,9 @@
             .find(condition)
             .skip(startNum - 1)
             .limit(pageSize)
-            .sort({'starTime': -1})
+            .sort({
+                'starTime': -1
+            })
             .exec(function (err, doc) {
 
                 if (err) {
@@ -470,7 +507,10 @@
         JobLogSchema
             .find(condition)
             .limit(200)
-            .sort({'data': -1, 'starTime': -1})
+            .sort({
+                'data': -1,
+                'starTime': -1
+            })
             .exec(function (err, doc) {
                 if (err) {
                     return next(new DBOptionError(415, err));
@@ -515,10 +555,14 @@
                     },
                     $push: {
                         logs: {
-                            type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
-                            logTime: new Date(), /*日志时间戳*/
-                            msg: '审核了本条记录。', /*日志内容*/
-                            authorID: body.reviewerID.toString(), /*编辑人账户*/
+                            type: 'Change',
+                            /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                            logTime: new Date(),
+                            /*日志时间戳*/
+                            msg: '审核了本条记录。',
+                            /*日志内容*/
+                            authorID: body.reviewerID.toString(),
+                            /*编辑人账户*/
                             authorName: body.reviewerName.toString() /*编辑人姓名*/
                         }
                     }
@@ -605,10 +649,14 @@
                 },
                 $push: {
                     logs: {
-                        type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
-                        logTime: new Date(), /*日志时间戳*/
-                        msg: '退回了本条记录。原因：' + body.turnBackReason + '。', /*日志内容*/
-                        authorID: body.reviewerID.toString(), /*编辑人账户*/
+                        type: 'Change',
+                        /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                        logTime: new Date(),
+                        /*日志时间戳*/
+                        msg: '退回了本条记录。原因：' + body.turnBackReason + '。',
+                        /*日志内容*/
+                        authorID: body.reviewerID.toString(),
+                        /*编辑人账户*/
                         authorName: body.reviewerName.toString() /*编辑人姓名*/
                     }
                 }
@@ -721,10 +769,14 @@
                     },
                     $push: {
                         logs: {
-                            type: 'Edit', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
-                            logTime: new Date(), /*日志时间戳*/
-                            msg: '修改了本条记录。', /*日志内容*/
-                            authorID: body.authorID.toString(), /*编辑人账户*/
+                            type: 'Edit',
+                            /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                            logTime: new Date(),
+                            /*日志时间戳*/
+                            msg: '修改了本条记录。',
+                            /*日志内容*/
+                            authorID: body.authorID.toString(),
+                            /*编辑人账户*/
                             authorName: body.authorName.toString() /*编辑人姓名*/
                         }
                     }

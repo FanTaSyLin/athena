@@ -29,6 +29,8 @@
         var memberStatusModal = angular.element(document.getElementById('member-status-modal'));
         var memberAddModal = angular.element(document.getElementById('member-add-modal'));
         var memberNav = angular.element(document.getElementById('memberNav'));
+        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
+        
         /*详情弹窗*/
         var jobDetail = angular.element(document.getElementById('jobDetail'));
 
@@ -60,6 +62,12 @@
         self.pageNum = 0;
         self.startDate = "";
         self.endDate = "";
+        self.sortType = "VarDate";
+        self.sharingRange = "所有分享";
+        self.sharings = [];
+        self.currentSharing = {};
+        self.sharingDetail = undefined;
+        self.authorIsMe = false;
 
         self.init = _init;
         self.starred = _starred;
@@ -91,13 +99,176 @@
         self.formatDateTime = _formatDateTime;
         /*显示工作记录详情模态框*/
         self.showActivityDetial = _showActivityDetial;
-
+        /**/
         self.selectedPType = _selectedPType;
+        /*选择分享列表排序方式*/
+        self.selectSortType = _selectSortType;
+        /*判断是否选中了某个分享列表的排序方式*/
+        self.isSelectedSortType = _isSelectedSortType;
+        /*选择分享列表的可见范围*/
+        self.selectSharingRange = _selectSharingRange;
+        /*选择分享列表中的对象*/
+        self.selectSharingItem = _selectSharingItem;
+        /*判断分享对象是否是已选中的对象*/
+        self.sharingItemIsSelected = _sharingItemIsSelected;
+        /*显示编辑分享对话框*/
+        self.showSharingEdit = _showSharingEdit;
+        /*删除分享内容*/
+        self.deleteSharing = _deleteSharing;
+        /*定义 当成功提交了一个新的分享后调用的函数*/
+        ProjectInfoServices.onNewSharingSubmited = _getSharings;
+        /*定义 当成功提交了一个修改后调用的函数*/
+        ProjectInfoServices.onSharingEdited = _updateSharingList;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function() {
             _selectMonthRange();
         });
+
+        /**
+         * @desc 更新列表
+         */
+        function _updateSharingList(sharingItem) {
+            for (var i = 0; i < self.sharings.length; i++) {
+                if (self.sharings[i]._id === sharingItem._id) {
+                    self.sharings[i].title = sharingItem.title;
+                    self.sharings[i].varDate = sharingItem.varDate;
+                }
+            }
+            _getSharingDetail(sharingItem._id);
+        }
+
+        /**
+         * @desc 获取详细分享内容
+         */
+        function _getSharingDetail(_id) {
+            ProjectInfoServices.getSharingDetail(_id, function (res) {
+                    self.sharingDetail = res.doc[0];
+                    if (account === self.sharingDetail.authorID) {
+                        self.authorIsMe = true;
+                    } else {
+                        self.authorIsMe = false;
+                    }
+                }, function (res) {
+
+                });
+        }
+
+        /**
+         * @desc 获取分享记录列表
+         */
+        function _getSharings() {
+
+            var rangeType = "project";
+            var id = self.thisProject._id;
+
+            ProjectInfoServices.getSharings(rangeType, id, function (res) {
+                var doc = res.doc;
+                // self.sharings.splice(0, self.sharings.length);
+                doc.forEach(function (item) {
+                    var isExist = false;
+                    for (var i = 0; i < self.sharings.length; i++) {
+                        if (self.sharings[i]._id === item._id) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        item.showTime = moment(item.varDate).format("YYYY年MM月DD日");
+                        self.sharings.push(item);
+                    }
+                });
+                if (self.sharingDetail === undefined && self.sharings.length > 0) {
+                    _getSharingDetail(self.sharings[0]._id);
+                }
+            }, function (res) {
+
+            });
+        }
+
+        /**
+         * @desc 删除分享内容
+         */
+        function _deleteSharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            ProjectInfoServices.deleteSharing(body, function (res) {
+                var index = self.sharings.indexOf(self.currentSharing);
+                self.sharings.splice(index, 1);
+                self.sharingDetail = {};
+            }, function (res) {
+
+            });
+        }
+
+        /**
+         * @desc 显示编辑分享对话框
+         */
+        function _showSharingEdit(sharingDetail) {
+            if (sharingDetail) {
+                ProjectInfoServices.currentSharingDetail = {};
+                ProjectInfoServices.currentSharingDetail = sharingDetail;
+                ProjectInfoServices.currentSharingDetail.targetItem = {
+                    id: self.thisProject.id,
+                    name: self.thisProject.cnName,
+                    type: "project"
+                };
+            } else {
+                ProjectInfoServices.currentSharingDetail = undefined;
+            }
+            ProjectInfoServices.sharingTargets.splice(0, ProjectInfoServices.sharingTargets.length);
+            ProjectInfoServices.sharingTargets.push({
+                param: self.thisProject.id,
+                name: self.thisProject.cnName,
+                type: "project"
+            });
+            ProjectInfoServices.sharingTarget.param = self.thisProject._id;
+            ProjectInfoServices.sharingTarget.name = self.thisProject.cnName;
+            ProjectInfoServices.sharingTarget.type = "project";
+            sharingEdit.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        /**
+         * @desc 判断分享对象是否是已选中的对象
+         */
+        function _sharingItemIsSelected(item) {
+            return item._id === self.currentSharing._id;
+        }
+
+        /**
+         * @desc 选择分享列表中的对象
+         */
+        function _selectSharingItem(item) {
+            var orgItem = self.currentSharing;
+            self.currentSharing = item;
+            if (orgItem !== item) {
+                _getSharingDetail(self.currentSharing._id);
+            }
+        }
+
+        /**
+         * @desc 选择分享列表的可见范围
+         */
+        function _selectSharingRange(sharingRange) {
+            self.sharingRange = sharingRange;
+        }
+
+        /**
+         * @desc 判断是否选中了某个分享列表的排序方式
+         */
+        function _isSelectedSortType(sortType) {
+            return self.sortType === sortType;
+        }
+
+        /**
+         * @description 选择分享列表排序方式
+         */
+        function _selectSortType(sortType) {
+            self.sortType = sortType;
+        }
 
         function _selectedPType(type) {
             self.thisProjectInfo.type = type;
@@ -491,6 +662,7 @@
             var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
             self.startDate = startDate;
             self.endDate = endDate;
+            self.jobLogs.splice(0, self.jobLogs.length);
             _getMemberJobLogs(self.selectedMemberAccount, startDate, endDate, skipNum, limitNum);
         }
 
@@ -717,7 +889,13 @@
         }
 
         function _selectProfileNavItem(item) {
+            var orgItem = self.profileNavCurrentItem;
             self.profileNavCurrentItem = item;
+            if (orgItem !== item) {
+                if (item === "Shared") {
+                    _getSharings();
+                }
+            }
         }
 
         function _memberItemIsSelected(memberAccount) {
