@@ -49,7 +49,7 @@
                 for (var j = 0; j < tmpJogLogs.length; j++) {
                     if (tmpJogLogs[j].authorID === data[i].authorID && tmpJogLogs[j].content === data[i].content && moment(tmpJogLogs[j].starTime).format('yyyy-MM-dd hh:mm:ss') === moment(data[i].starTime).format('yyyy-MM-dd hh:mm:ss')) {
                         isUnique = false;
-                        console.log('发现重复记录: \r\n记录人：' + data[i].authorID + "\r\n开始时间：" + data[i].starTime + "\r\n内容：" + data[i].content);
+                        console.log('发现重复记录: \r\n记录人：' + data[i].authorID + "\r\n开始时间：" + data[i].starTime + "\r\n内容：" + data[i].content + "\r\n");
                         noUniques.push(data[i]);
                         break;
                     }
