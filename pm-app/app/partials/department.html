@@ -90,7 +90,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 member-list">
+            <!--<div class="col-md-1 member-list">
                 <ul class="nav nav-pills nav-stacked" id="memberNav">
                     <li ng-class="{active: DptCtrl.memberItemIsSelected('all')}">
                         <a href ng-click="DptCtrl.selectMemberItem('all')">
@@ -103,7 +103,30 @@
                             </a>
                     </li>
                 </ul>
-            </div>
+            </div>-->
+<!--修改-->
+                <div class="col-md-1 member-list">
+                    <ul class="nav nav-pills nav-stacked" id="memberNav">
+                        <li ng-class="{active: DptCtrl.memberItemIsSelected('all')}">
+                            <a href ng-click="DptCtrl.selectMemberItem('all')">
+                                全体
+                            </a>
+                        </li>
+                        <li ng-repeat="member in DptCtrl.members" ng-class="{active: DptCtrl.memberItemIsSelected(member.account)}">
+
+                            <a data-toggle="collapse" data-parent="#accordion" href="/#{{member.name}}" ng-click="DptCtrl.selectMemberItem(member.account)">
+                                {{member.name}}
+                            </a>
+
+                            <div id="{{member.name}}" class="panel-collapse collapse" style="width: 150px">
+                                <div class="panel-body artlist" style="padding: 8px;width: 150px" ng-repeat="activeItem in member.activeList" title="{{activeItem}}" ng-click="DptCtrl.slectArticle(activeItem,member.account)" ng-class="{'artice': DptCtrl.ArticeSelected(activeItem,member.account)}">
+                                    <div class="text-overflow">{{activeItem}}</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
             <!--活动 end-->
         </div>
         

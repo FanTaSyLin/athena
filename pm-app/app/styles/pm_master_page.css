@@ -1921,7 +1921,20 @@ h3 {
     display: inherit
 }
 
-
+/*增加*/
+.artlist{
+    cursor: pointer;
+}
+.artlist:hover{
+    background: #EEEEEE;
+    border-radius: 2px;
+    color: #337AB7;
+    font-weight: 700;
+}
+.artice{
+    border-left: 1px solid black;
+    font-weight: 700;
+}
 
 
 
