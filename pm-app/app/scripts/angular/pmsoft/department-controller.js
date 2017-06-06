@@ -65,6 +65,11 @@
         self.selectSortType = _selectSortType;
         self.isSelectedSortType = _isSelectedSortType;
         self.selectSharingRange = _selectSharingRange;
+
+        self.slectArticle = _slectArticle;
+        self.ArticeSelected = _ArticeSelected
+
+
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
         /*取消审核模态框*/
@@ -600,7 +605,13 @@
             return memberAccount === self.selectedMemberAccount;
         }
 
+        //增加
+        function _ArticeSelected(article,memberAccount){
+            return (self.selectedMemberAccount === memberAccount && self.articlesect === article)
+        }
+
         function _selectMemberItem(memberAccount) {
+            self.articlesect = false
             var org = self.selectedMemberAccount;
             self.selectedMemberAccount = memberAccount;
             if (org === memberAccount) {
@@ -610,6 +621,38 @@
                 self.displayLogs.splice(0, self.displayLogs.length);
                 _showMoreActivity(self.selectedMemberAccount, self.pageNum);
             }
+        }
+
+        //增加
+        function _slectArticle(article,memberAccount){
+            self.selectedMemberAccount = memberAccount;
+            self.articlesect = article
+            self.displayLogs.splice(0, self.displayLogs.length);
+            self.pageNum = 0;
+            _showMoreArtiicle(article,memberAccount,self.pageNum);
+        }
+
+
+        //增加
+        function _showMoreArtiicle(article,memberAccount, pageNum) {
+            var count = 0;
+            var start = pageNum * MAXNUMPREPAGE;
+            var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
+
+            for (var i = 0; i < self.departmentLogs.length; i++) {
+                if (memberAccount === self.departmentLogs[i].authorID && article == self.departmentLogs[i].projectCName) {
+
+                    if (count >= start && count <= end) {
+                        self.displayLogs.push(self.departmentLogs[i]);
+                    }
+
+                    count++;
+                }
+            }
+            if (count < end) {
+                self.isShowShowMoreAcitivtyBtn = false;
+            }
+            self.pageNum++;
         }
 
         //点击显示更多信息
