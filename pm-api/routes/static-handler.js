@@ -63,6 +63,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     _id: {
                         account: '$authorID'
                     },
+                    authorID: {
+                        $first: '$authorID'
+                    },
+                    authorName: {
+                        $first: '$authorName'
+                    },
                     jobLogCount: {
                         $sum: 1
                     },
@@ -233,12 +239,18 @@ function _getMemberActivityInProject(req, res, next) {
             {
                 $group: {
                     _id: {
-                        projectID: '$projectID',
-                        projectCName: '$projectCName',
-                        projectEName: '$projectEName'
+                        projectID: '$projectID'
                     },
-
-                    duration_Presonal: {
+                    projectCName: {
+                        $first: '$projectCName',
+                    },
+                    projectEName: {
+                        $first: '$projectEName',
+                    },
+                    authorID: {
+                        $first: account,
+                    },
+                    presonal: {
                         $sum: {
                             $cond: {
                                 if: {$eq: ['$authorID', account]},
@@ -247,18 +259,9 @@ function _getMemberActivityInProject(req, res, next) {
                             }
                         }
                     },
-                    duration_Total: {
+                    total: {
                         $sum: '$duration'
                     }
-                }
-            },
-            {
-                $project: {
-                    projectCName: '$_id.projectCName',
-                    projectEName: '$_id.projectEName',
-                    presonal: '$duration_Presonal',
-                    total: '$duration_Total',
-                    rate: {$divide: ['$duration_Presonal', '$duration_Total']}
                 }
             },
             {
@@ -301,10 +304,16 @@ function _getMemberTimeDistribution(req, res, next) {
             {
                 $group: {
                     _id: {
-                        project: {
-                            cName: '$projectCName',
-                            eName: '$projectEName'
-                        }
+                        projectID: '$projectID'
+                    },
+                    authorID: {
+                        $first: account
+                    },
+                    projectCName: {
+                        $first: '$projectCName',
+                    },
+                    projectEName: {
+                        $first: '$projectEName',
                     },
                     totalReal: {
                         $sum: '$duration'
@@ -312,14 +321,6 @@ function _getMemberTimeDistribution(req, res, next) {
                     totalStandard: {
                         $sum: {$multiply: ['$duration', '$factor']}
                     }
-                }
-            },
-            {
-                $project: {
-                    cName: '$_id.project.cName',
-                    eName: '$_id.project.eName',
-                    real: '$totalReal',
-                    standard: '$totalStandard'
                 }
             }
         )
