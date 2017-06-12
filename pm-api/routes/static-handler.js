@@ -93,7 +93,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     D_Easy: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$difficulty', 0.5]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$difficulty', 0.5]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -102,7 +107,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     D_Normal: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$difficulty', 1]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$difficulty', 1]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -111,7 +121,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     D_Difficult: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$difficulty', 1.5]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$difficulty', 1.5]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -120,7 +135,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     E_Turtle: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$efficiency', 0]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$efficiency', 0]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -129,7 +149,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     E_Slowly: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$efficiency', 0.5]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$efficiency', 0.5]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -138,7 +163,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     E_Normal: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$efficiency', 1]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$efficiency', 1]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -147,7 +177,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     E_Quickly: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$efficiency', 1.5]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$efficiency', 1.5]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -156,7 +191,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     E_Rabbit: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$efficiency', 2]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$efficiency', 2]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -165,7 +205,26 @@ function _getMemberJobEvaluation(req, res, next) {
                     Q_Invalid: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$quality', 0]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$quality', 0]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
+                                then: 1,
+                                else: 0
+                            }
+                        }
+                    },
+                    Q_Badest: {
+                        $sum: {
+                            $cond: {
+                                if: {
+                                    $and: [
+                                        {$eq: ['$quality', 0.25]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -174,7 +233,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     Q_Bad: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$quality', 0.25]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$quality', 0.5]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -183,7 +247,12 @@ function _getMemberJobEvaluation(req, res, next) {
                     Q_BelowNormal: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$quality', 0.75]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$quality', 0.75]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
@@ -192,17 +261,34 @@ function _getMemberJobEvaluation(req, res, next) {
                     Q_Normal: {
                         $sum: {
                             $cond: {
-                                if: {$eq: ['$quality', 1]},
+                                if: {
+                                    $and: [
+                                        {$eq: ['$quality', 1]},
+                                        {$eq: ['$status', 'Pass']}
+                                    ]
+                                },
                                 then: 1,
                                 else: 0
                             }
                         }
                     },
                     StdTime: {
-                        $sum: {$multiply: ['$duration', '$factor']}
+                        $sum: {
+                            $cond: {
+                                if: {$eq: ['$status', 'Pass']},
+                                then: {$multiply: ['$duration', '$factor']},
+                                else: 0
+                            }
+                        }
                     },
                     RealTime: {
-                        $sum: '$duration'
+                        $sum: {
+                            $cond: {
+                                if: {$eq: ['$status', 'Pass']},
+                                then: '$duration',
+                                else: 0
+                            }
+                        }
                     }
                 }
             }
