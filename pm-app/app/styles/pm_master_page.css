@@ -1936,11 +1936,77 @@ h3 {
     font-weight: 700;
 }
 
+.member-static-container {
+    width: 100%;
+    height:auto;
+}
 
+.wall-evaluation .layout {
+    padding: 16px 48px 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #EEE;
+    list-style: none;
+    line-height: 50px;
+    /*height: 170px;*/
+    /*position: relative;*/
+}
 
+.wall-evaluation .name {
+    /*background-color: #00b3ee;*/
+    width: 48px;
+    height: 48px;
+    -webkit-border-radius:50%;
+    -moz-border-radius:50%;
+    border-radius:50%;
+    background-color: rgba(102, 153, 255, 1);
+    position: absolute;
+    left: 15px;
+    right: 8px;
+}
 
+.wall-evaluation .name > span {
+    display: block;
+    font-size: 1.5pc;
+    font-weight: 700;
+    height: 45px;
+    text-align: center;
+    color: #fff;
+    width: 45px;
+}
 
+.wall-evaluation .statics {
+    display: inline;
+    width: 90%;
+}
 
+.wall-evaluation .statics .evaluation {
+    /*height: 100px;*/
+    /*color: #000;*/
+    margin-left: 65px;
+    /*background-color: #00b3ee;*/
+}
+
+.wall-evaluation .statics .evaluation-title span {
+    font-size: 1.2pc;
+    font-weight: 400;
+    color: #767676
+}
+
+.wall-evaluation .statics .evaluation-item span{
+    font-size: 0.9pc;
+    font-weight: 400;
+    color: #767676;
+    display: inline;
+    /*float: left;*/
+    /*width: 100px;*/
+    border-left: 1px solid #EEE;
+}
+
+.wall-evaluation .statics .details {
+    height: 200px;
+    color: #000;
+    background-color: #00d95a;
+}
 
 
 

@@ -36,7 +36,7 @@
             /**
              * 获取分享列表
              */
-            getSharings: _getSharings, 
+            getSharings: _getSharings,
             /**
              * 获取单个分享的详细数据 （主要是content部分）
              */
@@ -55,12 +55,17 @@
             /**
              * 设置分享置顶
              */
-             setSharingPin: _setSharingPin,
+            setSharingPin: _setSharingPin,
 
-             /**
-              * 设置隐私模式
-              */
-             setSharingPrivacy: _setSharingPrivacy,
+            /**
+             * 设置隐私模式
+             */
+            setSharingPrivacy: _setSharingPrivacy,
+
+            /**
+             * 获取员工在某段时间内的工作评价
+             */
+            getMemberJobEvaluation: _getMemberJobEvaluation,
 
             /**
              * 当提交了一个新的分享时触发此事件
@@ -124,6 +129,11 @@
 
         return self;
 
+        function _getMemberJobEvaluation(account, startDate, endDate, successFn, errorFn) {
+            var url = BASEPATH + "/static/member/" + account + "/evaluation?start=" + startDate + "&end=" + endDate;
+            $http.get(url).success(successFn).error(errorFn);
+        }
+
         function _setSharingPrivacy(body, successFn, errorFn) {
             $http.post(BASEPATH + "/sharing/privacy", body).success(successFn).error(errorFn);
         }
@@ -144,7 +154,7 @@
             $http.get(BASEPATH + "/sharing/detail?id=" + _id).success(successFn).error(errorFn);
         }
 
-        function _getSharings (rangeType, departmentID, successFn, errorFn) {
+        function _getSharings(rangeType, departmentID, successFn, errorFn) {
             var paramStr = "";
             paramStr += "rangetype=" + rangeType;
             paramStr += "&param=" + departmentID.toString();
@@ -157,14 +167,14 @@
 
         function _changePwd(account, orgPwd, newPwd, successFn, errorFn) {
             /*$http({
-                url: 'http://123.56.135.196:4001/api/user/changepwd',
-                method: 'POST',
-                params: {
-                    username: account,
-                    orgpassword: orgPwd,
-                    newpassword: newPwd
-                }
-            }).success(successFn).error(errorFn);*/
+             url: 'http://123.56.135.196:4001/api/user/changepwd',
+             method: 'POST',
+             params: {
+             username: account,
+             orgpassword: orgPwd,
+             newpassword: newPwd
+             }
+             }).success(successFn).error(errorFn);*/
             var body = {
                 username: account,
                 orgpassword: orgPwd,
