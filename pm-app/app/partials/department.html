@@ -361,7 +361,7 @@
                                 <div class="evaluation-title">
                                     <span>
                                         <!--工作记录（已审核/总数）： {{memberStatics.evaluation.reviewedCount}}&nbsp/&nbsp{{memberStatics.evaluation.jobLogCount}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
-                                        工时数（标准/实际）： {{memberStatics.evaluation.StdTime}}小时&nbsp/&nbsp{{memberStatics.evaluation.RealTime}}小时&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                        工时数（标准/实际）： {{memberStatics.evaluation.StdTime | number: 1}}小时&nbsp/&nbsp{{memberStatics.evaluation.RealTime}}小时&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                         (已审核记录 {{memberStatics.evaluation.reviewedCount}}条，尚有{{memberStatics.evaluation.unreviewedCount}}条记录因未审核不在该统计中）
                                     </span>
                                 </div>
