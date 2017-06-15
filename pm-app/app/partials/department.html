@@ -354,10 +354,14 @@
                             <span>{{memberStatics.name.substring(memberStatics.name.length - 1, memberStatics.name.length)}}</span>
                         </div>
                         <div class="statics" id="staticsGroup{{memberStatics.account}}">
-                            <div class="evaluation" type="button" data-toggle="collapse"
-                                 data-parent="#staticsGroup{{memberStatics.account}}"
-                                 href="-#collapseDetails{{memberStatics.account}}" aria-expanded="false"
-                                 aria-controls="collapseDetails{{memberStatics.account}}">
+                            <div class="evaluation">
+                                <a class="evaluation-button-details" type="button" data-toggle="collapse"
+                                   data-parent="#staticsGroup{{memberStatics.account}}"
+                                   href="-#collapseDetails{{memberStatics.account}}" aria-expanded="false"
+                                   aria-controls="collapseDetails{{memberStatics.account}}"
+                                   ng-click="DptCtrl.getTimeDistribution(memberStatics, '#dashboard' + memberStatics.account)">
+                                    <span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;时间分配详情
+                                </a>
                                 <div class="evaluation-title">
                                     <span>
                                         <!--工作记录（已审核/总数）： {{memberStatics.evaluation.reviewedCount}}&nbsp/&nbsp{{memberStatics.evaluation.jobLogCount}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
@@ -397,7 +401,7 @@
                                 </div>
                             </div>
                             <div class="collapse details" id="collapseDetails{{memberStatics.account}}">
-                                collapse
+                                <div id="dashboard{{memberStatics.account}}"></div>
                             </div>
                         </div>
                     </li>

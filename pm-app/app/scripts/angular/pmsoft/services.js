@@ -68,6 +68,11 @@
             getMemberJobEvaluation: _getMemberJobEvaluation,
 
             /**
+             * 获取员工在某段时间的工作分配情况
+             */
+            getTimeDistribution: _getTimeDistribution,
+
+            /**
              * 当提交了一个新的分享时触发此事件
              */
             onNewSharingSubmited: undefined,
@@ -128,6 +133,11 @@
         }
 
         return self;
+
+        function _getTimeDistribution(account, startDate, endDate, successFn, errorFn) {
+            var url =  BASEPATH + "/static/member/" + account + "/time-distribution?start=" + startDate + "&end=" + endDate;
+            $http.get(url).success(successFn).error(errorFn);
+        }
 
         function _getMemberJobEvaluation(account, startDate, endDate, successFn, errorFn) {
             var url = BASEPATH + "/static/member/" + account + "/evaluation?start=" + startDate + "&end=" + endDate;

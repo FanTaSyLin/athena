@@ -119,18 +119,179 @@
          */
         self.setPrivacySharing = _setPrivacySharing;
 
+        /**
+         * 点击获取成员时间分配情况
+         */
+        self.getTimeDistribution = _getTimeDistribution;
+
         PMSoftServices.onNewSharingSubmited = _getSharings;
 
         PMSoftServices.onSharingEdited = _updateSharingList;
 
         //当 collapse 隐藏时 触发查询
         dateSelectArea.on('hidden.bs.collapse', function () {
+            self.membersStatics.splice(0, self.membersStatics.length);
+            self.members.forEach(function (item) {
+                var member = {
+                    account: item.account,
+                    name: item.name,
+                    isExpanded: false,
+                    evaluation: {
+                        // jobLogCount: 0,
+                        // reviewedCount: 0
+                    },
+                    activity: {},
+                    distribution: {}
+                };
+                self.membersStatics.push(member);
+            });
             var tmpMembers = [];
             self.members.forEach(function (member) {
                 tmpMembers.push(member.account);
             });
             _getDptWorkStatic(self.monthRange.startDate, self.monthRange.endDate, tmpMembers);
         });
+
+        /**
+         * 获取并绘制成员的时间分配情况
+         * @param account
+         * @private
+         */
+        var _lock = false;
+        function _getTimeDistribution(item, id) {
+            if (!_lock) {
+                _lock = !_lock;
+                setTimeout(function () {
+                   _lock = !_lock;
+                }, 500);
+                item.isExpanded = !item.isExpanded;
+                if (!item.isExpanded) {
+                    $(id).empty();
+                    return;
+                }
+                PMSoftServices.getTimeDistribution(item.account, self.monthRange.startDate.format("YYYY-MM-DD"), self.monthRange.endDate.format("YYYY-MM-DD"), function (data) {
+                    var doc = data.doc;
+                    for (var i = 0; i < doc.length; i++) {
+                        doc[i].index = i;
+                    }
+                    (function () {
+                        var pieChart = undefined;
+                        var leg = undefined;
+
+                        if (pieChart !== undefined || leg !== undefined) {
+                            pieChart = _pieChart(doc, pieChart);
+                            leg = _legend(doc, leg);
+                        } else {
+                            pieChart = _pieChart(doc, null);
+                            leg = _legend(doc, null);
+                        }
+
+                        function segColor(index) {
+                            var index = index % ColourSystem.length;
+                            return ColourSystem[index].borderColor;
+                        }
+
+                        function _pieChart(pieData, opt) {
+                            if (opt !== null) {
+                                opt.update(pieData);
+                                return;
+                            }
+                            var pC = {};
+                            var pieDim = {w: 300, h: 300};
+                            pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+                            var piesvg = d3.select(id).append("svg")
+                                .attr("width", pieDim.w)
+                                .attr("height", pieDim.h)
+                                .append("g")
+                                .attr("transform", "translate(" + pieDim.w / 2 + "," + pieDim.h / 2 + ")");
+                            var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+                            var pie = d3.layout.pie().sort(null).value(function (d) {
+                                return d.totalStandard;
+                            });
+                            piesvg.selectAll("path")
+                                .data(pie(pieData))
+                                .enter()
+                                .append("path")
+                                .attr("d", arc)
+                                .each(function (d) {
+                                    this._current = d;
+                                })
+                                .style("fill", function (d) {
+                                    return segColor(d.data.index);
+                                });
+                            pC.update = function (nD) {
+                                piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
+                                    .attrTween("d", arcTween);
+                            }
+                            return pC;
+                        }
+
+                        function _legend(legData, opt) {
+                            if (opt !== null) {
+                                opt.update(legData);
+                                return;
+                            }
+                            var leg = {};
+                            var legend = d3.select(id)
+                                .append("table")
+                                .attr('class', 'legend');
+                            var tr = legend.append("tbody")
+                                .selectAll("tr")
+                                .data(legData)
+                                .enter()
+                                .append("tr");
+                            tr.append("td")
+                                .append("svg")
+                                .attr("width", '16')
+                                .attr("height", '16')
+                                .append("rect")
+                                .attr("width", '16')
+                                .attr("height", '16')
+                                .attr("fill", function (d) {
+                                    return segColor(d.index);
+                                });
+                            tr.append("td").attr("class", "legendTitle")
+                                .text(function (d) {
+                                    return d.projectCName;
+                                });
+                            tr.append("td").attr("class", 'legendValue')
+                                .text(function (d) {
+                                    return d3.format(",")(d.totalStandard) + "（时）";
+                                });
+                            tr.append("td").attr("class", 'legendPerc')
+                                .text(function (d) {
+                                    return getLegend(d, legData);
+                                });
+                            leg.update = function (nD) {
+                                var l = legend.select("tbody").selectAll("tr").data(nD);
+
+                                // l.select(".legendTitle").text
+                                // update the frequencies.
+                                l.select(".legendValue").text(function (d) {
+                                    return d3.format(",")(d.totalStandard);
+                                });
+
+                                // update the percentage column.
+                                l.select(".legendPerc").text(function (d) {
+                                    return getLegend(d, nD);
+                                });
+                            };
+                            return leg;
+                        }
+
+                        function getLegend(d, aD) {
+                            return d3.format("%")(d.totalStandard / d3.sum(aD.map(function (v) {
+                                    return v.totalStandard;
+                                })));
+                        }
+
+                    })();
+                }, function (err) {
+
+                });
+
+            }
+        }
 
         function _startYearAdd() {
             self.monthRange.startDate = self.monthRange.startDate.add(1, 'Y');
@@ -369,6 +530,7 @@
                         var member = {
                             account: item.account,
                             name: item.name,
+                            isExpanded: false,
                             evaluation: {
                                 // jobLogCount: 0,
                                 // reviewedCount: 0
@@ -452,6 +614,7 @@
                         var member = {
                             account: item.account,
                             name: item.name,
+                            isExpanded: false,
                             evaluation: {
                                 // jobLogCount: 0,
                                 // reviewedCount: 0
