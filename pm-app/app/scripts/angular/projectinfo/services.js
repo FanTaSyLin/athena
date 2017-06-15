@@ -238,18 +238,8 @@
          * @param {Function} errorFn
          */
         function _getProjectStaticInfo(option, successFn, errorFn) {
-            var projectID = option.projectID;
-            var startMonth = option.startMonth;
-            var endMonth = option.endMonth;
-            var condition = '';
-            if (projectID) {
-                condition +='id=' + projectID;
-            }
-            if (startMonth && endMonth) {
-                condition += '&smonth=' + startMonth.toString();
-                condition += '&emonth=' + endMonth.toString();
-            }
-            $http.get(BASEPATH + '/project/static?' + condition).success(successFn).error(errorFn);
+            var url =  BASEPATH + "/static/project/" + option.project + "/activity?start=" + option.start + "&end=" + option.end;
+            $http.get(url).success(successFn).error(errorFn);
         }
 
     }

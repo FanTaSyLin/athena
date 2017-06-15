@@ -40,6 +40,14 @@ module.exports = function (server, BASEPATH) {
     server.get({
         path: BASEPATH + '/static/member/:account/evaluation'
     }, _getMemberJobEvaluation);
+
+    /**
+     * 获取项目成员在某段时间内的贡献度
+     * GET /api/static/project/:projectID/activity?start={yyyy-MM-dd}&end={yyyy-MM-dd}
+     */
+    server.get({
+        path: BASEPATH + '/static/project/:projectID/activity'
+    }, _getProjectActivityForMember);
 };
 
 function _getMemberJobEvaluation(req, res, next) {
@@ -485,4 +493,54 @@ function _personalRealWorkDoneStatic(req, res, next) {
             res.end(JSON.stringify(data));
             return next();
         });
+}
+
+function _getProjectActivityForMember(req, res, next) {
+    var projectID = req.params['projectID'];
+    var startDate = req.params['start'];
+    var endDate = req.params['end'];
+    JobLogSchema
+        .aggregate(
+            {
+                $match: {
+                    projectID: projectID,
+                    starTime: {
+                        $gte: new Date(startDate),
+                        $lte: new Date(endDate)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        authorID: '$authorID'
+                    },
+                    account: {$first: '$authorID'},
+                    name: {$first: '$authorName'},
+                    checked: {
+                        $sum: {
+                            $cond: {
+                                if: {$eq: ['$status', 'Pass']},
+                                then: {$multiply: ['$duration', '$factor']},
+                                else: 0
+                            }
+                        }
+                    },
+                    real: {
+                        $sum: '$duration'
+                    }
+                }
+            }
+        )
+        .exec(function (err, doc) {
+            if (err) {
+                return next(new DBOptionError(415, err));
+            }
+            var data = {
+                status: "success",
+                doc: doc
+            };
+            res.end(JSON.stringify(data));
+            next();
+        })
 }

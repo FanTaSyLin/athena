@@ -2,7 +2,7 @@
  * Created by FanTaSyLin on 2016/11/4.
  */
 
-(function() {
+(function () {
 
     'use strict';
 
@@ -30,7 +30,7 @@
         var memberAddModal = angular.element(document.getElementById('member-add-modal'));
         var memberNav = angular.element(document.getElementById('memberNav'));
         var sharingEdit = angular.element(document.getElementById('sharingEdit'));
-        
+
         /*详情弹窗*/
         var jobDetail = angular.element(document.getElementById('jobDetail'));
 
@@ -42,10 +42,8 @@
         self.thisProjectInfo = {};
         self.title = '';
         self.monthRange = {
-            startYear: '',
-            startMonth: '',
-            endYear: '',
-            endMonth: ''
+            startDate: new Date(),
+            endDate: new Date()
         };
         self.isShowMenu = false;
         self.showedMember = {};
@@ -121,7 +119,7 @@
         ProjectInfoServices.onSharingEdited = _updateSharingList;
 
         //当 collapse 隐藏时 触发查询
-        dateSelectArea.on('hidden.bs.collapse', function() {
+        dateSelectArea.on('hidden.bs.collapse', function () {
             _selectMonthRange();
         });
 
@@ -143,15 +141,15 @@
          */
         function _getSharingDetail(_id) {
             ProjectInfoServices.getSharingDetail(_id, function (res) {
-                    self.sharingDetail = res.doc[0];
-                    if (account === self.sharingDetail.authorID) {
-                        self.authorIsMe = true;
-                    } else {
-                        self.authorIsMe = false;
-                    }
-                }, function (res) {
+                self.sharingDetail = res.doc[0];
+                if (account === self.sharingDetail.authorID) {
+                    self.authorIsMe = true;
+                } else {
+                    self.authorIsMe = false;
+                }
+            }, function (res) {
 
-                });
+            });
         }
 
         /**
@@ -279,12 +277,12 @@
          * @param {Object} member 成员
          */
         function _addMemberToProject(member) {
-            ProjectInfoServices.addMemberToProject(projectID, member, function(res) {
+            ProjectInfoServices.addMemberToProject(projectID, member, function (res) {
                 //成功后 添加到成员列表
                 self.thisProject.members.push(member);
                 //关闭 模态框
                 memberAddModal.modal('hide');
-            }, function(res) {
+            }, function (res) {
                 //失败 最好能有原因提示
                 alert(res);
             });
@@ -292,18 +290,18 @@
 
         /**
          * 查询成员
-         * @private 
+         * @private
          */
         function _searchMembers($event, condition) {
             if ($event.keyCode !== 13) {
                 return;
             }
-            ProjectInfoServices.searchMembers(condition, function(res) {
+            ProjectInfoServices.searchMembers(condition, function (res) {
                 self.foundMembers.splice(0, self.foundMembers.length);
-                res.forEach(function(member) {
+                res.forEach(function (member) {
                     self.foundMembers.push(member);
                 });
-            }, function(res) {
+            }, function (res) {
 
             });
         }
@@ -317,7 +315,7 @@
             self.searchCondition = "";
             self.foundMembers.splice(0, self.foundMembers.length);
 
-            memberAddModal.modal({ backdrop: 'static', keyboard: false });
+            memberAddModal.modal({backdrop: 'static', keyboard: false});
         }
 
         /**
@@ -333,13 +331,13 @@
             }
 
             if (rmShowedMemberClickCount % 2 === 1) {
-                ProjectInfoServices.rmMemberToProject(projectID, member, function(res) {
+                ProjectInfoServices.rmMemberToProject(projectID, member, function (res) {
                     //成功了需要从 成员列表中移除
                     var index = self.thisProject.members.indexOf(member);
                     self.thisProject.members.splice(index, 1);
                     //关闭 模态框
                     memberStatusModal.modal('hide');
-                }, function(res) {
+                }, function (res) {
                     //失败了 最好有个提示
                     alert('Faild');
                 });
@@ -349,13 +347,13 @@
         /**
          * 设置显示在模态框中的项目成员的权限
          * @param {Object} member 成员
-         * @param {String} member.account 
-         * @param {String} member.name 
+         * @param {String} member.account
+         * @param {String} member.name
          * @param {String} authority 权限 "reviewer" or "normal"
          * @private
          */
         function _setShowedMemberAuthority(authority, member) {
-            ProjectInfoServices.setProjectMemberAuthority(projectID, authority, member, function(res) {
+            ProjectInfoServices.setProjectMemberAuthority(projectID, authority, member, function (res) {
                 if (authority === 'reviewer') {
                     self.showedMember.isReviewer = true;
                 } else if (authority === 'normal') {
@@ -363,7 +361,7 @@
                 }
                 //关闭 模态框
                 memberStatusModal.modal('hide');
-            }, function(res) {
+            }, function (res) {
 
             });
         }
@@ -375,10 +373,10 @@
          */
         function _showMemberStatus(member) {
             /*for (var p in member) {
-                self.showedMember[p] = member[p];
-            }*/
+             self.showedMember[p] = member[p];
+             }*/
             self.showedMember = member;
-            memberStatusModal.modal({ backdrop: 'static', keyboard: false });
+            memberStatusModal.modal({backdrop: 'static', keyboard: false});
         }
 
         /**
@@ -417,55 +415,35 @@
         }
 
         function _startYearAdd() {
-            var year = Number(self.monthRange.startYear);
-            self.monthRange.startYear = (year + 1).toString();
+            self.monthRange.startDate = self.monthRange.startDate.add(1, 'Y');
         }
 
         function _startYearSubstract() {
-            var year = Number(self.monthRange.startYear);
-            self.monthRange.startYear = (year - 1).toString();
+            self.monthRange.startDate = self.monthRange.startDate.add(-1, 'Y');
         }
 
         function _startMonthAdd() {
-            var month = Number(self.monthRange.startMonth);
-            if (month < 12) {
-                month = month + 1;
-            }
-            self.monthRange.startMonth = (month.toString().length < 2) ? '0' + month.toString() : month.toString();
+            self.monthRange.startDate = self.monthRange.startDate.add(1, 'M');
         }
 
         function _startMonthSubstract() {
-            var month = Number(self.monthRange.startMonth);
-            if (month > 1) {
-                month = month - 1;
-            }
-            self.monthRange.startMonth = (month.toString().length < 2) ? '0' + month.toString() : month.toString();
+            self.monthRange.startDate = self.monthRange.startDate.add(-1, 'M');
         }
 
         function _endYearAdd() {
-            var year = Number(self.monthRange.endYear);
-            self.monthRange.endYear = (year + 1).toString();
+            self.monthRange.endDate = self.monthRange.endDate.add(1, 'Y');
         }
 
         function _endYearSubstract() {
-            var year = Number(self.monthRange.endYear);
-            self.monthRange.endYear = (year - 1).toString();
+            self.monthRange.endDate = self.monthRange.endDate.add(-1, 'Y');
         }
 
         function _endMonthAdd() {
-            var month = Number(self.monthRange.endMonth);
-            if (month < 12) {
-                month = month + 1;
-            }
-            self.monthRange.endMonth = (month.toString().length < 2) ? '0' + month.toString() : month.toString();
+            self.monthRange.endDate = self.monthRange.endDate.add(1, 'M');
         }
 
         function _endMonthSubstract() {
-            var month = Number(self.monthRange.endMonth);
-            if (month > 1) {
-                month = month - 1;
-            }
-            self.monthRange.endMonth = (month.toString().length < 2) ? '0' + month.toString() : month.toString();
+            self.monthRange.endDate = self.monthRange.endDate.add(-1, 'M');
         }
 
 
@@ -493,7 +471,7 @@
             self.isStarred = _checkIsStarred(projectID);
 
             //获取整个项目的基本属性 （projectSchema）
-            ProjectInfoServices.getProjectBaseInfo(projectID, function(res) {
+            ProjectInfoServices.getProjectBaseInfo(projectID, function (res) {
                 if (res.data !== null && res.data !== undefined && res.data.length > 0) {
                     var doc = res.data[0];
                     for (var p in doc) {
@@ -512,62 +490,51 @@
                     }
 
                     /**
-                     * 判断是否为项目经理 (创建者为项目经理) 
+                     * 判断是否为项目经理 (创建者为项目经理)
                      * @description 暂时以这种方式进行判断 前提是项目必须由项目经理本人创建
                      * 并且 中心负责人 默认为任何项目的项目经理
                      */
                     self.iamManager = _getIsManager(self.thisProject.authorID);
                     /*if (account === self.thisProject.authorID) {
-                        self.iamManager = true;
-                    } */
+                     self.iamManager = true;
+                     } */
 
                     /**
                      * 修改页标题 = 项目中文名
                      */
                     document.title = self.thisProject.cnName;
                 }
-            }, function(err) {
+            }, function (err) {
 
             });
 
             /**
              * @description 获取项目的统计信息 默认只查当前月与上个月的统计
              */
-            var now = new Date();
-            var y1 = now.getFullYear();
-            var m1 = now.getMonth() + 1;
-            var y2 = (m1 === 1) ? (y1 - 1) : y1;
-            var m2 = (m1 === 1) ? 12 : m1 - 1;
-            m1 = (m1.toString().length < 2) ? '0' + m1.toString() : m1.toString();
-            m2 = (m2.toString().length < 2) ? '0' + m2.toString() : m2.toString();
-            var startMonth = y2.toString() + m2;
-            var endMonth = y1.toString() + m1;
+
+                //生成标题
+            var startDate = moment(new Date()).add(-1, 'M').startOf('month');
+            var endDate = moment(new Date()).endOf('month');
+            //初始化日期选择框
+            self.monthRange.startDate = startDate;
+            self.monthRange.endDate = endDate;
             ProjectInfoServices.getProjectStaticInfo({
-                'projectID': projectID,
-                'startMonth': startMonth,
-                'endMonth': endMonth
-            }, function(res) {
+                'project': projectID,
+                'start': startDate.format('YYYY-MM-DD'),
+                'end': endDate.format('YYYY-MM-DD')
+            }, function (res) {
                 if (res.error) {
                     alert(res.error);
                 }
-
                 //按项目组成员进行统计
-                _projectStaticByMember(res.doc, function(err, data) {
-                    //根据计算后的结果生成图表
-                    _createBarByResult(data);
-                    _createPieByResult(data);
-                });
-
-                //生成标题
-                self.title = '统计范围 (' + startMonth.toString().substring(0, 4) + '年' + startMonth.toString().substring(4, 6) + '月 至 ' +
-                    endMonth.toString().substring(0, 4) + '年' + endMonth.toString().substring(4, 6) + '月)';
-                //初始化日期选择框
-                self.monthRange.startYear = y2;
-                self.monthRange.startMonth = m2;
-                self.monthRange.endYear = y1;
-                self.monthRange.endMonth = m1;
-
-            }, function(res) {
+                // _projectStaticByMember(res.doc, function (err, data) {
+                //     //根据计算后的结果生成图表
+                //     _createBarByResult(data);
+                //     _createPieByResult(data);
+                // });
+                _createBarByResult(res.doc);
+                _createPieByResult(res.doc)
+            }, function (res) {
 
             });
 
@@ -578,8 +545,8 @@
             self.pageNum = 0;
             var skipNum = self.pageNum * MAXNUMPREPAGE;
             var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-            var startDate = moment(startMonth + "01").format("YYYY-MM-DD");
-            var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
+            var startDate = self.monthRange.startDate.format("YYYY-MM-DD");
+            var endDate = self.monthRange.endDate.format("YYYY-MM-DD");
             self.startDate = startDate;
             self.endDate = endDate;
             _getMemberJobLogs("all", startDate, endDate, skipNum, limitNum);
@@ -589,7 +556,7 @@
          * @description 获取项目组成员的工作记录
          * @param {string} memberAccount
          * @param {string} startDate
-         * @param {string} endDate 
+         * @param {string} endDate
          * @param {Number} skipNum
          * @param {Number} limitNum
          * @private
@@ -599,10 +566,10 @@
             if (memberAccount !== "all") {
                 accounts.push(memberAccount);
             }
-            ProjectInfoServices.getJobLogs(accounts, projectID, startDate, endDate, skipNum, limitNum, function(res) {
+            ProjectInfoServices.getJobLogs(accounts, projectID, startDate, endDate, skipNum, limitNum, function (res) {
                 var doc = res.doc;
                 var count = 0;
-                doc.forEach(function(item) {
+                doc.forEach(function (item) {
                     item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
                     self.jobLogs.push(item);
                     count++;
@@ -613,7 +580,7 @@
                     self.isShowShowMoreAcitivtyBtn = true;
                 }
                 self.pageNum++;
-            }, function(res) {
+            }, function (res) {
 
             });
         }
@@ -624,30 +591,23 @@
          */
         function _selectMonthRange() {
 
-            var startMonth = self.monthRange.startYear + self.monthRange.startMonth;
-            var endMonth = self.monthRange.endYear + self.monthRange.endMonth;
-
             ProjectInfoServices.getProjectStaticInfo({
-                'projectID': projectID,
-                'startMonth': startMonth,
-                'endMonth': endMonth
-            }, function(res) {
+                'project': projectID,
+                'start': self.monthRange.startDate.format('YYYY-MM-DD'),
+                'end': self.monthRange.endDate.format('YYYY-MM-DD')
+            }, function (res) {
                 if (res.error) {
                     alert(res.error);
                 }
-
+                _createBarByResult(res.doc);
+                _createPieByResult(res.doc);
                 //按项目组成员进行统计
-                _projectStaticByMember(res.doc, function(err, data) {
-                    //根据计算后的结果生成图表
-                    _createBarByResult(data);
-                    _createPieByResult(data);
-                });
-
-                //生成标题
-                self.title = '统计范围 (' + startMonth.toString().substring(0, 4) + '年' + startMonth.toString().substring(4, 6) + '月 至 ' +
-                    endMonth.toString().substring(0, 4) + '年' + endMonth.toString().substring(4, 6) + '月)';
-
-            }, function(res) {
+                // _projectStaticByMember(res.doc, function (err, data) {
+                //     //根据计算后的结果生成图表
+                //     _createBarByResult(data);
+                //     _createPieByResult(data);
+                // });
+            }, function (res) {
 
             });
 
@@ -658,8 +618,8 @@
             self.pageNum = 0;
             var skipNum = self.pageNum * MAXNUMPREPAGE;
             var limitNum = (self.pageNum + 1) * MAXNUMPREPAGE;
-            var startDate = moment(startMonth + "01").format("YYYY-MM-DD");
-            var endDate = moment(endMonth + "01").endOf("month").format("YYYY-MM-DD");
+            var startDate = self.monthRange.startDate.format("YYYY-MM-DD");
+            var endDate = self.monthRange.endDate.format("YYYY-MM-DD");
             self.startDate = startDate;
             self.endDate = endDate;
             self.jobLogs.splice(0, self.jobLogs.length);
@@ -687,17 +647,17 @@
 
             for (var j = 0; j < data.length; j++) {
                 if (self.iamManager) {
-                    total += data[j].duration_Checked;
+                    total += data[j].checked;
                 } else {
-                    total += data[j].duration_Real;
+                    total += data[j].real;
                 }
             }
             for (var i = 0; i < data.length; i++) {
                 labels.push(data[i].name);
                 if (self.iamManager) {
-                    duration_Checked_List.push((data[i].duration_Checked / total * 100).toFixed(0));
+                    duration_Checked_List.push((data[i].checked / total * 100).toFixed(0));
                 } else {
-                    duration_Checked_List.push((data[i].duration_Real / total * 100).toFixed(0));
+                    duration_Checked_List.push((data[i].real / total * 100).toFixed(0));
                 }
                 bgColorList.push(colors[i % 6]);
             }
@@ -737,7 +697,7 @@
             var config = {};
 
             if (data === undefined || data.length < 1) {
-                self.thisProject.members.forEach(function(member) {
+                self.thisProject.members.forEach(function (member) {
                     x_Labels.push(member.name);
                     duration_Checked_List.push(0);
                     duration_Real_List.push(0);
@@ -745,8 +705,8 @@
             } else {
                 for (var i = 0; i < data.length; i++) {
                     x_Labels.push(data[i].name);
-                    duration_Checked_List.push(data[i].duration_Checked.toFixed(2));
-                    duration_Real_List.push(data[i].duration_Real.toFixed(2));
+                    duration_Checked_List.push(data[i].checked.toFixed(2));
+                    duration_Real_List.push(data[i].real.toFixed(2));
                 }
 
             }
@@ -881,7 +841,7 @@
             }
             var expireTime = new Date();
             expireTime.setDate(expireTime.getDate() + 7000);
-            $cookies.putObject('mystar-project', myStar, { 'expires': expireTime });
+            $cookies.putObject('mystar-project', myStar, {'expires': expireTime});
         }
 
         function _profileNavIsSeleced(item) {
@@ -945,7 +905,7 @@
         function _getIsManager(authorID) {
             var isManager = false;
             var sysconfig = $cookies.getObject('Sysconfig');
-            sysconfig[0].departmentGroups.forEach(function(departmentGroup) {
+            sysconfig[0].departmentGroups.forEach(function (departmentGroup) {
                 for (var i = 0; i < departmentGroup.manager.length; i++) {
                     var manager = departmentGroup.manager[i];
                     if (manager.account === account) {
