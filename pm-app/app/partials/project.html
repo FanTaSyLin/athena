@@ -14,7 +14,7 @@
                     <span></span>
                     <span class="board-tile-details is-badged" ng-click="ProjectListCtrl.openTheProject(starProject)">
                         <span title="{{starProject.cnName}}" class="board-tile-details-name" dir="auto">{{starProject.cnName}}</span>
-                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: </span>
+                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时:{{starProject.manMonth | number: 1}}人月 </span>
                     </span>
                     <span class="board-tile-options">
                         <span title="点击加星这个项目。它将会显示在你的看办列表上方。"
@@ -48,7 +48,7 @@
                     <span class="board-tile-details is-badged" ng-click="ProjectListCtrl.openTheProject(project)">
                         <span title="{{project.cnName}}" class="board-tile-details-name"
                               dir="auto">{{project.cnName}}</span>
-                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: </span>
+                        <span title="项目总耗时（人天）" class="board-tile-details-sub-name">项目总耗时: {{project.manMonth | number: 1}}人月</span>
                     </span>
                     <span class="board-tile-options">
                         <span title="点击加星这个项目。它将会显示在你的看办列表上方。"

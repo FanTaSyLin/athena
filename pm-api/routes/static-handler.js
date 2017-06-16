@@ -48,7 +48,59 @@ module.exports = function (server, BASEPATH) {
     server.get({
         path: BASEPATH + '/static/project/:projectID/activity'
     }, _getProjectActivityForMember);
+
+    /**
+     * 获取所有项目的总工时
+     */
+    server.get({
+        path: BASEPATH + '/static/project/man-month'
+    }, _getProjectManMonth);
 };
+
+function _getProjectManMonth(req, res, next) {
+    JobLogSchema
+        .aggregate(
+            {
+                $group: {
+                    _id: '$projectID',
+                    projectID: {$first: '$projectID'},
+                    projectCName: {$first: '$projectCName'},
+                    projectEName: {$first: '$projectEName'},
+                    checked: {
+                        $sum: {
+                            $cond: {
+                                if: {$eq: ['$status', 'Pass']},
+                                then: {$multiply: ['$duration', '$factor']},
+                                else: 0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    projectID: 1,
+                    projectCName: 1,
+                    projectEName: 1,
+                    checked: 1,
+                    manMonth: {
+                        $divide: ['$checked', 22 * 8]
+                    }
+                }
+            }
+        )
+        .exec(function (err, doc) {
+             if (err) {
+                return next(new DBOptionError(415, err));
+            }
+            var data = {
+                status: "success",
+                doc: doc
+            };
+            res.end(JSON.stringify(data));
+            next();
+        });
+}
 
 function _getMemberJobEvaluation(req, res, next) {
     var account = req.params['account'];
@@ -542,5 +594,5 @@ function _getProjectActivityForMember(req, res, next) {
             };
             res.end(JSON.stringify(data));
             next();
-        })
+        });
 }

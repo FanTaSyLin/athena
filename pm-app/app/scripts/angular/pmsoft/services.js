@@ -72,6 +72,8 @@
              */
             getTimeDistribution: _getTimeDistribution,
 
+            getProjectManMonth: _getProjectManMonth,
+
             /**
              * 当提交了一个新的分享时触发此事件
              */
@@ -133,6 +135,11 @@
         }
 
         return self;
+
+        function _getProjectManMonth(successFn) {
+            var url = BASEPATH + '/static/project/man-month';
+            $http.get(url).success(successFn);
+        }
 
         function _getTimeDistribution(account, startDate, endDate, successFn, errorFn) {
             var url =  BASEPATH + "/static/member/" + account + "/time-distribution?start=" + startDate + "&end=" + endDate;
