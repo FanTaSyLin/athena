@@ -13,6 +13,7 @@
     var Timer = require('./../lib/timer.js').Timer;
     var JobSchema = require('./../modules/joblog-schema.js');
     var _timer = new Timer(1000 * 60 * 60 * 3);
+    const MAXTIMELINE = (10 * 24 * 60 * 60 * 1000);
 
     const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
     var opt_Mongoose = {
@@ -32,6 +33,8 @@
     _timer.on('tick', function () {
         //  定时检查数据当天提交的工作记录，将连击产生的相同记录清除，只保留一条
         _stripoutDuplicateRecords();
+        // 定时检查所有已提交未审核的工作记录， 凡是超过 MAXTIMELINE 的工作记录，一律自动审核掉
+        _autoCheck();
     });
 
     /**
@@ -85,6 +88,43 @@
             .exec(function (err, doc) {
                 next(err, doc);
             });
+    }
+
+    /**
+     * @description 自动审核
+     * @private
+     */
+    function _autoCheck() {
+        JobSchema.update({
+            'status': 'Submit',
+            'date': {
+                '$lte': new Date(new Date().getTime() - MAXTIMELINE)
+            }
+        }, {
+            $set: {
+                reviewerName: '自动审核',
+                reviewerID: 'AutoChecked',
+                reviewerTime: new Date(),
+                difficulty: 1,
+                efficiency: 1,
+                quality: 1,
+                factor: 1,
+                status: 'Pass'
+            },
+            $push: {
+                logs: {
+                    type: 'Change', /*日志类型 New-新建 Add-添加内容等 Edit-编辑了内容 Change-修改了状态*/
+                    logTime: new Date(), /*日志时间戳*/
+                    msg: '审核了本条记录。', /*日志内容*/
+                    authorID: 'AutoChecked', /*编辑人账户*/
+                    authorName: '自动审核' /*编辑人姓名*/
+                }
+            }
+        }, {
+            multi: true
+        }, function (err, doc) {
+
+        });
     }
 
 })();
