@@ -680,7 +680,7 @@
             PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
                 var doc = res.doc;
-                var timeSpan = 45;
+                var timeSpan = 30;
                 var memberIDs = "";
                 var endDateStr = moment.utc().format('YYYY-MM-DD');
                 var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
