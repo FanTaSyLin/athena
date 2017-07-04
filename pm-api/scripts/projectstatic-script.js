@@ -1,9 +1,9 @@
 /**
  * Created by FanTaSyLin on 2016/11/7
- * 
- * 
+ *
+ *
  * 项目人天数是按月进行统计的，这样做的原因是便于按事件范围查询统计结果。
- * 因此不需要每次都获取出该想的所有工作记录进行计算。
+ * 因此不需要每次都获取出该项目的所有工作记录进行计算。
  * 按照既定原则：
  * 1. 贡献度以审核后的标准工时统计；
  * 2. 只允许提交3日之内的工作记录；
@@ -33,10 +33,8 @@
     const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/pmsoft";
 
     var opt_Mongoose = {
-        server: {
-            auto_reconnect: true,
-            poolSize: 100
-        }
+        server: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}},
+        replset: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}}
     };
     mongoose.Promise = global.Promise;
     mongoose.connect(MONGOOSE_URI, opt_Mongoose);
@@ -66,10 +64,12 @@
             }
             var projectList1 = [];
             var projectList2 = [];
-            data.forEach(function (item) {
-                projectList1.push(item);
-                projectList2.push(item);
-            });
+            if (data !== null && data !== undefined) {
+                data.forEach(function (item) {
+                    projectList1.push(item);
+                    projectList2.push(item);
+                });
+            }
 
             //统计当月工作量
             _projectStaticByMonthMember(projectList1, month1);
@@ -81,7 +81,7 @@
     });
 
     /**
-     * 根据月份 统计项目组成员的工作量 
+     * 根据月份 统计项目组成员的工作量
      * @param {Array} projectList - 项目列表
      * @param {String} month - '201609'/'201610'.....
      */
@@ -111,11 +111,11 @@
             //首先尝试删除原纪录
             _deleteProjectStaticResult(projectItem._id, month, function (err) {
 
-                if (err) console.error(err.message);
+                if (err) console.error("尝试删除原纪录: " + err.message);
 
                 //重新提交新的记录结果 
                 _submitProjectStaticResult(projectStatic, function (err) {
-                    if (err) console.error(err.message);
+                    if (err) console.error("重新提交新的记录结果: " + err.message);
                     _projectStatic(projectList, month, cb);
                 });
 
@@ -127,8 +127,8 @@
 
     /**
      * @description 统计
-     * 
-     * @param {Object} project - 
+     *
+     * @param {Object} project -
      * @param {String} month -'201609'/'201610' ......
      * @param {any} data
      * @returns {mongoose.Schema} result
@@ -137,8 +137,25 @@
         var schema = new ProjectStaticSchema();
         var joblog = {};
         var memberList = [];
-        for (var i = 0; i < data.length; i++) {
-            joblog = data[i];
+        //剔除掉工作记录日志中的重复项
+        //时间一致 内容一致 记录人一致（说白了就是防止工作记录连击）
+        var tmpJobLogs = [];
+        for (var x = 0; x < data.length; x++) {
+            var isUnique = true; //唯一性标志
+            for (var y = 0; y < tmpJobLogs.length; y++) {
+                if (tmpJobLogs[y].authorID === data[x].authorID && tmpJobLogs[y].content === data[x].content && tmpJobLogs[y].starTime === data[x].starTime) {
+                    isUnique = false;
+                    console.log('发现重复记录: \r\n记录人：' + data[x].authorID + "\r\n开始时间：" + data[x].starTime + "\r\n内容：" + data[x].content);
+                    break;
+                }
+
+            }
+            if (isUnique) {
+                tmpJobLogs.push(data[x]);
+            }
+        }
+        for (var i = 0; i < tmpJobLogs.length; i++) {
+            joblog = tmpJobLogs[i];
             //如果 memberList 中存在此成员 则追加工作量
             //如果 memberList 不存在此成员 先创建再追加
             var isExist = false;
@@ -172,7 +189,7 @@
     /**
      * 删除记录。
      * @param {String} _id - 项目ID
-     * @param {String} month - 统计的月份 表述方式：'201609' 
+     * @param {String} month - 统计的月份 表述方式：'201609'
      * @param {Function} cb
      * @param {Error} cb.err
      */
@@ -224,6 +241,8 @@
             }, {
                 'authorID': 1,
                 'authorName': 1,
+                'content': 1,
+                'starTime': 1,
                 'status': 1,
                 'factor': 1,
                 'quality': 1,
@@ -243,7 +262,7 @@
     /**
      * 获取项目列表
      * @param {Function} cb
-     * @param {Error} cb.err 
+     * @param {Error} cb.err
      * @param {Array} cb.data
      */
     function _getProjectList(cb) {

@@ -1,14 +1,21 @@
 <div ng-animate="'animate'" ng-controller="DepartmentController as DptCtrl" data-ng-init="DptCtrl.initData()">
     <div class="user-profile-nav top-0">
         <nav class="underline-nav" role="navigation">
-            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Active')}" ng-click="DptCtrl.selectProfileNavItem('Active')">近期活动</a>
-            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Shared')}" ng-click="DptCtrl.selectProfileNavItem('Shared')">分享</a>
-            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Repositories')}" ng-click="DptCtrl.selectProfileNavItem('Repositories')">资产</a>
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Active')}"
+               ng-click="DptCtrl.selectProfileNavItem('Active')">近期活动</a>
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Static')}"
+               ng-click="DptCtrl.selectProfileNavItem('Static')" ng-if="DptCtrl.showStaticsTab">统计</a>
+            <a class="underline-nav-item" role="tab" ng-class="{'selected': DptCtrl.profileNavIsSeleced('Shared')}"
+               ng-click="DptCtrl.selectProfileNavItem('Shared')">分享</a>
+            <a class="underline-nav-item" role="tab"
+               ng-class="{'selected': DptCtrl.profileNavIsSeleced('Repositories')}"
+               ng-click="DptCtrl.selectProfileNavItem('Repositories')">资产</a>
         </nav>
     </div>
     <div style="position: absolute; left: 10px; top: 100px">
         <ul class="nav nav-pills nav-stacked" id="departmentNav" ng-show="DptCtrl.isShowDptNav">
-            <li ng-repeat="department in DptCtrl.departments" ng-class="{active: DptCtrl.isSelectedDepartment(department)}">
+            <li ng-repeat="department in DptCtrl.departments"
+                ng-class="{active: DptCtrl.isSelectedDepartment(department)}">
                 <a href ng-click="DptCtrl.selectDetartment(department)">
                     {{department.name}}
                 </a>
@@ -20,9 +27,10 @@
             </li>
         </ul>
     </div>
-    <!--近期工作 start-->
+
     <div class="main-area-item">
 
+        <!--近期工作 start-->
         <div ng-show="DptCtrl.isShowArea('Active')">
             <!--工作量统计图表区域 start-->
             <h2 class="f4 mb-2 text-normal mt-4">
@@ -39,13 +47,15 @@
             </h2>
             <div class="col-lg-12 mt-4">
                 <ul class="boards-page-board-section-list" style="list-style: none; padding-left: 0px;">
-                    <li class="boards-page-board-section-list-item middle-item" ng-repeat="member in DptCtrl.members" style="margin-bottom: 0px;">
+                    <li class="boards-page-board-section-list-item middle-item" ng-repeat="member in DptCtrl.members"
+                        style="margin-bottom: 0px;">
                         <a class="board-tile middle" ng-click="DptCtrl.openThisMemberInfo(member)">
                             <span class="department-member-icon" title="{{member.name}}@{{member.account}}"></span>
                             <span class="department-member-initials" title="{{member.name}}@{{member.account}}">{{member.name.substring(member.name.length-1, member.name.length)}}</span>
                             <span class="department-member-active-title">近期活动 ... </span>
                             <ul class="department-member-active-items" style="list-style: none">
-                                <li style="font-size: 12px" ng-repeat="activeItem in member.activeList" title="{{activeItem}}">
+                                <li style="font-size: 12px" ng-repeat="activeItem in member.activeList"
+                                    title="{{activeItem}}">
                                     <div class="text-overflow">{{activeItem}}</div>
                                 </li>
                             </ul>
@@ -54,7 +64,7 @@
                 </ul>
             </div>
             <!--成员列表 end-->
-            
+
             <!--活动 start-->
             <h2 class="f4 mb-2 text-normal">
                 <span class="glyphicon glyphicon-align-left" style="color: #646464;">  成员动态</span>
@@ -63,11 +73,13 @@
                 <div class="col-md-10 activity-listing contribution-activity" style="min-height: 378px;">
                     <div class="contribution-activity-listing col-10 float-left">
                         <div class="profile-timeline discussion-timeline width-full pd-4">
-                            <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1" style="margin-top: 0px; background-color: #f6f8f8">
+                            <h3 class="profile-timeline-month-heading bg-white d-inline-block h6 pr-2 py-1"
+                                style="margin-top: 0px; background-color: #f6f8f8">
                                 全体成员
                             </h3>
-                            <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open" ng-repeat="log in DptCtrl.displayLogs"
-                                ng-click="DptCtrl.showActivityDetial(log)">
+                            <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
+                                 ng-repeat="log in DptCtrl.displayLogs"
+                                 ng-click="DptCtrl.showActivityDetial(log)">
                                 <span class="discussion-item-icon">
                                 <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
                                      viewBox="0 0 12 16" width="12" style="margin-top: 1px">
@@ -75,189 +87,329 @@
                                           d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
                                 </svg>
                             </span>
-                                <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target" type="button">
+                                <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
+                                        type="button">
                                 <span class="float-left">
                                     {{log.authorName}}@{{log.authorID}} added 工作记录 to {{log.projectCName}} <span
                                         style="color: #a3a3a3;font-size: 12px;">{{log.showTime}}</span>
                                 </span>
                                 </button>
                                 <label>{{log.content | delHtmlTag}}</label>
-                        </div>
-                        <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2" ng-click="DptCtrl.showMoreActivity(DptCtrl.selectedMemberAccount, DptCtrl.pageNum)"
-                            ng-show="DptCtrl.isShowShowMoreAcitivtyBtn">
-                            加载更多活动
+                            </div>
+                            <button class="ajax-pagination-btn btn btn-normal border-gray-dark width-full f6 mt-0 py-2"
+                                    ng-click="DptCtrl.showMoreActivity(DptCtrl.selectedMemberAccount, DptCtrl.pageNum)"
+                                    ng-show="DptCtrl.isShowShowMoreAcitivtyBtn">
+                                加载更多活动
                             </button>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-1 member-list">
+                    <ul class="nav nav-pills nav-stacked" id="memberNav">
+                        <li ng-class="{active: DptCtrl.memberItemIsSelected('all')}">
+                            <a href ng-click="DptCtrl.selectMemberItem('all')">
+                                    全体
+                                </a>
+                        </li>
+                        <li ng-repeat="member in DptCtrl.members" ng-class="{active: DptCtrl.memberItemIsSelected(member.account)}">
+                            <a href ng-click="DptCtrl.selectMemberItem(member.account)">
+                                    {{member.name}}
+                                </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <!--修改-->
+                <div class="col-md-1 member-list">
+                    <ul class="nav nav-pills nav-stacked" id="memberNav">
+                        <li ng-class="{active: DptCtrl.memberItemIsSelected('all')}">
+                            <a href ng-click="DptCtrl.selectMemberItem('all')">
+                                全体
+                            </a>
+                        </li>
+                        <li ng-repeat="member in DptCtrl.members"
+                            ng-class="{active: DptCtrl.memberItemIsSelected(member.account)}">
+
+                            <a data-toggle="collapse" data-parent="#accordion" href="/#{{member.name}}"
+                               ng-click="DptCtrl.selectMemberItem(member.account)">
+                                {{member.name}}
+                            </a>
+
+                            <div id="{{member.name}}" class="panel-collapse collapse" style="width: 150px">
+                                <div class="panel-body artlist" style="padding: 8px;width: 150px"
+                                     ng-repeat="activeItem in member.activeList" title="{{activeItem}}"
+                                     ng-click="DptCtrl.slectArticle(activeItem,member.account)"
+                                     ng-class="{'artice': DptCtrl.ArticeSelected(activeItem,member.account)}">
+                                    <div class="text-overflow" style="margin-left: 10px">{{activeItem}}</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--活动 end-->
+            </div>
+
+            <!--工作记录详情对话框 start-->
+            <div class="modal fade" id="jobDetail">
+                <div class="modal-dialog size-jobsheet">
+                    <div class="modal-content">
+                        <!--标题-->
+                        <div class="modal-header dialog-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title title-h4">
+                                工作记录详情
+                            </h4>
+                        </div>
+                        <!--内容-->
+                        <div class="modal-body dialog-body">
+                            <form>
+                                <!-- 状态显示区 -->
+                                <div class="row">
+                                    <div class="function-select-area item-border">
+                                        <!--项目显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">项目</p>
+                                            <div class="function-select-area-projects">
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                                <a class="title-h7 dropdown-toggle"
+                                                   style="font-size: 14px; font-weight: 600"
+                                                   title="{{DptCtrl.currentJob.projectCName}}"
+                                                   href>
+                                                    {{DptCtrl.currentJob.projectCName }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--日期显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">日期</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.date.substring(0, 10)}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--时间显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">所用时间(实际)</p>
+                                            <div class="function-select-area-type">
+                                                <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.duration}}小时
+                                                </a>
+                                            </div>
+                                            <!--
+                                                <div class="row function-select-area-time">
+                                                    <div class="col-xs-4 ">
+                                                        <a class="title-h7 dropdown-toggle" href>
+                                                            {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
+                                                        </a>
+                                                    </div>
+                                                    <i class="col-xs-1">
+                                                        -
+                                                    </i>
+                                                    <div class="col-xs-4">
+                                                        <a class="title-h7 dropdown-toggle" href>
+                                                            {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--系数显示区-->
+                                <div class="row" style="padding-top: 5px" ng-if="DptCtrl.currentJob.isReviewer">
+                                    <div class="function-select-area item-border" style="height: 4em;">
+                                        <!--工作难度-->
+                                        <div class="col-md-4   item-border" style="height: 4em;">
+                                            <p class="title-h8">难度系数:{{DptCtrl.currentJob.difficulty}}</p>
+                                        </div>
+                                        <!--时间系数-->
+                                        <div class="col-md-4   item-border" style="height: 4em;">
+                                            <p class="title-h8">效率系数:{{DptCtrl.currentJob.efficiency}}</p>
+                                        </div>
+                                        <!--完成质量-->
+                                        <div class="col-md-4  item-border" style="height: 4em;">
+                                            <p class="title-h8">质量系数： {{DptCtrl.currentJob.quality}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--提交状态显示区-->
+                                <div class="row" style="padding-top: 5px;">
+                                    <div class="function-select-area item-border">
+                                        <!--提交人-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">提交人</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon glyphicon-user"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.authorName }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--类型显示-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">类型</p>
+                                            <div class="function-select-area-type">
+                                                <span class="glyphicon glyphicon-tag"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.type}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!--记录状态-->
+                                        <div class="col-md-4 function-select-item item-border">
+                                            <p class="title-h8">审核状态</p>
+                                            <div class="function-select-area-date">
+                                                <span class="glyphicon glyphicon glyphicon-info-sign"></span>
+                                                <a class="title-h7 dropdown-toggle" href>
+                                                    {{DptCtrl.currentJob.status}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 内容显示区 -->
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="function-recode-area item-border"
+                                         style="overflow: auto; min-height: 290px; max-height: 290px">
+                                        <div ng-bind-html="DptCtrl.currentJob.content  | to_trusted">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 日志显示区 -->
+                                <div class="row" style="padding-top: 5px">
+                                    <div class="function-recode-area item-border"
+                                         style="overflow: auto; min-height: 200px; max-height: 200px">
+                                        <p class="title-h7" style="margin-left: 15px; font-weight: 500">
+                                            <span class="glyphicon glyphicon-list-alt"></span> 日志：
+                                        </p>
+                                        <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500"
+                                           ng-repeat="log in DptCtrl.currentJob.logs">
+                                            <b>{{log.authorName}}</b>: {{log.msg}}
+                                            {{DptCtrl.formatDateTime(log.logTime)}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--页脚-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    ng-click="DptCtrl.disMissModal()">关闭
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 member-list">
-                <ul class="nav nav-pills nav-stacked" id="memberNav">
-                    <li ng-class="{active: DptCtrl.memberItemIsSelected('all')}">
-                        <a href ng-click="DptCtrl.selectMemberItem('all')">
-                                全体
-                            </a>
-                    </li>
-                    <li ng-repeat="member in DptCtrl.members" ng-class="{active: DptCtrl.memberItemIsSelected(member.account)}">
-                        <a href ng-click="DptCtrl.selectMemberItem(member.account)">
-                                {{member.name}}
-                            </a>
+            <!--工作记录详情对话框 end-->
+
+        </div>
+        <!--近期工作 end-->
+
+        <!--统计 start-->
+        <div ng-show="DptCtrl.isShowArea('Static')" style="margin-top: 20px">
+            <div class="panel-group" id="accordion" role="tab">
+                <div class="chart-title">
+                    <a class="button button-glow button-border button-rounded button-primary collapsed"
+                       data-toggle="collapse" data-parent="#accordion" href="-#dateSelectArea" aria-expanded="false"
+                       aria-controls="dateSelectArea" title="点击打开日期选择面板，再次点击确认选择">
+                        统计范围 ( {{DptCtrl.monthRange.startDate.get('year')}}年{{DptCtrl.monthRange.startDate.get('month')
+                        + 1}}月 至 {{DptCtrl.monthRange.endDate.get('year')}}年{{DptCtrl.monthRange.endDate.get('month') +
+                        1}}月 )
+                    </a>
+                </div>
+                <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div style="height: 80px;">
+                        <div class="date-select">
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="DptCtrl.startYearSubstract()"></span>
+                            {{DptCtrl.monthRange.startDate.get('year')}}年
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="DptCtrl.startYearAdd()"></span>
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="DptCtrl.startMonthSubstract()"></span>
+                            {{DptCtrl.monthRange.startDate.get('month') + 1}}月
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="DptCtrl.startMonthAdd()"></span> 至
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="DptCtrl.endYearSubstract()"></span>
+                            {{DptCtrl.monthRange.endDate.get('year')}}年
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="DptCtrl.endYearAdd()"></span>
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="DptCtrl.endMonthSubstract()"></span>
+                            {{DptCtrl.monthRange.endDate.get('month') + 1}}月
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="DptCtrl.endMonthAdd()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wall-evaluation">
+                <ul style="padding-left: 0">
+                    <li class="layout" ng-repeat="memberStatics in DptCtrl.membersStatics">
+                        <div class="name" title="{{memberStatics.name}}@{{memberStatics.account}}">
+                            <span>{{memberStatics.name.substring(memberStatics.name.length - 1, memberStatics.name.length)}}</span>
+                        </div>
+                        <div class="statics" id="staticsGroup{{memberStatics.account}}">
+                            <div class="evaluation">
+                                <a class="evaluation-button-details" type="button" data-toggle="collapse"
+                                   data-parent="#staticsGroup{{memberStatics.account}}"
+                                   href="-#collapseDetails{{memberStatics.account}}" aria-expanded="false"
+                                   aria-controls="collapseDetails{{memberStatics.account}}"
+                                   ng-click="DptCtrl.getTimeDistribution(memberStatics, '#dashboard' + memberStatics.account)">
+                                    <span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;时间分配详情
+                                </a>
+                                <div class="evaluation-title">
+                                    <span>
+                                        <!--工作记录（已审核/总数）： {{memberStatics.evaluation.reviewedCount}}&nbsp/&nbsp{{memberStatics.evaluation.jobLogCount}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
+                                        工时数（标准/实际）： {{memberStatics.evaluation.StdTime | number: 1}}小时&nbsp/&nbsp{{memberStatics.evaluation.RealTime}}小时&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                        (已审核记录 {{memberStatics.evaluation.reviewedCount}}条，尚有{{memberStatics.evaluation.unreviewedCount}}条记录因未审核不在该统计中）
+                                    </span>
+                                </div>
+                                <div class="evaluation-item" style="line-height: 20px!important;">
+                                    <p>
+                                        <!--难度评价:-->
+                                        <span>难度评价 - (</span>
+                                        <span>标准: {{memberStatics.evaluation.D_Normal}}，</span>
+                                        <span>简单: {{memberStatics.evaluation.D_Easy}}，</span>
+                                        <span>困难: {{memberStatics.evaluation.D_Difficult}}</span>
+                                        <span>)</span>
+                                    </p>
+                                    <p>
+                                        <!--效率评价-->
+                                        <span>效率评价 - (</span>
+                                        <span>标准: {{memberStatics.evaluation.E_Normal}}，</span>
+                                        <span>龟速: {{memberStatics.evaluation.E_Turtle}}，</span>
+                                        <span>较慢: {{memberStatics.evaluation.E_Slowly}}，</span>
+                                        <span>较快: {{memberStatics.evaluation.E_Quickly}}，</span>
+                                        <span>神速: {{memberStatics.evaluation.E_Rabbit}}</span>
+                                        <span>)</span>
+                                    </p>
+                                    <p>
+                                        <!--质量评价-->
+                                        <span>质量评价 - (</span>
+                                        <span>标准: {{memberStatics.evaluation.Q_Normal}}，</span>
+                                        <span>不可用: {{memberStatics.evaluation.Q_Invalid}}，</span>
+                                        <span>极差: {{memberStatics.evaluation.Q_Badest}}，</span>
+                                        <span>较差: {{memberStatics.evaluation.Q_Bad}}，</span>
+                                        <span>一般: {{memberStatics.evaluation.Q_BelowNormal}}</span>
+                                        <span>)</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="collapse details" id="collapseDetails{{memberStatics.account}}">
+                                <div id="dashboard{{memberStatics.account}}"></div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
-            <!--活动 end-->
         </div>
-        
-        <!--工作记录详情对话框 start-->
-        <div class="modal fade" id="jobDetail">
-            <div class="modal-dialog size-jobsheet">
-                <div class="modal-content">
-                    <!--标题-->
-                    <div class="modal-header dialog-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title title-h4">
-                            工作记录详情
-                        </h4>
-                    </div>
-                    <!--内容-->
-                    <div class="modal-body dialog-body">
-                        <form>
-                            <!-- 状态显示区 -->
-                            <div class="row">
-                                <div class="function-select-area item-border">
-                                    <!--项目显示-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">项目</p>
-                                        <div class="function-select-area-projects">
-                                            <span class="glyphicon glyphicon-list-alt"></span>
-                                            <a class="title-h7 dropdown-toggle" style="font-size: 14px; font-weight: 600" title="{{DptCtrl.currentJob.projectCName}}"
-                                                href>
-                                                {{DptCtrl.currentJob.projectCName }}
-                                                </a>
-                                        </div>
-                                    </div>
-                                    <!--日期显示-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">日期</p>
-                                        <div class="function-select-area-date">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                            <a class="title-h7 dropdown-toggle" href>
-                                                    {{DptCtrl.currentJob.date.substring(0, 10)}}
-                                                </a>
-                                        </div>
-                                    </div>
-                                    <!--时间显示-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">所用时间(实际)</p>
-                                        <div class="function-select-area-type">
-                                            <span class="glyphicon glyphicon-time" style="color: #6e6e6e;"></span>
-                                            <a class="title-h7 dropdown-toggle" href>
-                                                    {{DptCtrl.currentJob.duration}}小时
-                                                </a>
-                                        </div>
-                                        <!--
-                                            <div class="row function-select-area-time">
-                                                <div class="col-xs-4 ">
-                                                    <a class="title-h7 dropdown-toggle" href>
-                                                        {{ReviewCtrl.currentJob.starTime.substring(11, 16)}}
-                                                    </a>
-                                                </div>
-                                                <i class="col-xs-1">
-                                                    -
-                                                </i>
-                                                <div class="col-xs-4">
-                                                    <a class="title-h7 dropdown-toggle" href>
-                                                        {{ReviewCtrl.currentJob.endTime.substring(11, 16)}}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            -->
-                                    </div>
-                                </div>
-                            </div>
-                            <!--系数显示区-->
-                            <div class="row" style="padding-top: 5px" ng-if="DptCtrl.currentJob.isReviewer">
-                                <div class="function-select-area item-border" style="height: 4em;">
-                                    <!--工作难度-->
-                                    <div class="col-md-4   item-border" style="height: 4em;">
-                                        <p class="title-h8">难度系数:{{DptCtrl.currentJob.difficulty}}</p>
-                                    </div>
-                                    <!--时间系数-->
-                                    <div class="col-md-4   item-border" style="height: 4em;">
-                                        <p class="title-h8">效率系数:{{DptCtrl.currentJob.efficiency}}</p>
-                                    </div>
-                                    <!--完成质量-->
-                                    <div class="col-md-4  item-border" style="height: 4em;">
-                                        <p class="title-h8">质量系数： {{DptCtrl.currentJob.quality}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--提交状态显示区-->
-                            <div class="row" style="padding-top: 5px;">
-                                <div class="function-select-area item-border">
-                                    <!--提交人-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">提交人</p>
-                                        <div class="function-select-area-date">
-                                            <span class="glyphicon glyphicon glyphicon-user"></span>
-                                            <a class="title-h7 dropdown-toggle" href>
-                                                    {{DptCtrl.currentJob.authorName }}
-                                                </a>
-                                        </div>
-                                    </div>
-                                    <!--类型显示-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">类型</p>
-                                        <div class="function-select-area-type">
-                                            <span class="glyphicon glyphicon-tag"></span>
-                                            <a class="title-h7 dropdown-toggle" href>
-                                                    {{DptCtrl.currentJob.type}}
-                                                </a>
-                                        </div>
-                                    </div>
-                                    <!--记录状态-->
-                                    <div class="col-md-4 function-select-item item-border">
-                                        <p class="title-h8">审核状态</p>
-                                        <div class="function-select-area-date">
-                                            <span class="glyphicon glyphicon glyphicon-info-sign"></span>
-                                            <a class="title-h7 dropdown-toggle" href>
-                                                    {{DptCtrl.currentJob.status}}
-                                                </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 内容显示区 -->
-                            <div class="row" style="padding-top: 5px">
-                                <div class="function-recode-area item-border" style="overflow: auto; min-height: 290px; max-height: 290px">
-                                    <div ng-bind-html="DptCtrl.currentJob.content  | to_trusted">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 日志显示区 -->
-                            <div class="row" style="padding-top: 5px">
-                                <div class="function-recode-area item-border" style="overflow: auto; min-height: 200px; max-height: 200px">
-                                    <p class="title-h7" style="margin-left: 15px; font-weight: 500">
-                                        <span class="glyphicon glyphicon-list-alt"></span> 日志：
-                                    </p>
-                                    <p class="title-h7" style="font-size: 14px;margin-left: 25px; font-weight: 500" ng-repeat="log in DptCtrl.currentJob.logs">
-                                        <b>{{log.authorName}}</b>: {{log.msg}} {{DptCtrl.formatDateTime(log.logTime)}}
-                                    </p>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!--页脚-->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="DptCtrl.disMissModal()">关闭
-                            </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--工作记录详情对话框 end-->
-
     </div>
-    <!--近期工作 end-->
+    <!--统计 end-->
 
     <!--Shared start-->
     <div ng-show="DptCtrl.isShowArea('Shared')">
@@ -266,32 +418,42 @@
                 <div class="wall-left-column">
                     <header class="wall-left-column-header clearfix" style="display: block">
                         <div class="dropdown" style="float: left!important">
-                            <a class="dropdown-toggle header-item-padding" data-toggle="dropdown" href style="font-size: 18px; color: #646464">
+                            <a class="dropdown-toggle header-item-padding" data-toggle="dropdown" href
+                               style="font-size: 18px; color: #646464">
                                 {{DptCtrl.sharingRange}}
                             </a>
                             <a class="caret" style="color: #646464"></a>
                             <ul class="dropdown-menu dropdown-menu-custom" role="menu">
-                                <a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSharingRange('所有分享')">所有分享</a>
-                                <a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSharingRange('我的分享')">我的分享</a>
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="DptCtrl.selectSharingRange('所有分享')">所有分享</a>
+                                <a class="dropdown-item btn btn-align-left"
+                                   ng-click="DptCtrl.selectSharingRange('我的分享')">我的分享</a>
                                 <div class="dropdown-split-line" href="/"></div>
-                                <a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSortType('VarDate')">按发布时间排序  <span class="glyphicon glyphicon-ok" ng-show="DptCtrl.isSelectedSortType('VarDate')"></span></a>
-                                <a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSortType('ReplyDate')">按回复时间排序  <span class="glyphicon glyphicon-ok" ng-show="DptCtrl.isSelectedSortType('ReplyDate')"></span></a>
+                                <!--<a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSortType('VarDate')">按发布时间排序  <span class="glyphicon glyphicon-ok" ng-show="DptCtrl.isSelectedSortType('VarDate')"></span></a>
+                                <a class="dropdown-item btn btn-align-left" ng-click="DptCtrl.selectSortType('ReplyDate')">按回复时间排序  <span class="glyphicon glyphicon-ok" ng-show="DptCtrl.isSelectedSortType('ReplyDate')"></span></a>-->
                             </ul>
                         </div>
                         <div class="btn-group post-create-wrap pull-right">
-                            <a class="open-post-creator-handler link-add-handler" style="font-size: 16px; cursor: pointer" ng-click="DptCtrl.showSharingEdit()">
-                                <span class="glyphicon glyphicon-pencil"></span>  添加分享
+                            <a class="open-post-creator-handler link-add-handler"
+                               style="font-size: 16px; cursor: pointer" ng-click="DptCtrl.showSharingEdit()">
+                                <span class="glyphicon glyphicon-pencil"></span> 添加分享
                             </a>
                         </div>
                     </header>
                     <nav class="posts-navigator">
                         <ul style="padding-left: 0px">
-                            <li class="post" ng-repeat="sharing in DptCtrl.sharings" ng-class="{active: DptCtrl.sharingItemIsSelected(sharing)}" ng-click="DptCtrl.selectSharingItem(sharing)">
+                            <li class="post"
+                                ng-repeat="sharing in DptCtrl.sharings | sharingListFilter:DptCtrl.sharingRange:DptCtrl.account | sharingListSort"
+                                ng-class="{active: DptCtrl.sharingItemIsSelected(sharing)}"
+                                ng-click="DptCtrl.selectSharingItem(sharing)">
                                 <section>
-                                    <div class="avatar img-36 img-circle pull-left" style="background-image: url(/public/100.png)"></div>
+                                    <div class="avatar img-36 img-circle pull-left"
+                                         style="background-image: url(/public/100.png)"></div>
                                     <div class="post-content">
-                                        <p class="post-title" style="font-weight: 400" ng-class="{active: sharing.isSelected}">
-                                            <span class="post-title" title="{{sharing.title}}">{{sharing.title}}</span>
+                                        <p class="post-title" style="font-weight: 400"
+                                           ng-class="{active: sharing.isSelected}">
+                                                <span class="post-title"
+                                                      title="{{sharing.title}}">{{sharing.title}}</span>
                                         </p>
                                         <p class="post-info muted">
                                             {{sharing.authorID}}发布于
@@ -299,6 +461,12 @@
                                         </p>
                                     </div>
                                 </section>
+                                <div style="position: absolute;top: 16px;right: 33px" ng-show="sharing.privacyFlg">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </div>
+                                <div style="position: absolute;top: 16px;right: 8px" ng-show="sharing.pinFlg">
+                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                </div>
                             </li>
                         </ul>
                     </nav>
@@ -310,36 +478,70 @@
                                 <div class="post-detail-header-wrap">
                                     <div class="post-detail-header">
                                         <h4 class="post-title">
-                                            {{DptCtrl.sharingDetail.title}} 
+                                            {{DptCtrl.sharingDetail.title}}
+                                            <span class="glyphicon glyphicon-new-window"
+                                                  style="margin-left: 20px;cursor: pointer; color: #9f9f9f"
+                                                  title="在新窗口中打开"
+                                                  ng-click="DptCtrl.newWindowSharing(DptCtrl.sharingDetail._id)"></span>
                                         </h4>
                                         <div class="dropdown menu-handler">
-                                            <a class="dropdown-toggle menu-tip" data-toggle="dropdown" ng-show="DptCtrl.authorIsMe">
+                                            <a class="dropdown-toggle menu-tip" data-toggle="dropdown"
+                                               ng-show="DptCtrl.authorIsMe">
                                                 更多...
-                                            </a>    
+                                            </a>
                                             <ul class="dropdown-menu menu-handler-menu" role="menu">
                                                 <div class="dropdown-menu-header">
                                                     <strong class="">分享菜单</strong>
                                                 </div>
                                                 <div class="dropdown-split-line"></div>
-                                                <a class="dropdown-item" href ng-click="DptCtrl.showSharingEdit(DptCtrl.sharingDetail)">
+                                                <a class="dropdown-item" href
+                                                   ng-click="DptCtrl.showSharingEdit(DptCtrl.sharingDetail)"
+                                                   style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                     编辑分享
                                                 </a>
-                                                <a class="dropdown-item" href disabled="disabled">
+                                                <a class="dropdown-item" href
+                                                   ng-click="DptCtrl.pinSharing(DptCtrl.sharingDetail)"
+                                                   style="color: #3f3f3f" ng-show="!DptCtrl.sharingDetail.pinFlg">
+                                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                                    置顶分享
+                                                </a>
+                                                <a class="dropdown-item" href
+                                                   ng-click="DptCtrl.pinSharing(DptCtrl.sharingDetail)"
+                                                   style="color: #3f3f3f" ng-show="DptCtrl.sharingDetail.pinFlg">
+                                                    <span class="glyphicon glyphicon-pushpin"></span>
+                                                    取消置顶
+                                                </a>
+                                                <a class="dropdown-item" href style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-duplicate"></span>
                                                     复制分享
                                                 </a>
-                                                <a class="dropdown-item" href disabled="disabled">
+                                                <a class="dropdown-item" href style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-share"></span>
                                                     移动分享
                                                 </a>
-                                                <div class="dropdown-split-line" href></div>
-                                                <a class="dropdown-item" href ng-click="DptCtrl.deleteSharing(DptCtrl.sharingDetail)">
+                                                <a class="dropdown-item" href
+                                                   ng-click="DptCtrl.deleteSharing(DptCtrl.sharingDetail)"
+                                                   style="color: #3f3f3f">
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                     删除分享
                                                 </a>
-                                            </ul>  
-                                        </div>                                  
+                                                <div class="dropdown-split-line" href></div>
+                                                <a class="dropdown-item" href
+                                                   ng-click="DptCtrl.setPrivacySharing(DptCtrl.sharingDetail)"
+                                                   style="color: #3f3f3f">
+                                                        <span class="glyphicon"
+                                                              ng-class="{'glyphicon-eye-open': !DptCtrl.sharingDetail.privacyFlg, 'glyphicon-eye-close': DptCtrl.sharingDetail.privacyFlg}"></span>
+                                                    隐私模式
+                                                    <p ng-show="!DptCtrl.sharingDetail.privacyFlg"
+                                                       style="font-size: 12px; line-height: 14px; color: #a6a6a6; margin-left: 18px">
+                                                        所有成员可见</p>
+                                                    <p ng-show="DptCtrl.sharingDetail.privacyFlg"
+                                                       style="font-size: 12px; line-height: 14px; color: #a6a6a6; margin-left: 18px">
+                                                        仅作者可见</p>
+                                                </a>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="post-detail-content-wrap">
@@ -362,5 +564,5 @@
     <!--部门资产 end-->
 
 
-
+</div>
 </div>

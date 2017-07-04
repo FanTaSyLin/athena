@@ -144,17 +144,20 @@
                 var tmpStr = moment(startDateStr).add(i, "d").format("MM月DD日");
                 labelList.push(tmpStr);
                 var isExist = false;
+                var tmp = 0;
                 for (var j = 0; j < datas.length; j++) {
                     var data = datas[j];
                     if (moment(data.date).format("MM月DD日") === tmpStr) {
-                        dataList.push(data.duration);
-                        isExist = true;
-                        break;
+                        // dataList.push(data.duration);
+                        // isExist = true;
+                        // break;
+	                    tmp += data.duration;
                     }
                 }
-                if (!isExist) {
-                    dataList.push(0);
-                }
+                dataList.push(tmp);
+                // if (!isExist) {
+                //     dataList.push(0);
+                // }
             }
 
 

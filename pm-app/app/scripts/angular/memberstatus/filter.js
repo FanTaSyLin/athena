@@ -38,7 +38,7 @@
         return function (list) {
             var tmpArray = [];
             for (var i = 0; i < list.length; i++) {
-                if (list[i].myWorkDone > 0) {
+                if (list[i].myWorkDone >= 0) {
                     tmpArray.push(list[i]);
                 }
             }

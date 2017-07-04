@@ -16,8 +16,7 @@
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
-        }
-    );
+        });
 
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 

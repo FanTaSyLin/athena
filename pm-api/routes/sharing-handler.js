@@ -26,7 +26,7 @@
          * 
          * @typedef {range} 可见范围
          * @property {string} type (global, department, project, private)
-         * @property {string[]} params 
+         * @property {string} params 
          */
 
         /**
@@ -70,6 +70,26 @@
         }, _deleteContent);
 
         /**
+         * @description 设置或取消置顶
+         * @param {string} body._id
+         * @param {Boolean} body.pinFlg 置顶标记
+         */
+        server.post({
+            path: BASEPATH + "/sharing/pin",
+            version: "0.0.1",
+        }, _pinSharing);
+
+        /**
+         * @description 设置隐私或公开
+         * @param {string} body._id
+         * @param {Boolean} body.privacyFlg 隐私标记
+         */
+        server.post({
+            path: BASEPATH + "/sharing/privacy",
+            version: "0.0.1",
+        }, _privacySharing);
+
+        /**
          * @description 获取分享列表
          * @param {string} authorid 作者账号
          * @param {string} rangetype 可见范围
@@ -81,12 +101,94 @@
             version: "0.0.1",
         }, _getContentList);
 
+        /**
+         * @description 获取分享详细信息
+         * @param {string} _id
+         */
         server.get({
             path: BASEPATH + "/sharing/detail",
             version: "0.0.1",
         }, _getSharingDetail);
 
+        /**
+         * @description 获取分享详细信息的内容部分
+         * @param {string} _id
+         */
+        server.get({
+            path: BASEPATH + "/sharing/content",
+            version: "0.0.1",
+        }, _getSharingContent);
+
     };
+
+    function _getSharingContent(req, res, next) {
+        if (_.isUndefined(req.params.id)) {
+            return next(new ParamProviderError(415, {
+                message: 'Invalid params'
+            }));
+        }
+
+        var id = req.params.id;
+
+        ContentSharingSchema
+            .findOne({
+                _id: id
+            }, ["content", "title"]).exec(function (err, doc) {
+
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                }
+
+                res.end(JSON.stringify(doc));
+
+            });
+    }
+
+    function _privacySharing(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: "body is undefined"
+            }));
+        }
+        var body = req.body;
+        ContentSharingSchema
+            .update({
+                _id: body._id
+            }, {
+                $set: {
+                    privacyFlg: body.privacyFlg
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
+            });
+    }
+
+    function _pinSharing(req, res, next) {
+        if (_.isUndefined(req.body)) {
+            return next(new ParamProviderError(415, {
+                message: "body is undefined"
+            }));
+        }
+        var body = req.body;
+        ContentSharingSchema
+            .update({
+                _id: body._id
+            }, {
+                $set: {
+                    pinFlg: body.pinFlg
+                }
+            }, function (err) {
+                if (err) {
+                    return next(new DBOptionError(415, err));
+                } else {
+                    res.end();
+                }
+            });
+    }
 
     function _deleteContent(req, res, next) {
 
@@ -186,8 +288,9 @@
         }
         console.log(JSON.stringify(condition));
         ContentSharingSchema
-            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate"])
+            .find(condition, ["_id", "authorID", "authorName", "tags", "title", "varDate", "pinFlg", "privacyFlg"])
             .sort({
+                "pinFlg": -1,
                 "varDate": -1
             })
             .exec(function (err, doc) {

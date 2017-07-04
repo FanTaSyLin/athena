@@ -20,16 +20,18 @@
         var account = "";
         var departmentID = "";
         var departmentName = "";
-            var sharingEdit = angular.element(document.getElementById('sharingEdit'));
-            var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
+        var sharingEdit = angular.element(document.getElementById('sharingEdit'));
+        var ctxByDay = angular.element(document.getElementById('department-Chart-ByDay'));
         var memberNav = angular.element(document.getElementById('memberNav'));
         var departmentNav = angular.element(document.getElementById('departmentNav'));
+        var dateSelectArea = angular.element(document.getElementById('dateSelectArea'));
         /*详情弹窗*/
         var jobDetail = angular.element(document.getElementById('jobDetail'));
 
         /*是否为当前部门经理 初始化时候配置 用于判断显示*/
         var is_dptManager = false;
 
+        self.account = "";
         /*当前显示的工作记录*/
         self.currentJob = {};
         self.members = [];
@@ -49,6 +51,13 @@
         self.currentSharing = {};
         self.sharingDetail = undefined;
         self.authorIsMe = false;
+        self.membersStatics = [];
+        self.staticRangeTitle = "";
+        self.monthRange = {
+            startDate: new Date(),
+            endDate: new Date()
+        };
+        self.showStaticsTab = false;
 
         self.initData = _initData;
         self.openThisMemberInfo = _openThisMemberInfo;
@@ -64,6 +73,19 @@
         self.selectSortType = _selectSortType;
         self.isSelectedSortType = _isSelectedSortType;
         self.selectSharingRange = _selectSharingRange;
+        self.startYearAdd = _startYearAdd;
+        self.startYearSubstract = _startYearSubstract;
+        self.startMonthAdd = _startMonthAdd;
+        self.startMonthSubstract = _startMonthSubstract;
+        self.endYearAdd = _endYearAdd;
+        self.endYearSubstract = _endYearSubstract;
+        self.endMonthAdd = _endMonthAdd;
+        self.endMonthSubstract = _endMonthSubstract;
+
+        self.slectArticle = _slectArticle;
+        self.ArticeSelected = _ArticeSelected;
+
+
         /*格式化时间 + 日期 格式*/
         self.formatDateTime = _formatDateTime;
         /*取消审核模态框*/
@@ -77,17 +99,283 @@
          */
         self.sharingItemIsSelected = _sharingItemIsSelected;
         /**
-         * 显示编辑分享对话框 
+         * 显示编辑分享对话框
          */
         self.showSharingEdit = _showSharingEdit;
         /**
          * 删除分享内容
          */
         self.deleteSharing = _deleteSharing;
+        /**
+         * 设置置顶
+         */
+        self.pinSharing = _pinSharing;
+        /**
+         * 在新窗口中打开分享内容
+         */
+        self.newWindowSharing = _newWindowSharing;
+        /**
+         * 将分享内容设置为隐私或公开状态
+         */
+        self.setPrivacySharing = _setPrivacySharing;
+
+        /**
+         * 点击获取成员时间分配情况
+         */
+        self.getTimeDistribution = _getTimeDistribution;
 
         PMSoftServices.onNewSharingSubmited = _getSharings;
 
         PMSoftServices.onSharingEdited = _updateSharingList;
+
+        //当 collapse 隐藏时 触发查询
+        dateSelectArea.on('hidden.bs.collapse', function () {
+            self.membersStatics.splice(0, self.membersStatics.length);
+            self.members.forEach(function (item) {
+                var member = {
+                    account: item.account,
+                    name: item.name,
+                    isExpanded: false,
+                    evaluation: {
+                        // jobLogCount: 0,
+                        // reviewedCount: 0
+                    },
+                    activity: {},
+                    distribution: {}
+                };
+                self.membersStatics.push(member);
+            });
+            var tmpMembers = [];
+            self.members.forEach(function (member) {
+                tmpMembers.push(member.account);
+            });
+            _getDptWorkStatic(self.monthRange.startDate, self.monthRange.endDate, tmpMembers);
+        });
+
+        /**
+         * 获取并绘制成员的时间分配情况
+         * @param account
+         * @private
+         */
+        var _lock = false;
+        function _getTimeDistribution(item, id) {
+            if (!_lock) {
+                _lock = !_lock;
+                setTimeout(function () {
+                   _lock = !_lock;
+                }, 500);
+                item.isExpanded = !item.isExpanded;
+                if (!item.isExpanded) {
+                    $(id).empty();
+                    return;
+                }
+                PMSoftServices.getTimeDistribution(item.account, self.monthRange.startDate.format("YYYY-MM-DD"), self.monthRange.endDate.format("YYYY-MM-DD"), function (data) {
+                    var doc = data.doc;
+                    for (var i = 0; i < doc.length; i++) {
+                        doc[i].index = i;
+                    }
+                    (function () {
+                        var pieChart = undefined;
+                        var leg = undefined;
+
+                        if (pieChart !== undefined || leg !== undefined) {
+                            pieChart = _pieChart(doc, pieChart);
+                            leg = _legend(doc, leg);
+                        } else {
+                            pieChart = _pieChart(doc, null);
+                            leg = _legend(doc, null);
+                        }
+
+                        function segColor(index) {
+                            var index = index % ColourSystem.length;
+                            return ColourSystem[index].borderColor;
+                        }
+
+                        function _pieChart(pieData, opt) {
+                            if (opt !== null) {
+                                opt.update(pieData);
+                                return;
+                            }
+                            var pC = {};
+                            var pieDim = {w: 300, h: 300};
+                            pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+                            var piesvg = d3.select(id).append("svg")
+                                .attr("width", pieDim.w)
+                                .attr("height", pieDim.h)
+                                .append("g")
+                                .attr("transform", "translate(" + pieDim.w / 2 + "," + pieDim.h / 2 + ")");
+                            var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+                            var pie = d3.layout.pie().sort(null).value(function (d) {
+                                return d.totalStandard;
+                            });
+                            piesvg.selectAll("path")
+                                .data(pie(pieData))
+                                .enter()
+                                .append("path")
+                                .attr("d", arc)
+                                .each(function (d) {
+                                    this._current = d;
+                                })
+                                .style("fill", function (d) {
+                                    return segColor(d.data.index);
+                                });
+                            pC.update = function (nD) {
+                                piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
+                                    .attrTween("d", arcTween);
+                            }
+                            return pC;
+                        }
+
+                        function _legend(legData, opt) {
+                            if (opt !== null) {
+                                opt.update(legData);
+                                return;
+                            }
+                            var leg = {};
+                            var legend = d3.select(id)
+                                .append("table")
+                                .attr('class', 'legend');
+                            var tr = legend.append("tbody")
+                                .selectAll("tr")
+                                .data(legData)
+                                .enter()
+                                .append("tr");
+                            tr.append("td")
+                                .append("svg")
+                                .attr("width", '16')
+                                .attr("height", '16')
+                                .append("rect")
+                                .attr("width", '16')
+                                .attr("height", '16')
+                                .attr("fill", function (d) {
+                                    return segColor(d.index);
+                                });
+                            tr.append("td").attr("class", "legendTitle")
+                                .text(function (d) {
+                                    return d.projectCName;
+                                });
+                            tr.append("td").attr("class", 'legendValue')
+                                .text(function (d) {
+                                    return d3.format(",")(d.totalStandard) + "（时）";
+                                });
+                            tr.append("td").attr("class", 'legendPerc')
+                                .text(function (d) {
+                                    return getLegend(d, legData);
+                                });
+                            leg.update = function (nD) {
+                                var l = legend.select("tbody").selectAll("tr").data(nD);
+
+                                // l.select(".legendTitle").text
+                                // update the frequencies.
+                                l.select(".legendValue").text(function (d) {
+                                    return d3.format(",")(d.totalStandard);
+                                });
+
+                                // update the percentage column.
+                                l.select(".legendPerc").text(function (d) {
+                                    return getLegend(d, nD);
+                                });
+                            };
+                            return leg;
+                        }
+
+                        function getLegend(d, aD) {
+                            return d3.format("%")(d.totalStandard / d3.sum(aD.map(function (v) {
+                                    return v.totalStandard;
+                                })));
+                        }
+
+                    })();
+                }, function (err) {
+
+                });
+
+            }
+        }
+
+        function _startYearAdd() {
+            self.monthRange.startDate = self.monthRange.startDate.add(1, 'Y');
+        }
+
+        function _startYearSubstract() {
+            self.monthRange.startDate = self.monthRange.startDate.add(-1, 'Y');
+        }
+
+        function _startMonthAdd() {
+            self.monthRange.startDate = self.monthRange.startDate.add(1, 'M');
+        }
+
+        function _startMonthSubstract() {
+            self.monthRange.startDate = self.monthRange.startDate.add(-1, 'M');
+        }
+
+        function _endYearAdd() {
+            self.monthRange.endDate = self.monthRange.endDate.add(1, 'Y');
+        }
+
+        function _endYearSubstract() {
+            self.monthRange.endDate = self.monthRange.endDate.add(-1, 'Y');
+        }
+
+        function _endMonthAdd() {
+            self.monthRange.endDate = self.monthRange.endDate.add(1, 'M');
+        }
+
+        function _endMonthSubstract() {
+            self.monthRange.endDate = self.monthRange.endDate.add(-1, 'M');
+        }
+
+        /**
+         * @description 将分享内容设置为隐私或公开状态
+         * @param {Object} sharingDetail
+         */
+        function _setPrivacySharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            body.privacyFlg = sharingDetail.privacyFlg;
+            body.privacyFlg = !body.privacyFlg;
+            PMSoftServices.setSharingPrivacy(body, function (res) {
+                sharingDetail.privacyFlg = !sharingDetail.privacyFlg;
+                for (var i = 0; i < self.sharings.length; i++) {
+                    if (self.sharings[i]._id === sharingDetail._id) {
+                        self.sharings[i].privacyFlg = sharingDetail.privacyFlg;
+                        break;
+                    }
+                }
+            }, function (res) {
+                alert("设置失败，请检查网络并稍后再试。");
+            });
+        }
+
+        /**
+         * @description 在新窗口中打开分享内容
+         */
+        function _newWindowSharing(_id) {
+            var url = 'pm-soft/sharingcontent?id=' + _id;
+            window.open(url);
+        }
+
+        /**
+         * @description 设置置顶
+         * @param {Object} sharingDetail 分享内容详情
+         */
+        function _pinSharing(sharingDetail) {
+            var body = {};
+            body._id = sharingDetail._id;
+            body.pinFlg = sharingDetail.pinFlg;
+            body.pinFlg = !body.pinFlg;
+            PMSoftServices.setSharingPin(body, function (res) {
+                sharingDetail.pinFlg = !sharingDetail.pinFlg;
+                for (var i = 0; i < self.sharings.length; i++) {
+                    if (self.sharings[i]._id === sharingDetail._id) {
+                        self.sharings[i].pinFlg = sharingDetail.pinFlg;
+                        break;
+                    }
+                }
+            }, function (res) {
+                alert("设置失败，请检查网络并稍后再试。");
+            });
+        }
 
         function _updateSharingList(sharingItem) {
             for (var i = 0; i < self.sharings.length; i++) {
@@ -136,7 +424,14 @@
                     }
                 });
                 if (self.sharingDetail === undefined && self.sharings.length > 0) {
-                    _getSharingDetail(self.sharings[0]._id);
+                    for (var i = 0; i < self.sharings.length; i++) {
+                        if (self.sharings[i].privacyFlg === true && self.sharings[i].authorID !== account) {
+                            continue;
+                        } else {
+                            _getSharingDetail(self.sharings[i]._id);
+                            break;
+                        }
+                    }
                 }
             }, function (res) {
 
@@ -190,15 +485,15 @@
 
         function _getSharingDetail(_id) {
             PMSoftServices.getSharingDetail(_id, function (res) {
-                    self.sharingDetail = res.doc[0];
-                    if (account === self.sharingDetail.authorID) {
-                        self.authorIsMe = true;
-                    } else {
-                        self.authorIsMe = false;
-                    }
-                }, function (res) {
+                self.sharingDetail = res.doc[0];
+                if (account === self.sharingDetail.authorID) {
+                    self.authorIsMe = true;
+                } else {
+                    self.authorIsMe = false;
+                }
+            }, function (res) {
 
-                });
+            });
         }
 
         function _selectSharingRange(sharingRange) {
@@ -228,9 +523,37 @@
 
         function _refreshData(department) {
             dptNum = department.id;
-            _getPageData(dptNum);
+            _getPageData(dptNum, function () {
+                if (self.profileNavCurrentItem === 'Static') {
+                    self.membersStatics.splice(0, self.membersStatics.length);
+                    self.members.forEach(function (item) {
+                        var member = {
+                            account: item.account,
+                            name: item.name,
+                            isExpanded: false,
+                            evaluation: {
+                                // jobLogCount: 0,
+                                // reviewedCount: 0
+                            },
+                            activity: {},
+                            distribution: {}
+                        };
+                        self.membersStatics.push(member);
+                    });
+                    var tmpMembers = [];
+                    self.members.forEach(function (member) {
+                        tmpMembers.push(member.account);
+                    });
+                    _getDptWorkStatic(self.monthRange.startDate, self.monthRange.endDate, tmpMembers);
+                }
+            });
         }
 
+        /**
+         * @description 页面初始化函数 运行于页面加载完成后
+         * 既包括数据获取 也包括页面相关控件的初始化
+         * @private
+         */
         function _initData() {
             //  difficultyEditor.slider('setValue', 1);
             if (window.location.hash !== '#/department') {
@@ -239,6 +562,7 @@
 
                 sysconfig = $cookies.getObject('Sysconfig');
                 account = $cookies.get('account');
+                self.account = account;
                 departmentID = $cookies.get("department");
                 for (var i = 0; i < sysconfig[0].departments.length; i++) {
                     if (sysconfig[0].departments[i].id.toString() === departmentID) {
@@ -276,15 +600,75 @@
                 /**
                  * 获取是否为部门经理 软件中心，决定显示系数权限
                  */
-                is_dptManager = _getIsManager();
+                is_dptManager = _getIsManager() || isManager;
+                self.showStaticsTab = is_dptManager;
 
                 dptNum = $cookies.get('department');
                 /**
                  * @description 获取部门成员列表， 根据列表内容获取工作记录， 根据工作记录（简化信息）生成曲线图
                  */
-                _getPageData(dptNum);
-                
+                _getPageData(dptNum, function () {
+                    //初始化统计列表
+                    self.membersStatics.splice(0, self.membersStatics.length);
+                    self.members.forEach(function (item) {
+                        var member = {
+                            account: item.account,
+                            name: item.name,
+                            isExpanded: false,
+                            evaluation: {
+                                // jobLogCount: 0,
+                                // reviewedCount: 0
+                            },
+                            activity: {},
+                            distribution: {}
+                        };
+                        self.membersStatics.push(member);
+                    });
+                });
+                //生成标题
+                var startDate = moment(new Date()).add(-1, 'M').startOf('month');
+                var endDate = moment(new Date()).endOf('month');
+                //初始化日期选择框
+                self.monthRange.startDate = startDate;
+                self.monthRange.endDate = endDate;
+
             }
+        }
+
+        /**
+         * @description 获取成员的工作统计信息
+         * @param {String} startDate yyyy-MM-dd
+         * @param {String} endDate yyyy-MM-dd
+         * @param {String[]} members
+         * @private
+         */
+        function _getDptWorkStatic(startDate, endDate, members) {
+            if (members.length == 0) {
+                console.log(JSON.stringify(self.membersEvaluation));
+                return;
+            }
+            var memberID = members.shift();
+            _getMemberWorkStatic(startDate, endDate, memberID, function () {
+                _getDptWorkStatic(startDate, endDate, members);
+            });
+        }
+
+        function _getMemberWorkStatic(startDate, endDate, account, next) {
+            PMSoftServices.getMemberJobEvaluation(account, startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'), function (data) {
+                self.membersStatics.forEach(function (member) {
+                    if (member.account === account) {
+                        // member.evaluation.jobLogCount = data.doc[0].jobLogCount;
+                        // member.evaluation.reviewedCount = data.doc[0].reviewedCount;
+                        if (data.doc.length < 1) return;
+                        for (var p in data.doc[0]) {
+                            member.evaluation[p] = data.doc[0][p];
+                        }
+                    }
+                });
+                next();
+            }, function (err) {
+                next();
+            });
         }
 
         /**
@@ -292,11 +676,11 @@
          * @param dptNum
          * @private
          */
-        function _getPageData(dptNum) {
+        function _getPageData(dptNum, next) {
             PMSoftServices.getDepartmentMembers(dptNum, function (res) {
 
                 var doc = res.doc;
-                var timeSpan = 45;
+                var timeSpan = 30;
                 var memberIDs = "";
                 var endDateStr = moment.utc().format('YYYY-MM-DD');
                 var startDateStr = moment.utc().add(-timeSpan, "d").format('YYYY-MM-DD');
@@ -310,13 +694,15 @@
                 condition.username = memberIDs;
                 condition.startDate = startDateStr;
                 condition.endDate = endDateStr;
-
+                if (self.profileNavCurrentItem !== 'Active') return next();
                 PMSoftServices.getJobList(condition, function (res) {
 
                     var doc = res.doc;
                     self.departmentLogs.splice(0, self.departmentLogs.length);
+                    self.displayLogs.splice(0, self.displayLogs.length);
                     doc.forEach(function (item) {
-                        item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        // item.showTime = moment(item.reportTime).format('MM月DD日 YYYY HH:mm');
+                        item.showTime = moment(item.starTime).format('MM月DD日 YYYY HH:mm');
                         self.departmentLogs.push(item);
                         if (self.displayLogs.length < MAXNUMPREPAGE) {
                             self.displayLogs.push(item);
@@ -330,12 +716,14 @@
 
                     _memberActiveStatics(doc);
 
-                }, function (res) {
+                    next();
 
+                }, function (res) {
+                    next();
                 });
 
             }, function (res) {
-
+                next();
             });
         }
 
@@ -489,7 +877,7 @@
         }
 
         /**
-         *
+         * @description 打开成员信息页面
          * @param member
          * @private
          */
@@ -509,6 +897,13 @@
                 if (item === "Shared") {
                     _getSharings();
                 }
+                if (item === "Static") {
+                    var tmpMembers = [];
+                    self.members.forEach(function (member) {
+                        tmpMembers.push(member.account);
+                    });
+                    _getDptWorkStatic(self.monthRange.startDate, self.monthRange.endDate, tmpMembers);
+                }
             }
         }
 
@@ -520,7 +915,13 @@
             return memberAccount === self.selectedMemberAccount;
         }
 
+        //增加
+        function _ArticeSelected(article, memberAccount) {
+            return (self.selectedMemberAccount === memberAccount && self.articlesect === article)
+        }
+
         function _selectMemberItem(memberAccount) {
+            self.articlesect = false
             var org = self.selectedMemberAccount;
             self.selectedMemberAccount = memberAccount;
             if (org === memberAccount) {
@@ -530,6 +931,38 @@
                 self.displayLogs.splice(0, self.displayLogs.length);
                 _showMoreActivity(self.selectedMemberAccount, self.pageNum);
             }
+        }
+
+        //增加
+        function _slectArticle(article, memberAccount) {
+            self.selectedMemberAccount = memberAccount;
+            self.articlesect = article
+            self.displayLogs.splice(0, self.displayLogs.length);
+            self.pageNum = 0;
+            _showMoreArtiicle(article, memberAccount, self.pageNum);
+        }
+
+
+        //增加
+        function _showMoreArtiicle(article, memberAccount, pageNum) {
+            var count = 0;
+            var start = pageNum * MAXNUMPREPAGE;
+            var end = (pageNum + 1) * MAXNUMPREPAGE - 1;
+
+            for (var i = 0; i < self.departmentLogs.length; i++) {
+                if (memberAccount === self.departmentLogs[i].authorID && article == self.departmentLogs[i].projectCName) {
+
+                    if (count >= start && count <= end) {
+                        self.displayLogs.push(self.departmentLogs[i]);
+                    }
+
+                    count++;
+                }
+            }
+            if (count < end) {
+                self.isShowShowMoreAcitivtyBtn = false;
+            }
+            self.pageNum++;
         }
 
         //点击显示更多信息
@@ -676,9 +1109,9 @@
     }
 
     var ColourSystem = [{
-            borderColor: "rgba(154, 89, 181, 0.7)",
-            backgroundColor: "rgba(154, 89, 181, 0.2)"
-        },
+        borderColor: "rgba(154, 89, 181, 0.7)",
+        backgroundColor: "rgba(154, 89, 181, 0.2)"
+    },
         {
             borderColor: "rgba(255, 99, 132, 0.7)",
             backgroundColor: "rgba(255, 99, 132, 0.2)"

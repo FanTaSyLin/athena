@@ -75,6 +75,7 @@
                         project.unread = false;
                         project.isStarred = false;
                         project.reviewers = item.reviewers;
+                        project.manMonth = 0;
                         // for (var i = 0; i < item.reviewers.length; i++) {
                         //     if (item.reviewers[i].account === self.account) {
                         //         self.projectList.push(project);
@@ -82,6 +83,16 @@
                         //     }
                         // }
                         self.projectList.push(project);
+                    });
+                    PMSoftServices.getProjectManMonth(function (data) {
+                        self.projectList.forEach(function (item) {
+                            for(var i = 0; i < data.doc.length; i++) {
+                                if (item._id === data.doc[i].projectID) {
+                                    item.manMonth = data.doc[i].manMonth;
+                                    break;
+                                }
+                            }
+                        });
                     });
                     //获取星标项目
                     _getStarProjectList();                    

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
     <link rel="stylesheet" href="/bower_components/fullcalendar/dist/fullcalendar.min.css">
     <link rel="stylesheet" href="/bower_components/percircle/dist/css/percircle.css">
+    <link rel="stylesheet" href="/styles/buttons.css">
     <link rel="stylesheet" href="/styles/pm_master_page.css">
     <link rel="shortcut icon" href="/public/favicon.ico">
 </head>
@@ -556,11 +557,13 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary submit-handler" ng-click="SharingCtrl.submitSharing()">立即发布</button>
+                    <button class="btn btn-warning submit-handler" style="margin-right: 15px" ng-click="SharingCtrl.saveSharing()">临时保存</button>
                 </div>
             </div>
         </div>
     </div>
     <!--分享编辑对话框 end-->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bower_components/summernote/dist/summernote.js"></script>

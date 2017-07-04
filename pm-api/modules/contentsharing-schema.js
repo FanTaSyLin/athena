@@ -20,6 +20,10 @@ var ContentSharingSchema = new Schema({
      */
     varDate: { type: Date },
     /**
+     * @description 隐私标记
+     */
+    privacyFlg: { type: Boolean },    
+    /**
      * @description 标题
      */
     title: { type: String },
@@ -27,7 +31,10 @@ var ContentSharingSchema = new Schema({
      * @description 内容
      */
     content: { type: String },
-
+    /**
+     * @description 置顶标记
+     */
+    pinFlg: { type: Boolean },
     /**
      * @description 附件
      */
@@ -97,6 +104,8 @@ ContentSharingSchema.methods.submitInit = function (body) {
         for (var p in body) {
             self[p] = body[p];
         }
+        self.pinFlg = false;
+        self.privacyFlg = false;
         self.varDate = new Date();
         self.logs = [];
         self.logs.push({
@@ -122,7 +131,7 @@ function _dataVerify (body) {
     if (_.isUndefined(body.authorID) ||
     _.isUndefined(body.authorName) ||
     _.isUndefined(body.title) ||
-    _.isUndefined(body.content) ) {
+    _.isUndefined(body.content)) {
         return false;
     } else {
         return true;

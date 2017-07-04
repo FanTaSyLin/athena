@@ -114,13 +114,12 @@
             summernote.summernote({
                 minHeight: 700,
                 maxHeight: 700,
+                dialogsInBody: true,
                 toolbar: [
-                    // [groupName, [list of button]]
+                    ['option', ['undo', 'redo', 'style']],
                     ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['fontsize', ['fontsize']],
-                    ['color', ['color']],
+                    ['fontsize', ['fontsize', 'height', 'color']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']],
                     ['insert', ['picture', 'link', 'table', 'hr']]
                 ]
 

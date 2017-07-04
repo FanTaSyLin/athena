@@ -38,6 +38,16 @@
      */
     app.filter("delHtmlTag", delHtmlTag);
 
+    /**
+     * 分享列表过滤器
+     */
+    app.filter("sharingListFilter", sharingListFilter);
+
+    /**
+     * 分享列表排序
+     */
+    app.filter("sharingListSort", sharingListSort);
+
     toTrusted.$inject = ['$sce'];
 
     function toTrusted($sce) {
@@ -118,6 +128,46 @@
                 tmpStr = tmpStr.substring(0, 130) + '...';
             }
             return tmpStr;
+        }
+    }
+
+    function sharingListFilter() {
+        return function (items, rangeType, account) {
+            var tmpList = [];
+            for(var i = 0; i < items.length; i++) {
+                if (rangeType === "所有分享") {
+                    if (items[i].privacyFlg !== true) {
+                        tmpList.push(items[i]);
+                    }
+                    else if (items[i].privacyFlg === true && items[i].authorID === account) {
+                        tmpList.push(items[i]);
+                    } else if (items[i].privacyFlg === true && items[i].authorID !== account) {
+                        continue;
+                    }
+                } else if (rangeType === "我的分享" && items[i].authorID === account) {
+                    tmpList.push(items[i]);
+                } else {
+                    continue;
+                }
+            }
+            return tmpList;
+        }
+    }
+
+    function sharingListSort() {
+        return function (items) {
+            var tmpList = items.slice(0);
+            var tmp = {};
+            for (var i = 0; i < tmpList.length; i++) {
+                for (var j = 1; j < tmpList.length - 1; j++) {
+                    if (tmpList[i].pinFlg < tmpList[j].pinFlg) {
+                        tmp = tmpList[i];
+                        tmpList[i] = tmpList[j];
+                        tmpList[j] = tmp;
+                    }
+                }
+            }
+            return tmpList;
         }
     }
 })();

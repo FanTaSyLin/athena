@@ -24,8 +24,8 @@
 <!--页头 end-->
 
 <div role="main" class="container-project px-3 mt-4">
-    
-     <div class="project-info-top">
+
+    <div class="project-info-top">
         <span class="project-info-top-title">{{MainCtrl.thisProject.cnName}}</span> （
         <span class="project-info-top-title">{{MainCtrl.thisProject.enName}}</span>）
         <span class="glyphicon glyphicon-star-empty project-info-top-star"
@@ -52,30 +52,39 @@
             <div class="panel-group" id="accordion" role="tab">
                 <div class="chart-title">
                     <a class="button button-glow button-border button-rounded button-primary collapsed"
-                    data-toggle="collapse" data-parent="#accordion" href="#dateSelectArea" aria-expanded="false"
-                    aria-controls="dateSelectArea" title="点击打开日期选择面板，再次点击确认选择">
-                        {{MainCtrl.title}}
+                       data-toggle="collapse" data-parent="#accordion" href="#dateSelectArea" aria-expanded="false"
+                       aria-controls="dateSelectArea" title="点击打开日期选择面板，再次点击确认选择">
+                        <!--{{MainCtrl.title}}-->
+                        统计范围 (
+                        {{MainCtrl.monthRange.startDate.get('year')}}年{{MainCtrl.monthRange.startDate.get('month')
+                        + 1}}月 至 {{MainCtrl.monthRange.endDate.get('year')}}年{{MainCtrl.monthRange.endDate.get('month')
+                        +
+                        1}}月 )
                     </a>
                 </div>
                 <div id="dateSelectArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div style="height: 80px;">
                         <div class="date-select">
-                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                                ng-click="MainCtrl.startYearSubstract()"></span> {{MainCtrl.monthRange.startYear}}年
-                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                                ng-click="MainCtrl.startYearAdd()"></span>
-                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                                ng-click="MainCtrl.startMonthSubstract()"></span> {{MainCtrl.monthRange.startMonth}}月
-                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                                ng-click="MainCtrl.startMonthAdd()"></span> 至
-                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                                ng-click="MainCtrl.endYearSubstract()"></span> {{MainCtrl.monthRange.endYear}}年
-                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                                ng-click="MainCtrl.endYearAdd()"></span>
-                            <span class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
-                                ng-click="MainCtrl.endMonthSubstract()"></span> {{MainCtrl.monthRange.endMonth}}月
-                            <span class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
-                                ng-click="MainCtrl.endMonthAdd()"></span>
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="MainCtrl.startYearSubstract()"></span>
+                            {{MainCtrl.monthRange.startDate.get('year')}}年
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="MainCtrl.startYearAdd()"></span>
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="MainCtrl.startMonthSubstract()"></span>
+                            {{MainCtrl.monthRange.startDate.get('month') + 1}}月
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="MainCtrl.startMonthAdd()"></span> 至
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="MainCtrl.endYearSubstract()"></span>
+                            {{MainCtrl.monthRange.endDate.get('year')}}年
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="MainCtrl.endYearAdd()"></span>
+                            <span type="button" class="glyphicon glyphicon-chevron-left" style="cursor: pointer"
+                                  ng-click="MainCtrl.endMonthSubstract()"></span>
+                            {{MainCtrl.monthRange.endDate.get('month') + 1}}月
+                            <span type="button" class="glyphicon glyphicon-chevron-right" style="cursor: pointer"
+                                  ng-click="MainCtrl.endMonthAdd()"></span>
                         </div>
                     </div>
                 </div>
@@ -101,12 +110,12 @@
                                 全体成员
                             </h3>
                             <div class="profile-rollup-wrapper py-4 pl-4 position-relative ml-3 js-details-container Details open"
-                                ng-repeat="log in MainCtrl.jobLogs" ng-click="MainCtrl.showActivityDetial(log)">
+                                 ng-repeat="log in MainCtrl.jobLogs" ng-click="MainCtrl.showActivityDetial(log)">
                                     <span class="discussion-item-icon">
                                     <svg aria-hidden="true" class="octicon octicon-repo-push" height="16" version="1.1"
-                                        viewBox="0 0 12 16" width="12" style="margin-top: 1px">
+                                         viewBox="0 0 12 16" width="12" style="margin-top: 1px">
                                         <path fill-rule="evenodd"
-                                            d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
+                                              d="M4 3H3V2h1v1zM3 5h1V4H3v1zm4 0L4 9h2v7h2V9h2L7 5zm4-5H1C.45 0 0 .45 0 1v12c0 .55.45 1 1 1h4v-1H1v-2h4v-1H2V1h9.02L11 10H9v1h2v2H9v1h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1z"></path>
                                     </svg>
                                 </span>
                                 <button class="btn-link f4 muted-link no-underline lh-condensed width-full js-details-target"
@@ -165,12 +174,14 @@
                                    ng-click="MainCtrl.selectSharingRange('我的分享')">我的分享</a>
                                 <div class="dropdown-split-line" href="/"></div>
                                 <a class="dropdown-item btn btn-align-left"
-                                   ng-click="MainCtrl.selectSortType('VarDate')">按发布时间排序 
-                                   <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.isSelectedSortType('VarDate')"></span>
+                                   ng-click="MainCtrl.selectSortType('VarDate')">按发布时间排序
+                                    <span class="glyphicon glyphicon-ok"
+                                          ng-show="MainCtrl.isSelectedSortType('VarDate')"></span>
                                 </a>
                                 <a class="dropdown-item btn btn-align-left"
                                    ng-click="MainCtrl.selectSortType('ReplyDate')">按回复时间排序
-                                    <span class="glyphicon glyphicon-ok" ng-show="MainCtrl.isSelectedSortType('ReplyDate')"></span>
+                                    <span class="glyphicon glyphicon-ok"
+                                          ng-show="MainCtrl.isSelectedSortType('ReplyDate')"></span>
                                 </a>
                             </ul>
                         </div>

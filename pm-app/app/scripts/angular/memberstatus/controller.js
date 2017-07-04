@@ -77,13 +77,17 @@
                 /**
                  * 当时就不该存ID 蛋疼
                  */
+                var tmpDtp = undefined;
                 for (var i = 0; i < sysconfig[0].departments.length; i++) {
                     if (sysconfig[0].departments[i].id.toString() === self.member.department) {
                         self.member.department = sysconfig[0].departments[i].name;
+                        tmpDtp = sysconfig[0].departments[i];
                     }
                 }
 
                 document.title = self.member.name + "的个人信息";
+
+                is_dptManager = _getIsManager(tmpDtp);
 
             }, function (res) {
 
@@ -94,7 +98,7 @@
              */
             _getProjectStatic(account);
             //权限配置 默认为false
-            is_dptManager = _getIsManager();
+            //is_dptManager = _getIsManager();
 
             /*初始化日历信息部分*/
 
@@ -315,7 +319,7 @@
          * 获取是否有权限 查看当前页面内容-部门界面 根据account
          * @private
          */
-        function _getIsManager() {
+        function _getIsManager(account_Dpt) {
             //默认为非项目经理
             var is_Manager = false;
             //从 cookie中获取account Sysconfig
@@ -328,27 +332,43 @@
             //所有有权限的人的列表
             var m_accountList = [];
             //遍历部门
-            m_departments.forEach(function (department) {
-                //加入各个部门的部门经理
-                m_accountList.push(department.manager.account);
-                //若部门序号相同 则使用当前部门确定中心人员
-                if (department.id.toString() === dptNum.toString()) {
+            // m_departments.forEach(function (department) {
+            //     //加入各个部门的部门经理
+            //     m_accountList.push(department.manager.account);
+            //     //若部门序号相同 则使用当前部门确定中心人员
+            //     // if (department.id.toString() === dptNum.toString()) {
+            //     //
+            //     //     //循环查找中心分组信息
+            //     //     m_departmentGroups.forEach(function (m_Group) {
+            //     //         //查找ID相同
+            //     //         if (m_Group.id == department.group) {
+            //     //             //遍历加入 中心人员
+            //     //             m_Group.manager.forEach(function (m_GroupmanagerNum) {
+            //     //                 m_accountList.push(m_GroupmanagerNum.account);
+            //     //             });
+            //     //
+            //     //         }
+            //     //     });
+            //     // }
+            //
+            //
+            // });
 
-                    //循环查找中心分组信息
-                    m_departmentGroups.forEach(function (m_Group) {
-                        //查找ID相同
-                        if (m_Group.id == department.group) {
-                            //遍历加入 中心人员
-                            m_Group.manager.forEach(function (m_GroupmanagerNum) {
-                                m_accountList.push(m_GroupmanagerNum.account);
-                            });
+            //加入对应中心的所有人员
+            if (account_Dpt !== undefined) {
+                //加入本部门经理
+                m_accountList.push(account_Dpt.manager.account);
+                m_departmentGroups.forEach(function (m_Group) {
+                    //查找ID相同
+                    if (m_Group.id == account_Dpt.group) {
+                        //遍历加入 中心人员
+                        m_Group.manager.forEach(function (m_GroupmanagerNum) {
+                            m_accountList.push(m_GroupmanagerNum.account);
+                        });
 
-                        }
-                    });
-                }
-
-
-            });
+                    }
+                });
+            }
             //根据account查找 是否有权限
             if (m_accountList.indexOf(m_Account) != -1) {
                 is_Manager = true;
