@@ -2,9 +2,10 @@
  * Created by FanTaSyLin on 2016/7/25.
  */
 
-const MONGOOSE_URI = process.env.MONGOOSE_URI || "mongodb://shk401:68400145@123.56.135.196:6840/authentication";
-//const MONGOOSE_URI = process.env.MONGOOSE_URI || "192.168.226.138/pm-db";
-const HTTPS_PORT = process.env.HTTPS_PORT || 4401;
+var argvs = process.argv.splice(2);
+const MONGOOSE_URI = process.env.MONGOOSE_URI || argvs[0] || "mongodb://shk401:68400145@123.56.135.196:6840/authentication";
+const HTTPS_PORT = process.env.PM_HTTPS_PORT || argvs[1] || 4401;
+const HTTP_PORT = process.env.PM_HTTP_PORT || argvs[2] || 4001;
 
 var https = require('https');
 var debug = require('debug')('auth: ' + process.pid);
@@ -49,13 +50,13 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1');
-    if(req.method=="OPTIONS")
-        res.send(200);/*让options请求快速返回*/
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By", ' 3.2.1');
+    if (req.method == "OPTIONS")
+        res.send(200); /*让options请求快速返回*/
     else
         next();
 });
@@ -75,7 +76,9 @@ app.all("*", function (req, res, next) {
 
 app.use(function (err, req, res, next) {
     var code = 500;
-    var msg = {message: "Internal Server Error"};
+    var msg = {
+        message: "Internal Server Error"
+    };
 
     switch (err.name) {
         case "UnauthorizedError":
