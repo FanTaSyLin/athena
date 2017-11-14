@@ -644,7 +644,7 @@
          */
         function _getDptWorkStatic(startDate, endDate, members) {
             if (members.length == 0) {
-                console.log(JSON.stringify(self.membersEvaluation));
+                // console.log(JSON.stringify(self.membersStatics));
                 return;
             }
             var memberID = members.shift();
